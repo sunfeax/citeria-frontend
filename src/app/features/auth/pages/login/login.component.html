@@ -21,11 +21,11 @@
         <div class="flex justify-between items-center">
           <label class="text-sm font-semibold text-slate-700">Email</label>
 
-          @if (isLoading() && loginForm.controls.email.hasError('required')) {
+          @if (isSubmitted() && loginForm.controls.email.hasError('required')) {
             <span class="text-red-600 text-sm">Email is required</span>
           }
 
-          @if (isLoading() && loginForm.controls.email.hasError('email')) {
+          @if (isSubmitted() && loginForm.controls.email.hasError('email')) {
             <span class="text-red-600 text-sm">Invalid email</span>
           }
         </div>
@@ -41,7 +41,7 @@
         <div class="flex justify-between items-center">
           <label class="text-sm font-semibold text-slate-700">Password</label>
           
-          @if (isLoading() && loginForm.controls.password.hasError('required')) {
+          @if (isSubmitted() && loginForm.controls.password.hasError('required')) {
             <span class="text-red-600 text-sm">Password is required</span>
           }
         </div>

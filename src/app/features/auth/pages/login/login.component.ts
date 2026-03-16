@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators as v } from '@angular/forms';
 import { LucideAngularModule, ZapIcon, EyeIcon, EyeOff } from 'lucide-angular';
@@ -6,6 +7,7 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 import { ILoginRequest } from '../../models/login.interface';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -17,12 +19,14 @@ export class LoginComponent {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private toast = inject(ToastService);
 
   readonly ZapIcon = ZapIcon;
   readonly EyeIcon = EyeIcon;
   readonly EyeOff = EyeOff;
   
-  isLoading = signal<boolean>(false);  
+  isSubmitted = signal<boolean>(false);
+  isLoading = signal<boolean>(false);
   isPasswordVisible = signal<boolean>(true);
 
   loginForm = new FormGroup({
@@ -37,14 +41,16 @@ export class LoginComponent {
   });
 
   onSubmit() {
-    this.isLoading.set(true);
     this.isPasswordVisible.set(true);
+    this.isSubmitted.set(true);
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
-      this.isLoading.set(false);
+      this.toast.warning('Please fill in all required fields correctly.', 'Validation error');
       return;
     }
+
+    this.isLoading.set(true);
 
     const payload: ILoginRequest = this.loginForm.getRawValue();
 
@@ -55,14 +61,15 @@ export class LoginComponent {
         })
       )
       .subscribe({
-        next: (response) => {
-          console.log('Login success', response);
-          this.router.navigate(['/dashboard']);
+        next: () => {
+          this.toast.success('You have signed in successfully.', 'Welcome back');
+          this.router.navigateByUrl('/');
         },
-        error: (err) => {
-          console.error('Login failed', err);
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 401) {
+            this.toast.error('Invalid email or password.', 'Login failed');
+          }
         },
       });
-
   }
 }
