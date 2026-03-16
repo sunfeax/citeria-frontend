@@ -1,0 +1,70 @@
+<div class="flex justify-center items-center min-h-screen bg-slate-50 p-4">
+  
+  <div class="max-w-md w-440 rounded-3xl border border-slate-200 shadow-lg">
+    
+    <div>
+      <div class="flex flex-col items-center pt-8">
+        <div class="bg-blue-100 text-blue-600 w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
+          <lucide-icon class="h-6 w-6" [img]="ZapIcon"></lucide-icon>
+        </div>
+        <h1 class="text-3xl font-bold text-slate-900">Citeria</h1>
+        <p class="text-sm text-slate-500 mt-2 text-center px-4">Please enter your details to sign in</p>
+      </div>
+    </div>
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="submit()"
+      class="flex flex-col gap-4 p-8"
+    >
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-semibold text-slate-700">Email</label>
+        <input
+          type="email"
+          class="py-2 px-3 border rounded-2xl border-slate-300 outline-none"
+          placeholder="name@example.com"
+          formControlName="email"
+          />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-between items-center">
+          <label class="text-sm font-semibold text-slate-700">Password</label>
+          <a class="text-xs text-blue-600 font-medium cursor-pointer">Forgot password?</a>
+        </div>
+        <div class="flex flex-col relative">
+          <input
+            [type]="isPasswordVisible() ? 'password' : 'text'"
+            class="py-2 px-3 rounded-2xl border border-slate-300 outline-none"
+            placeholder="••••••••"
+            formControlName="password" />
+          <button
+            class="absolute right-2 translate-y-1/3 outline-none"
+            type="button"
+            (click)="isPasswordVisible.set(!isPasswordVisible())">
+            <lucide-icon [img]="isPasswordVisible() ? EyeIcon : EyeOff" class="text-gray-400 cursor-pointer"></lucide-icon>
+          </button>
+        </div>
+      </div>
+
+      <app-button
+        text="Login"
+        type="submit"
+        [loading]="isLoading">
+      </app-button>
+
+      <div class="flex items-center my-4">
+        <div class="flex-grow border-t border-slate-200"></div>
+        <span class="flex-none px-4 text-[11px] font-semibold text-slate-400 tracking-widest">
+          OR CONTINUE WITH
+        </span>
+        <div class="flex-grow border-t border-slate-200"></div>
+      </div>
+
+      <button type="button" class="flex items-center justify-center gap-3 h-14 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition-colors cursor-pointer">
+        <img src="assets/img/logo/google-logo.svg" class="w-8 h-8" alt="Google">
+        <span class="text-sm font-semibold text-slate-700">Google</span>
+      </button>
+    </form>
+  </div>
+</div>
