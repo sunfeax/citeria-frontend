@@ -60,17 +60,30 @@
             <lucide-icon [img]="isPasswordVisible() ? EyeIcon : EyeOff" class="text-gray-400 cursor-pointer stroke-1"></lucide-icon>
           </button>
         </div>
-      </div>
-
-      <div class="flex justify-center items-center">
-        <a href="#" class="text-xs text-blue-600 font-medium cursor-pointer">Forgot password?</a>
+        <div class="flex justify-end">
+          <a
+            routerLink="/forgot-password"
+            class="text-xs font-medium text-blue-600 transition-colors hover:text-blue-700"
+          >
+            Forgot password?
+          </a>
+        </div>
       </div>
 
       <app-button
         text="Login"
         type="submit"
+        size="lg"
+        fullWidth
         [loading]="isLoading()">
       </app-button>
+
+      <p class="text-center text-sm text-slate-500">
+        Don't have an account?
+        <a routerLink="/register" class="font-semibold text-blue-600 hover:text-blue-700">
+          Sign up
+        </a>
+      </p>
 
       <div class="flex items-center my-4">
         <div class="flex-grow border-t border-slate-300"></div>

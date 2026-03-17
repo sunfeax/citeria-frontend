@@ -1,13 +1,12 @@
 <button
   [type]="type"
   [disabled]="disabled || loading"
-  class="inline-flex w-full items-center justify-center gap-2 rounded-2xl
-    bg-blue-600 px-4 py-3 text-sl font-semibold text-white transition
-    hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer">
+  [class]="buttonClasses"
+  [attr.aria-busy]="loading">
   @if (loading) {
     <lucide-icon
       [img]="loaderCircleIcon"
-      class="h-6 w-6 animate-spin"
+      [class]="loaderClasses"
       aria-hidden="true">
     </lucide-icon>
   } @else {

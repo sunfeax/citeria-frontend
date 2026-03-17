@@ -6,12 +6,12 @@ import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { ILoginRequest } from '../../models/login.interface';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ButtonComponent, LucideAngularModule],
+  imports: [ReactiveFormsModule, ButtonComponent, LucideAngularModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
