@@ -18,17 +18,7 @@
       class="flex flex-col gap-4 p-8"
     >
       <div class="flex flex-col gap-2">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-semibold text-slate-700">Email</label>
-
-          @if (isSubmitted() && loginForm.controls.email.hasError('required')) {
-            <span class="text-red-600 text-sm">Email is required</span>
-          }
-
-          @if (isSubmitted() && loginForm.controls.email.hasError('email')) {
-            <span class="text-red-600 text-sm">Invalid email</span>
-          }
-        </div>
+        <label class="text-sm font-semibold text-slate-700">Email</label>
         <input
           type="email"
           class="py-2 px-3 border rounded-2xl border-slate-300 outline-none"
@@ -38,13 +28,7 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-semibold text-slate-700">Password</label>
-          
-          @if (isSubmitted() && loginForm.controls.password.hasError('required')) {
-            <span class="text-red-600 text-sm">Password is required</span>
-          }
-        </div>
+        <label class="text-sm font-semibold text-slate-700">Password</label>
         <div class="flex flex-col relative">
           <input
             [type]="isPasswordVisible() ? 'password' : 'text'"
@@ -87,7 +71,7 @@
 
       <div class="flex items-center my-4">
         <div class="flex-grow border-t border-slate-300"></div>
-        <span class="flex-none px-4 text-[11px] font-semibold text-slate-400 tracking-widest">
+        <span class="flex-none px-2 text-[11px] font-semibold text-slate-400 tracking-widest">
           OR CONTINUE WITH
         </span>
         <div class="flex-grow border-t border-slate-300"></div>

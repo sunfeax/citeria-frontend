@@ -1,0 +1,17 @@
+@if (shouldShowError) {
+  <div class="text-sm text-red-600">
+    @if (serverError) {
+      {{ serverError }}
+    } @else if (control.hasError('required')) {
+      Field is required
+    } @else if (control.hasError('minlength')) {
+      Must be at least {{ control.getError('minlength').requiredLength }} characters
+    } @else if (control.hasError('maxlength')) {
+      Must be at least {{ control.getError('maxlength').requiredLength }} characters
+    } @else if (control.hasError('pattern')) {
+      Invalid format
+    } @else if (control.hasError('email')) {
+      Invalid email address
+    }
+  </div>
+}

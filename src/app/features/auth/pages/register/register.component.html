@@ -1,9 +1,7 @@
-<div class="flex justify-center items-center min-h-screen bg-slate-50 p-4">
-  
-  <div class="max-w-md w-440 rounded-3xl border border-slate-200 shadow-lg">
-    
-    <div>
-      <div class="flex flex-col items-center pt-8">
+<div class="flex min-h-screen items-center justify-center bg-slate-50 p-4 md:p-6">
+  <div class="w-full max-w-5xl rounded-3xl border border-slate-200 bg-white shadow-lg">
+    <div class="px-8 pt-8 md:px-10 md:pt-10">
+      <div class="flex flex-col items-center">
         <div class="bg-blue-100 text-blue-600 w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
           <lucide-icon class="h-6 w-6" [img]="ZapIcon"></lucide-icon>
         </div>
@@ -15,20 +13,16 @@
     <form
       [formGroup]="registerForm"
       (ngSubmit)="onSubmit()"
-      class="flex flex-col gap-4 p-8"
+      class="grid grid-cols-1 gap-4 p-8 md:grid-cols-2 md:gap-x-6 md:gap-y-5 md:px-10 md:pb-10"
     >
       <!-- First Name -->
       <div class="flex flex-col gap-2">
         <div class="flex justify-between items-center">
           <label class="text-sm font-semibold text-slate-700">First Name</label>
-
-          @if (isSubmitted() && registerForm.controls.firstName.hasError('required')) {
-            <span class="text-red-600 text-sm">First Name is required</span>
-          }
-
-          @if (isSubmitted() && registerForm.controls.firstName.hasError('firstName')) {
-            <span class="text-red-600 text-sm">Invalid First Name</span>
-          }
+            <app-field-error 
+            [control]="registerForm.controls.firstName" 
+            [serverError]="serverErrors().firstName">
+          </app-field-error>
         </div>
         <input
           type="firstName"
@@ -42,14 +36,10 @@
       <div class="flex flex-col gap-2">
         <div class="flex justify-between items-center">
           <label class="text-sm font-semibold text-slate-700">Last Name</label>
-
-          @if (isSubmitted() && registerForm.controls.lastName.hasError('required')) {
-            <span class="text-red-600 text-sm">Last Name is required</span>
-          }
-
-          @if (isSubmitted() && registerForm.controls.lastName.hasError('lastName')) {
-            <span class="text-red-600 text-sm">Invalid Last Name</span>
-          }
+          <app-field-error 
+            [control]="registerForm.controls.lastName" 
+            [serverError]="serverErrors().lastName">
+          </app-field-error>
         </div>
         <input
           type="lastName"
@@ -63,14 +53,10 @@
       <div class="flex flex-col gap-2">
         <div class="flex justify-between items-center">
           <label class="text-sm font-semibold text-slate-700">Email</label>
-
-          @if (isSubmitted() && registerForm.controls.email.hasError('required')) {
-            <span class="text-red-600 text-sm">Email is required</span>
-          }
-
-          @if (isSubmitted() && registerForm.controls.email.hasError('email')) {
-            <span class="text-red-600 text-sm">Invalid email</span>
-          }
+          <app-field-error 
+            [control]="registerForm.controls.email" 
+            [serverError]="serverErrors().email">
+          </app-field-error>
         </div>
         <input
           type="email"
@@ -83,11 +69,11 @@
       <!-- Phone -->
       <div class="flex flex-col gap-2">
         <div class="flex justify-between items-center">
-          <label class="text-sm font-semibold text-slate-700">Phone (optional)</label>
-
-          @if (isSubmitted() && registerForm.controls.phone.hasError('phone')) {
-            <span class="text-red-600 text-sm">Invalid phone</span>
-          }
+          <label class="text-sm font-semibold text-slate-700">Phone number</label>
+          <app-field-error 
+            [control]="registerForm.controls.phone" 
+            [serverError]="serverErrors().phone">
+          </app-field-error>
         </div>
         <input
           type="phone"
@@ -98,12 +84,41 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-semibold text-slate-700">Password</label>
-          
-          @if (isSubmitted() && registerForm.controls.password.hasError('required')) {
-            <span class="text-red-600 text-sm">Password is required</span>
-          }
+        <div class="flex items-center justify-between">
+          <div class="group/password relative flex items-center justify-between gap-1.5 mb-1">
+            <div class="flex items-center gap-1.5">
+              <label class="text-sm font-semibold text-slate-700">Password</label>
+              <button
+                type="button"
+                class="inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-500 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200"
+                aria-label="Show password requirements"
+              >
+                <lucide-icon [img]="InfoIcon" class="h-4 w-4"></lucide-icon>
+              </button>
+            </div>
+
+            <div class="pointer-events-none absolute left-0 top-full
+              z-20 mt-1 hidden w-72 max-w-[calc(100vw-2rem)]
+              rounded-xl border border-slate-200 bg-white p-3
+              text-xs leading-5 text-slate-700 shadow-lg
+              group-hover/password:block group-focus-within/password:block"
+            >
+              <p class="font-semibold text-slate-900">Password requirements</p>
+              <ul class="mt-1 list-disc pl-4">
+                <li>Only Latin letters</li>
+                <li>At least 8 characters</li>
+                <li>At least one digit</li>
+                <li>At least one uppercase Latin letter</li>
+                <li>At least one special character: @#$%^&+=!</li>
+                <li>No spaces</li>
+              </ul>
+            </div>
+          </div>
+          <app-field-error 
+            class="text-right"
+            [control]="registerForm.controls.password" 
+            [serverError]="serverErrors().password">
+          </app-field-error>
         </div>
         <div class="flex flex-col relative">
           <input
@@ -125,16 +140,12 @@
       <div class="flex flex-col gap-2">
         <div class="flex justify-between items-center">
           <label class="text-sm font-semibold text-slate-700">Confirm password</label>
-          
-          @if (isSubmitted() && registerForm.controls.confirmPassword.hasError('required')) {
-            <span class="text-red-600 text-sm">Repeat your passwords</span>
-          }
-
-          @if (isSubmitted() &&
+          @if (
+            (registerForm.controls.confirmPassword.touched || isSubmitted()) &&
             registerForm.hasError('passwordMismatch') &&
             !registerForm.controls.confirmPassword.hasError('required')
           ) {
-            <span class="text-red-600 text-sm">Passwords don't match</span>
+            <p class="text-sm text-red-600">Passwords don't match</p>
           }
         </div>
         <div class="flex flex-col relative">
@@ -155,7 +166,7 @@
       </div>
 
       <!-- Type -->
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 md:col-span-2">
         <span class="text-sm font-semibold text-slate-700">Are you</span>
 
         <div class="grid grid-cols-2 gap-4">
@@ -181,24 +192,31 @@
             <span [class]="userTypeOptionClass">Specialist</span>
           </label>
         </div>
+        @if (serverErrors().type) {
+          <p class="text-sm text-red-600">{{ serverErrors().type }}</p>
+        } @else if (isSubmitted() && registerForm.controls.type.hasError('required')) {
+          <p class="text-sm text-red-600">Please select user type</p>
+        }
       </div>
 
-      <app-button
-        text="Create Account"
-        type="submit"
-        size="md"
-        fullWidth
-        [loading]="isLoading()">
-      </app-button>
+      <div class="md:col-span-2">
+        <app-button
+          text="Create Account"
+          type="submit"
+          size="md"
+          fullWidth
+          [loading]="isLoading()">
+        </app-button>
+      </div>
 
-      <p class="text-center text-sm text-slate-500">
+      <p class="text-center text-sm text-slate-500 md:col-span-2">
         Already have an account?
         <a routerLink="/login" class="font-semibold text-blue-600 hover:text-blue-700">
           Log in
         </a>
       </p>
 
-      <div class="flex items-center my-4">
+      <div class="flex items-center my-1 md:col-span-2">
         <div class="flex-grow border-t border-slate-300"></div>
         <span class="flex-none px-4 text-[11px] font-semibold text-slate-400 tracking-widest">
           OR CONTINUE WITH
@@ -206,7 +224,7 @@
         <div class="flex-grow border-t border-slate-300"></div>
       </div>
 
-      <button type="button" class="flex items-center justify-center gap-3 h-14 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition-colors cursor-pointer">
+      <button type="button" class="md:col-span-2 flex items-center justify-center gap-3 h-14 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition-colors cursor-pointer">
         <img src="assets/img/logo/google-logo.svg" class="w-8 h-8" alt="Google">
         <span class="text-sm font-semibold text-slate-700">Google</span>
       </button>

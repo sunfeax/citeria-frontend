@@ -2,17 +2,25 @@ import { UserType } from './../../../../core/enums/userType';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators as v, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { LucideAngularModule, ZapIcon, EyeIcon, EyeOff } from 'lucide-angular';
+import { LucideAngularModule, ZapIcon, EyeIcon, EyeOff, InfoIcon } from 'lucide-angular';
 import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { IRegisterRequest } from '../../models/register.interface';
+import { FieldErrorComponent } from "../../../../shared/components/field-error/field-error.component";
+
+type RegisterServerErrors = Partial<Record<
+  'firstName' | 'lastName' | 'email' | 'phone' | 'password' | 'confirmPassword' | 'type',
+  string
+>>;
+
+
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, ButtonComponent, LucideAngularModule, RouterLink],
+  imports: [ReactiveFormsModule, ButtonComponent, LucideAngularModule, RouterLink, FieldErrorComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
@@ -32,11 +40,13 @@ export class RegisterComponent {
   readonly ZapIcon = ZapIcon;
   readonly EyeIcon = EyeIcon;
   readonly EyeOff = EyeOff;
+  readonly InfoIcon = InfoIcon;
   
   isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   isPasswordVisible = signal<boolean>(true);
   isConfirmPasswordVisible = signal<boolean>(true);
+  serverErrors = signal<RegisterServerErrors>({});
 
   registerForm = new FormGroup({
     firstName: new FormControl('', {
@@ -62,8 +72,9 @@ export class RegisterComponent {
       validators: [v.required, v.email],
     }),
     phone: new FormControl('', {
-      nonNullable: false,
+      nonNullable: true,
       validators: [
+        v.required,
         v.minLength(7),
         v.maxLength(20),
         v.pattern(/^\d+$/),
@@ -71,7 +82,11 @@ export class RegisterComponent {
     }),
     password: new FormControl('', {
       nonNullable: true,
-      validators: [v.required],
+      validators: [
+        v.required,
+        v.minLength(8),
+        v.pattern(/^(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z0-9@#$%^&+=!]+$/)
+      ],
     }),
     confirmPassword: new FormControl('', {
       nonNullable: true,
@@ -82,13 +97,14 @@ export class RegisterComponent {
       validators: [v.required],
     }),
   }, {
-    validators: [this.passwordValidator()]
+    validators: [this.passwordComparator()]
   });
 
   onSubmit() {
     this.isPasswordVisible.set(true);
     this.isConfirmPasswordVisible.set(true);
     this.isSubmitted.set(true);
+    this.serverErrors.set({});
 
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
@@ -98,7 +114,7 @@ export class RegisterComponent {
 
     this.isLoading.set(true);
 
-    const payload: IRegisterRequest = this.registerForm.getRawValue();
+    const payload = this.getPayload(this.registerForm.getRawValue());
 
     this.authService.register(payload)
       .pipe(
@@ -108,18 +124,25 @@ export class RegisterComponent {
       )
       .subscribe({
         next: () => {
+          this.serverErrors.set({});
           this.toast.success('You have signed up successfully.', 'Welcome!');
           this.router.navigateByUrl('/');
         },
-        error: (err: HttpErrorResponse) => {
-          if (err.status === 400) {
-            this.toast.error('Please check that the fields are filled in correctly.', 'Registration failed');
-          }
-        },
-      });
+      error: (err: HttpErrorResponse) => {
+        const errors = err.error?.errors;
+
+        if (errors) {
+          this.serverErrors.set(errors);
+        } else {
+          this.toast.error(
+            err.error?.detail ?? 'Registration failed',
+            'Error'
+          );
+        }
+      }});
   }
 
-  passwordValidator(): ValidatorFn {
+  passwordComparator(): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       const { password, confirmPassword } = group.value;
 
@@ -127,5 +150,18 @@ export class RegisterComponent {
 
       return password === confirmPassword ? null : { passwordMismatch: true };
     };
+  }
+
+  getPayload(raw: IRegisterRequest) {
+    const payload: IRegisterRequest = {
+      firstName: raw.firstName.trim(),
+      lastName: raw.lastName.trim(),
+      email: raw.email.trim(),
+      phone: raw.phone.trim(),
+      password: raw.password,
+      type: raw.type,
+    };
+
+    return payload;
   }
 }

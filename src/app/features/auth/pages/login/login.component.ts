@@ -28,6 +28,7 @@ export class LoginComponent {
   isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   isPasswordVisible = signal<boolean>(true);
+  serverError = signal<string | null>(null);
 
   loginForm = new FormGroup({
     email: new FormControl('', {
@@ -43,10 +44,11 @@ export class LoginComponent {
   onSubmit() {
     this.isPasswordVisible.set(true);
     this.isSubmitted.set(true);
+    this.serverError.set(null);
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
-      this.toast.warning('Please fill in all required fields correctly.', 'Validation error');
+      this.toast.warning('Please fill in all required fields correctly.', 'Sign in failed');
       return;
     }
 
@@ -62,12 +64,16 @@ export class LoginComponent {
       )
       .subscribe({
         next: () => {
+          this.serverError.set(null);
           this.toast.success('You have signed in successfully.', 'Welcome back');
           this.router.navigateByUrl('/');
         },
         error: (err: HttpErrorResponse) => {
           if (err.status === 401) {
-            this.toast.error('Invalid email or password.', 'Login failed');
+            this.toast.error('Invalid email or password.');
+            return;
+          } else {
+            this.toast.error('Unable to sign in right now. Please try again.', 'Login failed');
           }
         },
       });
