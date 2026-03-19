@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LoginRequest, LoginResponse } from '../models/login.dto';
-import { BASE_URL } from '../../../core/environment/constants';
-import { RegisterRequest, RegisterResponse } from '../models/register.dto';
+import { LoginRequest, LoginResponse } from '../../features/auth/models/login.dto';
+import { BASE_URL } from '../environment/constants';
+import { RegisterRequest, RegisterResponse } from '../../features/auth/models/register.dto';
 
 @Injectable({
   providedIn: 'root',

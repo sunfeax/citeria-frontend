@@ -4,10 +4,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators as v } from '@a
 import { LucideAngularModule, ZapIcon, EyeIcon, EyeOff } from 'lucide-angular';
 import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
-import { ILoginRequest } from '../../models/login.interface';
-import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
+import { AuthService } from '../../services/auth.service';
+import { LoginRequest } from '../../models/login.dto';
 
 @Component({
   selector: 'app-login',
@@ -54,7 +54,7 @@ export class LoginComponent {
 
     this.isLoading.set(true);
 
-    const payload: ILoginRequest = this.loginForm.getRawValue();
+    const payload: LoginRequest = this.loginForm.getRawValue();
 
     this.authService.login(payload)
       .pipe(

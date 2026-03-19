@@ -1,22 +1,15 @@
-import { UserType } from './../../../../core/enums/userType';
+import { UserType } from '../../models/user-type.enum';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators as v, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { LucideAngularModule, ZapIcon, EyeIcon, EyeOff, InfoIcon } from 'lucide-angular';
 import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
-import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { IRegisterRequest } from '../../models/register.interface';
+import { RegisterRequest, RegisterServerErrors } from '../../models/register.dto';
 import { FieldErrorComponent } from "../../../../shared/components/field-error/field-error.component";
-
-type RegisterServerErrors = Partial<Record<
-  'firstName' | 'lastName' | 'email' | 'phone' | 'password' | 'confirmPassword' | 'type',
-  string
->>;
-
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -77,7 +70,7 @@ export class RegisterComponent {
         v.required,
         v.minLength(7),
         v.maxLength(20),
-        v.pattern(/^\d+$/),
+        v.pattern(/^\+?\d+$/),
       ],
     }),
     password: new FormControl('', {
@@ -108,7 +101,7 @@ export class RegisterComponent {
 
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
-      this.toast.warning('Please fill in all required fields correctly.', 'Validation error');
+      this.toast.warning('Please fill in all required fields correctly.', 'Registration failed');
       return;
     }
 
@@ -120,6 +113,8 @@ export class RegisterComponent {
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
+          this.isSubmitted.set(false);
+          this.serverErrors.set({});
         })
       )
       .subscribe({
@@ -129,14 +124,11 @@ export class RegisterComponent {
           this.router.navigateByUrl('/');
         },
       error: (err: HttpErrorResponse) => {
-        const errors = err.error?.errors;
-
-        if (errors) {
-          this.serverErrors.set(errors);
+        if (err.error.errors) {
+          this.serverErrors.set(err.error.errors);
         } else {
           this.toast.error(
-            err.error?.detail ?? 'Registration failed',
-            'Error'
+            err.error.detail ?? 'Registration failed', 'Error'
           );
         }
       }});
@@ -152,8 +144,8 @@ export class RegisterComponent {
     };
   }
 
-  getPayload(raw: IRegisterRequest) {
-    const payload: IRegisterRequest = {
+  getPayload(raw: RegisterRequest) {
+    const payload: RegisterRequest = {
       firstName: raw.firstName.trim(),
       lastName: raw.lastName.trim(),
       email: raw.email.trim(),

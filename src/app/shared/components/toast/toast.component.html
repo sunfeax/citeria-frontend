@@ -12,14 +12,14 @@
     animate.leave="toast-leave"
 
     [ngClass]="{
-      'border-emerald-500 bg-emerald-50 text-emerald-950 ring-emerald-200': toast.type === 'success',
+      'border-emerald-500 bg-emerald-200 text-emerald-950 ring-emerald-200': toast.type === 'success',
       'border-red-700 bg-red-600 text-white ring-red-700/40': toast.type === 'error',
-      'border-sky-500 bg-sky-50 text-sky-950 ring-sky-200': toast.type === 'info',
-      'border-amber-500 bg-amber-50 text-amber-950 ring-amber-200': toast.type === 'warning'
+      'border-sky-500 bg-sky-200 text-sky-950 ring-sky-200': toast.type === 'info',
+      'border-amber-500 bg-amber-200 text-amber-950 ring-amber-200': toast.type === 'warning'
     }"
   >
 
-    <div class="mt-[2px] opacity-90">
+    <div class="flex justify-center items-center self-center mt-[2px] opacity-90">
       <lucide-icon [img]="iconFor(toast.type)" class="h-5 w-5"></lucide-icon>
     </div>
 
@@ -30,13 +30,13 @@
         </div>
       }
 
-      <div class="text-sm opacity-90">
+      <div class="text-sm">
         {{ toast.message }}
       </div>
     </div>
 
     <button
-      class="flex items-center justify-center p-1 opacity-70 hover:opacity-100"
+      class="flex items-center justify-center p-1 opacity-90 hover:opacity-100"
       (click)="toastService.remove(toast.id)"
     >
       <lucide-icon [img]="XIcon" class="h-4 w-4"></lucide-icon>
