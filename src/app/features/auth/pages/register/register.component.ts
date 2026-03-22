@@ -9,7 +9,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { RegisterRequest, RegisterServerErrors } from '../../models/register.dto';
 import { FieldErrorComponent } from "../../../../shared/components/field-error/field-error.component";
-import { AuthService } from '../../services/auth.service';
+import { AuthApiService } from '../../services/auth-api.service';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +19,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegisterComponent {
 
-  private authService = inject(AuthService);
+  private authApiService = inject(AuthApiService);
   private router = inject(Router);
   private toast = inject(ToastService);
   
@@ -109,7 +109,7 @@ export class RegisterComponent {
 
     const payload = this.getPayload(this.registerForm.getRawValue());
 
-    this.authService.register(payload)
+    this.authApiService.register(payload)
       .pipe(
         finalize(() => {
           this.isLoading.set(false);

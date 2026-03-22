@@ -1,5 +1,5 @@
-import { UserRole } from "./user-role.enum"
-import { UserType } from "./user-type.enum"
+import { UserType } from './user-type.enum';
+import { UserRole } from './user-role.enum';
 
 export interface LoginRequest {
   email: string,
@@ -9,9 +9,15 @@ export interface LoginRequest {
 export interface LoginResponse {
   token: string,
   tokenType: string,
-  id: number,
-  firstName: string,
-  lastName: string,
-  role: UserRole,
-  type: UserType
+  user: {
+    id: number,
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+    role: UserRole,
+    type: UserType,
+    isActive: boolean,
+    createdAt: string
+  }
 }

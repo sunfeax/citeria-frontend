@@ -6,7 +6,7 @@ import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { AuthService } from '../../services/auth.service';
+import { AuthApiService } from '../../services/auth-api.service';
 import { LoginRequest } from '../../models/login.dto';
 
 @Component({
@@ -17,7 +17,7 @@ import { LoginRequest } from '../../models/login.dto';
 })
 export class LoginComponent {
 
-  private authService = inject(AuthService);
+  private authApiService = inject(AuthApiService);
   private router = inject(Router);
   private toast = inject(ToastService);
 
@@ -56,7 +56,7 @@ export class LoginComponent {
 
     const payload: LoginRequest = this.loginForm.getRawValue();
 
-    this.authService.login(payload)
+    this.authApiService.login(payload)
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
