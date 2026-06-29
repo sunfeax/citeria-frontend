@@ -24,11 +24,6 @@ export class RegisterComponent {
   private toast = inject(ToastService);
   
   readonly UserType = UserType;
-  readonly userTypeOptionClass =
-    'flex h-12 items-center justify-center rounded-2xl border border-slate-300 bg-white ' +
-    'text-sm font-semibold text-slate-700 transition-colors ' +
-    'peer-checked:border-2 peer-checked:border-blue-500 ' +
-    'peer-checked:bg-blue-50 peer-checked:text-blue-700';
 
   readonly ZapIcon = ZapIcon;
   readonly EyeIcon = EyeIcon;

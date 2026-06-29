@@ -1,24 +1,24 @@
-<div class="flex min-h-screen items-center justify-center bg-slate-50 p-4 md:p-6">
-  <div class="w-full max-w-5xl rounded-3xl border border-slate-200 bg-white shadow-lg">
-    <div class="px-8 pt-8 md:px-10 md:pt-10">
-      <div class="flex flex-col items-center">
-        <div class="bg-blue-100 text-blue-600 w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
-          <lucide-icon class="h-6 w-6" [img]="ZapIcon"></lucide-icon>
+<div class="auth-page auth-page--comfortable">
+  <div class="auth-card auth-card--register">
+    <div class="auth-card__header auth-card__header--wide">
+      <div class="brand-block">
+        <div class="brand-block__icon">
+          <lucide-icon class="brand-block__icon-svg" [img]="ZapIcon"></lucide-icon>
         </div>
-        <h1 class="text-3xl font-bold text-slate-900">Citeria</h1>
-        <p class="text-sm text-slate-500 mt-2 text-center px-4">Join our community of world-class experts.</p>
+        <h1 class="brand-block__title">Citeria</h1>
+        <p class="brand-block__subtitle">Join our community of world-class experts.</p>
       </div>
     </div>
 
     <form
       [formGroup]="registerForm"
       (ngSubmit)="onSubmit()"
-      class="grid grid-cols-1 gap-4 p-8 md:grid-cols-2 md:gap-x-6 md:gap-y-5 md:px-10 md:pb-10"
+      class="auth-form auth-form--grid"
     >
       <!-- First Name -->
-      <div class="flex flex-col gap-2">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-semibold text-slate-700">First Name</label>
+      <div class="form-field">
+        <div class="form-field__header">
+          <label class="form-label">First Name</label>
             <app-field-error 
             [control]="registerForm.controls.firstName" 
             [serverError]="serverErrors().firstName">
@@ -26,16 +26,16 @@
         </div>
         <input
           type="firstName"
-          class="py-2 px-3 border rounded-2xl border-slate-300 outline-none"
+          class="form-input"
           placeholder="John"
           formControlName="firstName"
           />
       </div>
 
       <!-- Last Name -->
-      <div class="flex flex-col gap-2">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-semibold text-slate-700">Last Name</label>
+      <div class="form-field">
+        <div class="form-field__header">
+          <label class="form-label">Last Name</label>
           <app-field-error 
             [control]="registerForm.controls.lastName" 
             [serverError]="serverErrors().lastName">
@@ -43,16 +43,16 @@
         </div>
         <input
           type="lastName"
-          class="py-2 px-3 border rounded-2xl border-slate-300 outline-none"
+          class="form-input"
           placeholder="Doe"
           formControlName="lastName"
           />
       </div>      
 
       <!-- Email -->
-      <div class="flex flex-col gap-2">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-semibold text-slate-700">Email</label>
+      <div class="form-field">
+        <div class="form-field__header">
+          <label class="form-label">Email</label>
           <app-field-error 
             [control]="registerForm.controls.email" 
             [serverError]="serverErrors().email">
@@ -60,16 +60,16 @@
         </div>
         <input
           type="email"
-          class="py-2 px-3 border rounded-2xl border-slate-300 outline-none"
+          class="form-input"
           placeholder="name@example.com"
           formControlName="email"
           />
       </div>
 
       <!-- Phone -->
-      <div class="flex flex-col gap-2">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-semibold text-slate-700">Phone number</label>
+      <div class="form-field">
+        <div class="form-field__header">
+          <label class="form-label">Phone number</label>
           <app-field-error 
             [control]="registerForm.controls.phone" 
             [serverError]="serverErrors().phone">
@@ -77,34 +77,29 @@
         </div>
         <input
           type="phone"
-          class="py-2 px-3 border rounded-2xl border-slate-300 outline-none"
+          class="form-input"
           placeholder="+1 234 567 890"
           formControlName="phone"
           />
       </div>
 
-      <div class="flex flex-col gap-2">
-        <div class="flex items-center justify-between">
-          <div class="group/password relative flex items-center justify-between gap-1.5 mb-1">
-            <div class="flex items-center gap-1.5">
-              <label class="text-sm font-semibold text-slate-700">Password</label>
+      <div class="form-field">
+        <div class="form-field__header">
+          <div class="password-help">
+            <div class="password-help__trigger">
+              <label class="form-label">Password</label>
               <button
                 type="button"
-                class="inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-500 transition-colors hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200"
+                class="password-help__button"
                 aria-label="Show password requirements"
               >
-                <lucide-icon [img]="InfoIcon" class="h-4 w-4"></lucide-icon>
+                <lucide-icon [img]="InfoIcon" class="password-help__icon"></lucide-icon>
               </button>
             </div>
 
-            <div class="pointer-events-none absolute left-0 top-full
-              z-20 mt-1 hidden w-72 max-w-[calc(100vw-2rem)]
-              rounded-xl border border-slate-200 bg-white p-3
-              text-xs leading-5 text-slate-700 shadow-lg
-              group-hover/password:block group-focus-within/password:block"
-            >
-              <p class="font-semibold text-slate-900">Password requirements</p>
-              <ul class="mt-1 list-disc pl-4">
+            <div class="password-help__popover">
+              <p class="password-help__title">Password requirements</p>
+              <ul class="password-help__list">
                 <li>Only Latin letters</li>
                 <li>At least 8 characters</li>
                 <li>At least one digit</li>
@@ -115,91 +110,93 @@
             </div>
           </div>
           <app-field-error 
-            class="text-right"
+            class="form-field__error"
             [control]="registerForm.controls.password" 
             [serverError]="serverErrors().password">
           </app-field-error>
         </div>
-        <div class="flex flex-col relative">
+        <div class="password-field">
           <input
             [type]="isPasswordVisible() ? 'password' : 'text'"
-            class="py-2 px-3 rounded-2xl border border-slate-300 outline-none"
+            class="form-input form-input--with-action"
             placeholder="••••••••"
             formControlName="password"
           />
 
           <button
-            class="absolute right-2 translate-y-1/3 outline-none"
+            class="password-field__toggle"
             type="button"
+            aria-label="Toggle password visibility"
             (click)="isPasswordVisible.set(!isPasswordVisible())">
-            <lucide-icon [img]="isPasswordVisible() ? EyeIcon : EyeOff" class="text-gray-400 cursor-pointer stroke-1"></lucide-icon>
+            <lucide-icon [img]="isPasswordVisible() ? EyeIcon : EyeOff" class="password-field__icon"></lucide-icon>
           </button>
         </div>
       </div>
 
-      <div class="flex flex-col gap-2">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-semibold text-slate-700">Confirm password</label>
+      <div class="form-field">
+        <div class="form-field__header">
+          <label class="form-label">Confirm password</label>
           @if (
             (registerForm.controls.confirmPassword.touched || isSubmitted()) &&
             registerForm.hasError('passwordMismatch') &&
             !registerForm.controls.confirmPassword.hasError('required')
           ) {
-            <p class="text-sm text-red-600">Passwords don't match</p>
+            <p class="form-error">Passwords don't match</p>
           }
         </div>
-        <div class="flex flex-col relative">
+        <div class="password-field">
           <input
             [type]="isConfirmPasswordVisible() ? 'password' : 'text'"
-            class="py-2 px-3 rounded-2xl border border-slate-300 outline-none"
+            class="form-input form-input--with-action"
             placeholder="••••••••"
             formControlName="confirmPassword"
           />
 
           <button
-            class="absolute right-2 translate-y-1/3 outline-none"
+            class="password-field__toggle"
             type="button"
+            aria-label="Toggle confirm password visibility"
             (click)="isConfirmPasswordVisible.set(!isConfirmPasswordVisible())">
-            <lucide-icon [img]="isConfirmPasswordVisible() ? EyeIcon : EyeOff" class="text-gray-400 cursor-pointer stroke-1"></lucide-icon>
+            <lucide-icon [img]="isConfirmPasswordVisible() ? EyeIcon : EyeOff" class="password-field__icon"></lucide-icon>
           </button>
         </div>
       </div>
 
       <!-- Type -->
-      <div class="flex flex-col gap-2 md:col-span-2">
-        <span class="text-sm font-semibold text-slate-700">Are you</span>
+      <div class="form-field auth-form__full">
+        <span class="form-label">Are you</span>
 
-        <div class="grid grid-cols-2 gap-4">
-          <label class="cursor-pointer">
+        <div class="type-choice-grid">
+          <label class="type-choice">
             <input
-              class="peer sr-only"
+              class="type-choice__input"
               type="radio"
               formControlName="type"
               [value]="UserType.CLIENT"
             />
 
-            <span [class]="userTypeOptionClass">Client</span>
+            <span class="type-choice__label">Client</span>
           </label>
 
-          <label class="cursor-pointer">
+          <label class="type-choice">
             <input
-              class="peer sr-only"
+              class="type-choice__input"
               type="radio"
               formControlName="type"
               [value]="UserType.SPECIALIST"
             />
 
-            <span [class]="userTypeOptionClass">Specialist</span>
+            <span class="type-choice__label">Specialist</span>
           </label>
         </div>
         @if (serverErrors().type) {
-          <p class="text-sm text-red-600">{{ serverErrors().type }}</p>
+          <p class="form-error">{{ serverErrors().type }}</p>
         } @else if (isSubmitted() && registerForm.controls.type.hasError('required')) {
-          <p class="text-sm text-red-600">Please select user type</p>
+          <p class="form-error">Please select user type</p>
         }
       </div>
 
-      <div class="md:col-span-2">
+      <div class="auth-form__full">
         <app-button
           text="Create Account"
           type="submit"
@@ -209,24 +206,24 @@
         </app-button>
       </div>
 
-      <p class="text-center text-sm text-slate-500 md:col-span-2">
+      <p class="auth-switch auth-form__full">
         Already have an account?
-        <a routerLink="/login" class="font-semibold text-blue-600 hover:text-blue-700">
+        <a routerLink="/login" class="auth-link">
           Log in
         </a>
       </p>
 
-      <div class="flex items-center my-1 md:col-span-2">
-        <div class="flex-grow border-t border-slate-300"></div>
-        <span class="flex-none px-4 text-[11px] font-semibold text-slate-400 tracking-widest">
+      <div class="auth-divider auth-divider--compact auth-form__full">
+        <div class="auth-divider__line"></div>
+        <span class="auth-divider__text">
           OR CONTINUE WITH
         </span>
-        <div class="flex-grow border-t border-slate-300"></div>
+        <div class="auth-divider__line"></div>
       </div>
 
-      <button type="button" class="md:col-span-2 flex items-center justify-center gap-3 h-14 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition-colors cursor-pointer">
-        <img src="assets/img/logo/google-logo.svg" class="w-8 h-8" alt="Google">
-        <span class="text-sm font-semibold text-slate-700">Google</span>
+      <button type="button" class="social-button auth-form__full">
+        <img src="assets/img/logo/google-logo.svg" class="social-button__icon" alt="Google">
+        <span class="social-button__text">Google</span>
       </button>
     </form>
   </div>
