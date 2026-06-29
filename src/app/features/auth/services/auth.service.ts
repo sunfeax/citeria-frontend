@@ -2,6 +2,7 @@ import { AuthApiService } from './auth-api.service';
 import { inject, Injectable } from '@angular/core';
 import { SessionService } from './session.service';
 import { LoginRequest, LoginResponse } from '../models/login.dto';
+import { RegisterRequest, RegisterResponse } from '../models/register.dto';
 import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
@@ -18,6 +19,10 @@ export class AuthService {
         this.sessionService.setAccessToken(response.token);
       })
     );
+  }
+
+  register(payload: RegisterRequest): Observable<RegisterResponse> {
+    return this.authApiService.register(payload);
   }
 
   refresh(): Observable<LoginResponse> {

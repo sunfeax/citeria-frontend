@@ -3,14 +3,17 @@ import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/f
 import { LoginComponent } from './features/auth/pages/login/login.component';
 import { RegisterComponent } from './features/auth/pages/register/register.component';
 import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.component';
+import { accessGuard } from './core/guards/access.guard';
 
 export const routes: Routes = [
-
-  { path: '', component: MainLayoutComponent, children: [
-      // { path: '', component: HomeComponent },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [accessGuard],
+    children: [
       // { path: 'search', component: SearchComponent },
       // { path: 'profile', component: ProfileComponent },
-    ]
+    ],
   },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'login', component: LoginComponent },
