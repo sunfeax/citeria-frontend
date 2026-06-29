@@ -7,12 +7,12 @@ import { AuthService } from '../../features/auth/services/auth.service';
 const AUTH_ENDPOINTS = ['/auth/login', '/auth/register', '/auth/refresh', '/auth/logout'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const sessionService = inject(SessionService);
-  const authService = inject(AuthService);
+  const sessionSE = inject(SessionService);
+  const authSE = inject(AuthService);
 
   const isAuthEndpoint = AUTH_ENDPOINTS.some((url) => req.url.includes(url));
 
-  const token = sessionService.getAccessToken();
+  const token = sessionSE.getAccessToken();
   const authReq = token && !isAuthEndpoint
     ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
     : req;
@@ -20,7 +20,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((err: HttpErrorResponse) => {
       if (err.status === 401 && !isAuthEndpoint) {
-        return authService.refresh().pipe(
+        return authSE.refresh().pipe(
           switchMap((response) => {
             const retryReq = req.clone({
               setHeaders: { Authorization: `Bearer ${response.token}` },

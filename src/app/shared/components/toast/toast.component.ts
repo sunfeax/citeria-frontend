@@ -11,7 +11,7 @@ import { ToastType } from '../../types/toast.type';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToastComponent {
-  readonly toastService = inject(ToastService);
+  readonly toastSE = inject(ToastService);
 
   protected readonly CheckCircle2Icon = CheckCircle2Icon;
   protected readonly CircleAlertIcon = CircleAlertIcon;

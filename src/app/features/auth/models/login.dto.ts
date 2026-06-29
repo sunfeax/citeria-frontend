@@ -1,5 +1,4 @@
-import { UserType } from './user-type.enum';
-import { UserRole } from './user-role.enum';
+import { User } from './user.model';
 
 export interface LoginRequest {
   email: string,
@@ -9,15 +8,5 @@ export interface LoginRequest {
 export interface LoginResponse {
   token: string,
   tokenType: string,
-  user: {
-    id: number,
-    firstName: string,
-    lastName: string,
-    email: string,
-    phone: string,
-    role: UserRole,
-    type: UserType,
-    isActive: boolean,
-    createdAt: string
-  }
+  user: User
 }

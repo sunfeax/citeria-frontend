@@ -1,5 +1,5 @@
-import { UserRole } from "./user-role.enum";
 import { UserType } from "./user-type.enum"
+import { User } from "./user.model";
 
 export interface RegisterRequest {
   firstName: string,
@@ -10,17 +10,7 @@ export interface RegisterRequest {
   type: UserType
 }
 
-export interface RegisterResponse {
-  id: number,
-  firstName: string,
-  lastName: string,
-  email: string,
-  phone: string,
-  role: UserRole,
-  type: UserType,
-  isActive: boolean,
-  createdAt: string
-}
+export type RegisterResponse = User;
 
 export type RegisterServerErrors = Partial<Record<
   'firstName'

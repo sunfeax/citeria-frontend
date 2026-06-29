@@ -32,7 +32,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-  private authService = inject(AuthService);
+  private authSE = inject(AuthService);
   private router = inject(Router);
   private toast = inject(ToastService);
 
@@ -115,7 +115,7 @@ export class RegisterComponent {
 
     const payload = this.getPayload(this.registerForm.getRawValue());
 
-    this.authService
+    this.authSE
       .register(payload)
       .pipe(
         finalize(() => {

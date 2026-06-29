@@ -3,7 +3,7 @@
   aria-live="polite"
   aria-atomic="true"
 >
-  @for (toast of toastService.toasts(); track toast.id) {
+  @for (toast of toastSE.toasts(); track toast.id) {
 
   <div
     [class]="'toast toast--' + toast.type"
@@ -31,7 +31,7 @@
       class="toast__dismiss"
       type="button"
       aria-label="Dismiss notification"
-      (click)="toastService.remove(toast.id)"
+      (click)="toastSE.remove(toast.id)"
     >
       <lucide-icon [img]="XIcon" class="toast__dismiss-icon"></lucide-icon>
     </button>

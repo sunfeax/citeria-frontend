@@ -2,19 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginRequest, LoginResponse } from '../models/login.dto';
-import { BASE_URL } from '../../../core/environment/constants';
+import { environment } from '../../../../environments/environment';
 import { RegisterRequest, RegisterResponse } from '../models/register.dto';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthApiService {
+export class AuthHttpService {
 
   http = inject(HttpClient);
   
   login(payload: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(
-      `${BASE_URL}/auth/login`,
+      `${environment.baseUrl}/auth/login`,
       payload,
       { withCredentials: true }
     );
@@ -22,7 +22,7 @@ export class AuthApiService {
 
   register(payload: RegisterRequest): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(
-      `${BASE_URL}/auth/register`,
+      `${environment.baseUrl}/auth/register`,
       payload,
       { withCredentials: true }
     );
@@ -30,7 +30,7 @@ export class AuthApiService {
 
   refresh(): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(
-      `${BASE_URL}/auth/refresh`,
+      `${environment.baseUrl}/auth/refresh`,
       {},
       { withCredentials: true }
     );
@@ -38,7 +38,7 @@ export class AuthApiService {
 
   logout(): Observable<void> {
     return this.http.post<void>(
-      `${BASE_URL}/auth/logout`,
+      `${environment.baseUrl}/auth/logout`,
       {},
       { withCredentials: true }
     );

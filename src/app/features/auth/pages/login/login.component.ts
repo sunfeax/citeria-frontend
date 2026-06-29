@@ -17,7 +17,7 @@ import { LoginRequest } from '../../models/login.dto';
 })
 export class LoginComponent {
 
-  private authService = inject(AuthService);
+  private authSE = inject(AuthService);
   private router = inject(Router);
   private toast = inject(ToastService);
 
@@ -56,7 +56,7 @@ export class LoginComponent {
 
     const payload: LoginRequest = this.loginForm.getRawValue();
 
-    this.authService.login(payload)
+    this.authSE.login(payload)
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
