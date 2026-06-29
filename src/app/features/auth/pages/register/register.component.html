@@ -1,230 +1,276 @@
 <div class="auth-page auth-page--comfortable">
-  <div class="auth-card auth-card--register">
-    <div class="auth-card__header auth-card__header--wide">
-      <div class="brand-block">
-        <div class="brand-block__icon">
-          <lucide-icon class="brand-block__icon-svg" [img]="ZapIcon"></lucide-icon>
+  <div class="auth-card auth-card--register auth-card--split">
+    <section class="register-hero" aria-label="Citeria registration overview">
+      <div>
+        <div class="register-hero__brand">
+          <span class="register-hero__mark">
+            <lucide-icon [img]="ZapIcon" class="register-hero__mark-icon"></lucide-icon>
+          </span>
+          <span>Citeria</span>
         </div>
-        <h1 class="brand-block__title">Citeria</h1>
-        <p class="brand-block__subtitle">Join our community of world-class experts.</p>
-      </div>
-    </div>
 
-    <form
-      [formGroup]="registerForm"
-      (ngSubmit)="onSubmit()"
-      class="auth-form auth-form--grid"
-    >
-      <!-- First Name -->
-      <div class="form-field">
-        <div class="form-field__header">
-          <label class="form-label">First Name</label>
-            <app-field-error 
-            [control]="registerForm.controls.firstName" 
-            [serverError]="serverErrors().firstName">
-          </app-field-error>
-        </div>
-        <input
-          type="firstName"
-          class="form-input"
-          placeholder="John"
-          formControlName="firstName"
-          />
+        <h2 class="register-hero__title">
+          Join the world's largest marketplace for high-quality professional services.
+        </h2>
+        <p class="register-hero__text">
+          Connect with over 50,000 top-tier specialists and scale your business with confidence.
+        </p>
       </div>
 
-      <!-- Last Name -->
-      <div class="form-field">
-        <div class="form-field__header">
-          <label class="form-label">Last Name</label>
-          <app-field-error 
-            [control]="registerForm.controls.lastName" 
-            [serverError]="serverErrors().lastName">
-          </app-field-error>
+      <div class="register-hero__trust">
+        <div class="register-hero__avatars" aria-hidden="true">
+          <span class="register-hero__avatar">G</span>
+          <span class="register-hero__avatar">A</span>
+          <span class="register-hero__avatar">M</span>
+          <span class="register-hero__avatar register-hero__avatar--count">50K</span>
         </div>
-        <input
-          type="lastName"
-          class="form-input"
-          placeholder="Doe"
-          formControlName="lastName"
-          />
-      </div>      
-
-      <!-- Email -->
-      <div class="form-field">
-        <div class="form-field__header">
-          <label class="form-label">Email</label>
-          <app-field-error 
-            [control]="registerForm.controls.email" 
-            [serverError]="serverErrors().email">
-          </app-field-error>
-        </div>
-        <input
-          type="email"
-          class="form-input"
-          placeholder="name@example.com"
-          formControlName="email"
-          />
+        <p>Trusted by experts from Google, Apple, and Meta.</p>
       </div>
+    </section>
 
-      <!-- Phone -->
-      <div class="form-field">
-        <div class="form-field__header">
-          <label class="form-label">Phone number</label>
-          <app-field-error 
-            [control]="registerForm.controls.phone" 
-            [serverError]="serverErrors().phone">
-          </app-field-error>
+    <section class="register-panel">
+      <div class="register-panel__inner">
+        <div class="register-panel__header">
+          <h1 class="register-panel__title">Create your account</h1>
+          <p class="register-panel__subtitle">Join our community of world-class experts.</p>
         </div>
-        <input
-          type="phone"
-          class="form-input"
-          placeholder="+1 234 567 890"
-          formControlName="phone"
-          />
-      </div>
 
-      <div class="form-field">
-        <div class="form-field__header">
-          <div class="password-help">
-            <div class="password-help__trigger">
-              <label class="form-label">Password</label>
-              <button
-                type="button"
-                class="password-help__button"
-                aria-label="Show password requirements"
+        <form
+          [formGroup]="registerForm"
+          (ngSubmit)="onSubmit()"
+          class="auth-form auth-form--grid auth-form--register"
+        >
+          <!-- First Name -->
+          <div class="form-field">
+            <div class="form-field__header">
+              <label class="form-label">First Name</label>
+              <app-field-error
+                [control]="registerForm.controls.firstName"
+                [serverError]="serverErrors().firstName"
               >
-                <lucide-icon [img]="InfoIcon" class="password-help__icon"></lucide-icon>
+              </app-field-error>
+            </div>
+            <input type="text" class="form-input" placeholder="Jane" formControlName="firstName" />
+          </div>
+
+          <!-- Last Name -->
+          <div class="form-field">
+            <div class="form-field__header">
+              <label class="form-label">Last Name</label>
+              <app-field-error
+                [control]="registerForm.controls.lastName"
+                [serverError]="serverErrors().lastName"
+              >
+              </app-field-error>
+            </div>
+            <input type="text" class="form-input" placeholder="Doe" formControlName="lastName" />
+          </div>
+
+          <!-- Email -->
+          <div class="form-field">
+            <div class="form-field__header">
+              <label class="form-label">Email Address</label>
+              <app-field-error
+                [control]="registerForm.controls.email"
+                [serverError]="serverErrors().email"
+              >
+              </app-field-error>
+            </div>
+            <input
+              type="email"
+              class="form-input"
+              placeholder="name@example.com"
+              formControlName="email"
+            />
+          </div>
+
+          <!-- Phone -->
+          <div class="form-field">
+            <div class="form-field__header">
+              <label class="form-label">Phone number</label>
+              <app-field-error
+                [control]="registerForm.controls.phone"
+                [serverError]="serverErrors().phone"
+              >
+              </app-field-error>
+            </div>
+            <input
+              type="tel"
+              class="form-input"
+              placeholder="+1 234 567 890"
+              formControlName="phone"
+            />
+          </div>
+
+          <div class="form-field">
+            <div class="form-field__header">
+              <div class="password-help">
+                <div class="password-help__trigger">
+                  <label class="form-label">Password</label>
+                  <button
+                    type="button"
+                    class="password-help__button"
+                    aria-label="Show password requirements"
+                  >
+                    <lucide-icon [img]="InfoIcon" class="password-help__icon"></lucide-icon>
+                  </button>
+                </div>
+
+                <div class="password-help__popover">
+                  <p class="password-help__title">Password requirements</p>
+                  <ul class="password-help__list">
+                    <li>Only Latin letters</li>
+                    <li>At least 8 characters</li>
+                    <li>At least one digit</li>
+                    <li>At least one uppercase Latin letter</li>
+                    <li>At least one special character: @#$%^&+=!</li>
+                    <li>No spaces</li>
+                  </ul>
+                </div>
+              </div>
+              <app-field-error
+                class="form-field__error"
+                [control]="registerForm.controls.password"
+                [serverError]="serverErrors().password"
+              >
+              </app-field-error>
+            </div>
+            <div class="password-field">
+              <input
+                [type]="isPasswordVisible() ? 'password' : 'text'"
+                class="form-input form-input--with-action"
+                placeholder="Password"
+                formControlName="password"
+              />
+
+              <button
+                class="password-field__toggle"
+                type="button"
+                aria-label="Toggle password visibility"
+                (click)="isPasswordVisible.set(!isPasswordVisible())"
+              >
+                <lucide-icon
+                  [img]="isPasswordVisible() ? EyeIcon : EyeOff"
+                  class="password-field__icon"
+                ></lucide-icon>
               </button>
             </div>
+          </div>
 
-            <div class="password-help__popover">
-              <p class="password-help__title">Password requirements</p>
-              <ul class="password-help__list">
-                <li>Only Latin letters</li>
-                <li>At least 8 characters</li>
-                <li>At least one digit</li>
-                <li>At least one uppercase Latin letter</li>
-                <li>At least one special character: @#$%^&+=!</li>
-                <li>No spaces</li>
-              </ul>
+          <div class="form-field">
+            <div class="form-field__header">
+              <label class="form-label">Confirm Password</label>
+              <p
+                class="form-error form-error--reserved"
+                [class.form-error--visible]="
+                  (registerForm.controls.confirmPassword.touched || isSubmitted()) &&
+                  registerForm.hasError('passwordMismatch') &&
+                  !registerForm.controls.confirmPassword.hasError('required')
+                "
+              >
+                @if (
+                  (registerForm.controls.confirmPassword.touched || isSubmitted()) &&
+                  registerForm.hasError('passwordMismatch') &&
+                  !registerForm.controls.confirmPassword.hasError('required')
+                ) {
+                  Passwords don't match
+                }
+              </p>
+            </div>
+            <div class="password-field">
+              <input
+                [type]="isConfirmPasswordVisible() ? 'password' : 'text'"
+                class="form-input form-input--with-action"
+                placeholder="Confirm"
+                formControlName="confirmPassword"
+              />
+
+              <button
+                class="password-field__toggle"
+                type="button"
+                aria-label="Toggle confirm password visibility"
+                (click)="isConfirmPasswordVisible.set(!isConfirmPasswordVisible())"
+              >
+                <lucide-icon
+                  [img]="isConfirmPasswordVisible() ? EyeIcon : EyeOff"
+                  class="password-field__icon"
+                ></lucide-icon>
+              </button>
             </div>
           </div>
-          <app-field-error 
-            class="form-field__error"
-            [control]="registerForm.controls.password" 
-            [serverError]="serverErrors().password">
-          </app-field-error>
-        </div>
-        <div class="password-field">
-          <input
-            [type]="isPasswordVisible() ? 'password' : 'text'"
-            class="form-input form-input--with-action"
-            placeholder="••••••••"
-            formControlName="password"
-          />
 
-          <button
-            class="password-field__toggle"
-            type="button"
-            aria-label="Toggle password visibility"
-            (click)="isPasswordVisible.set(!isPasswordVisible())">
-            <lucide-icon [img]="isPasswordVisible() ? EyeIcon : EyeOff" class="password-field__icon"></lucide-icon>
-          </button>
-        </div>
+          <!-- Type -->
+          <div class="form-field auth-form__full">
+            <span class="form-label">Are you joining as a</span>
+
+            <div class="type-choice-grid">
+              <label class="type-choice">
+                <input
+                  class="type-choice__input"
+                  type="radio"
+                  formControlName="type"
+                  [value]="UserType.CLIENT"
+                />
+
+                <span class="type-choice__label">Client</span>
+              </label>
+
+              <label class="type-choice">
+                <input
+                  class="type-choice__input"
+                  type="radio"
+                  formControlName="type"
+                  [value]="UserType.SPECIALIST"
+                />
+
+                <span class="type-choice__label">Specialist</span>
+              </label>
+            </div>
+            <p
+              class="form-error form-error--reserved form-error--below"
+              [class.form-error--visible]="
+                !!serverErrors().type ||
+                (isSubmitted() && registerForm.controls.type.hasError('required'))
+              "
+            >
+              @if (serverErrors().type) {
+                {{ serverErrors().type }}
+              } @else if (isSubmitted() && registerForm.controls.type.hasError('required')) {
+                Please select user type
+              }
+            </p>
+          </div>
+
+          <div class="auth-form__full">
+            <app-button
+              text="Create Account"
+              type="submit"
+              size="md"
+              fullWidth
+              [loading]="isLoading()"
+            >
+            </app-button>
+          </div>
+
+          <div class="auth-divider auth-divider--compact auth-form__full">
+            <div class="auth-divider__line"></div>
+            <span class="auth-divider__text"> OR CONTINUE WITH </span>
+            <div class="auth-divider__line"></div>
+          </div>
+
+          <div class="social-button-grid auth-form__full">
+            <button type="button" class="social-button social-button--compact">
+              <img src="assets/img/logo/google-logo.svg" class="social-button__icon" alt="Google" />
+              <span class="social-button__text">Google</span>
+            </button>
+          </div>
+
+          <p class="auth-switch auth-form__full">
+            Already have an account?
+            <a routerLink="/login" class="auth-link"> Log in </a>
+          </p>
+        </form>
       </div>
-
-      <div class="form-field">
-        <div class="form-field__header">
-          <label class="form-label">Confirm password</label>
-          @if (
-            (registerForm.controls.confirmPassword.touched || isSubmitted()) &&
-            registerForm.hasError('passwordMismatch') &&
-            !registerForm.controls.confirmPassword.hasError('required')
-          ) {
-            <p class="form-error">Passwords don't match</p>
-          }
-        </div>
-        <div class="password-field">
-          <input
-            [type]="isConfirmPasswordVisible() ? 'password' : 'text'"
-            class="form-input form-input--with-action"
-            placeholder="••••••••"
-            formControlName="confirmPassword"
-          />
-
-          <button
-            class="password-field__toggle"
-            type="button"
-            aria-label="Toggle confirm password visibility"
-            (click)="isConfirmPasswordVisible.set(!isConfirmPasswordVisible())">
-            <lucide-icon [img]="isConfirmPasswordVisible() ? EyeIcon : EyeOff" class="password-field__icon"></lucide-icon>
-          </button>
-        </div>
-      </div>
-
-      <!-- Type -->
-      <div class="form-field auth-form__full">
-        <span class="form-label">Are you</span>
-
-        <div class="type-choice-grid">
-          <label class="type-choice">
-            <input
-              class="type-choice__input"
-              type="radio"
-              formControlName="type"
-              [value]="UserType.CLIENT"
-            />
-
-            <span class="type-choice__label">Client</span>
-          </label>
-
-          <label class="type-choice">
-            <input
-              class="type-choice__input"
-              type="radio"
-              formControlName="type"
-              [value]="UserType.SPECIALIST"
-            />
-
-            <span class="type-choice__label">Specialist</span>
-          </label>
-        </div>
-        @if (serverErrors().type) {
-          <p class="form-error">{{ serverErrors().type }}</p>
-        } @else if (isSubmitted() && registerForm.controls.type.hasError('required')) {
-          <p class="form-error">Please select user type</p>
-        }
-      </div>
-
-      <div class="auth-form__full">
-        <app-button
-          text="Create Account"
-          type="submit"
-          size="md"
-          fullWidth
-          [loading]="isLoading()">
-        </app-button>
-      </div>
-
-      <p class="auth-switch auth-form__full">
-        Already have an account?
-        <a routerLink="/login" class="auth-link">
-          Log in
-        </a>
-      </p>
-
-      <div class="auth-divider auth-divider--compact auth-form__full">
-        <div class="auth-divider__line"></div>
-        <span class="auth-divider__text">
-          OR CONTINUE WITH
-        </span>
-        <div class="auth-divider__line"></div>
-      </div>
-
-      <button type="button" class="social-button auth-form__full">
-        <img src="assets/img/logo/google-logo.svg" class="social-button__icon" alt="Google">
-        <span class="social-button__text">Google</span>
-      </button>
-    </form>
+    </section>
   </div>
 </div>

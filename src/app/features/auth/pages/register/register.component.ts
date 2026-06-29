@@ -1,92 +1,103 @@
 import { UserType } from '../../models/user-type.enum';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators as v, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators as v,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 import { LucideAngularModule, ZapIcon, EyeIcon, EyeOff, InfoIcon } from 'lucide-angular';
 import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { RegisterRequest, RegisterServerErrors } from '../../models/register.dto';
-import { FieldErrorComponent } from "../../../../shared/components/field-error/field-error.component";
+import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
 import { AuthApiService } from '../../services/auth-api.service';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, ButtonComponent, LucideAngularModule, RouterLink, FieldErrorComponent],
+  imports: [
+    ReactiveFormsModule,
+    ButtonComponent,
+    LucideAngularModule,
+    RouterLink,
+    FieldErrorComponent,
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-
   private authApiService = inject(AuthApiService);
   private router = inject(Router);
   private toast = inject(ToastService);
-  
+
   readonly UserType = UserType;
 
   readonly ZapIcon = ZapIcon;
   readonly EyeIcon = EyeIcon;
   readonly EyeOff = EyeOff;
   readonly InfoIcon = InfoIcon;
-  
+
   isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   isPasswordVisible = signal<boolean>(true);
   isConfirmPasswordVisible = signal<boolean>(true);
   serverErrors = signal<RegisterServerErrors>({});
 
-  registerForm = new FormGroup({
-    firstName: new FormControl('', {
-      nonNullable: true,
-      validators: [
-        v.required,
-        v.minLength(2),
-        v.maxLength(50),
-        v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
-      ],
-    }),
-    lastName: new FormControl('', {
-      nonNullable: true,
-      validators: [
-        v.required,
-        v.minLength(2),
-        v.maxLength(50),
-        v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
-      ],
-    }),
-    email: new FormControl('', {
-      nonNullable: true,
-      validators: [v.required, v.email],
-    }),
-    phone: new FormControl('', {
-      nonNullable: true,
-      validators: [
-        v.required,
-        v.minLength(7),
-        v.maxLength(20),
-        v.pattern(/^\+?\d+$/),
-      ],
-    }),
-    password: new FormControl('', {
-      nonNullable: true,
-      validators: [
-        v.required,
-        v.minLength(8),
-        v.pattern(/^(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z0-9@#$%^&+=!]+$/)
-      ],
-    }),
-    confirmPassword: new FormControl('', {
-      nonNullable: true,
-      validators: [v.required],
-    }),
-    type: new FormControl(UserType.CLIENT, {
-      nonNullable: true,
-      validators: [v.required],
-    }),
-  }, {
-    validators: [this.passwordComparator()]
-  });
+  registerForm = new FormGroup(
+    {
+      firstName: new FormControl('', {
+        nonNullable: true,
+        validators: [
+          v.required,
+          v.minLength(2),
+          v.maxLength(50),
+          v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
+        ],
+      }),
+      lastName: new FormControl('', {
+        nonNullable: true,
+        validators: [
+          v.required,
+          v.minLength(2),
+          v.maxLength(50),
+          v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
+        ],
+      }),
+      email: new FormControl('', {
+        nonNullable: true,
+        validators: [v.required, v.email],
+      }),
+      phone: new FormControl('', {
+        nonNullable: true,
+        validators: [v.required, v.minLength(7), v.maxLength(20), v.pattern(/^\+?\d+$/)],
+      }),
+      password: new FormControl('', {
+        nonNullable: true,
+        validators: [
+          v.required,
+          v.minLength(8),
+          v.pattern(/^(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z0-9@#$%^&+=!]+$/),
+        ],
+      }),
+      confirmPassword: new FormControl('', {
+        nonNullable: true,
+        validators: [v.required],
+      }),
+      type: new FormControl(UserType.CLIENT, {
+        nonNullable: true,
+        validators: [v.required],
+      }),
+    },
+    {
+      validators: [this.passwordComparator()],
+    },
+  );
 
   onSubmit() {
     this.isPasswordVisible.set(true);
@@ -104,13 +115,14 @@ export class RegisterComponent {
 
     const payload = this.getPayload(this.registerForm.getRawValue());
 
-    this.authApiService.register(payload)
+    this.authApiService
+      .register(payload)
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
           this.isSubmitted.set(false);
           this.serverErrors.set({});
-        })
+        }),
       )
       .subscribe({
         next: () => {
@@ -118,15 +130,14 @@ export class RegisterComponent {
           this.toast.success('You have signed up successfully.', 'Welcome!');
           this.router.navigateByUrl('/');
         },
-      error: (err: HttpErrorResponse) => {
-        if (err.error.errors) {
-          this.serverErrors.set(err.error.errors);
-        } else {
-          this.toast.error(
-            err.error.detail ?? 'Registration failed', 'Error'
-          );
-        }
-      }});
+        error: (err: HttpErrorResponse) => {
+          if (err.error.errors) {
+            this.serverErrors.set(err.error.errors);
+          } else {
+            this.toast.error(err.error.detail ?? 'Registration failed', 'Error');
+          }
+        },
+      });
   }
 
   passwordComparator(): ValidatorFn {
