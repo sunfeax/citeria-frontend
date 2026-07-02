@@ -13,8 +13,10 @@ type ButtonSize = 'sm' | 'md' | 'lg';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
+  /** ICONS */
   protected readonly icons = IconsClass;
 
+  /** INPUTS */
   @Input() text: string = '';
   @Input() type: 'button' | 'submit' = 'button';
   @Input({ transform: booleanAttribute }) loading: boolean = false;

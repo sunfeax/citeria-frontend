@@ -9,5 +9,6 @@ import RoutesClass from '../../../../shared/util/routes-class';
   styleUrl: './forgot-password.component.scss',
 })
 export class ForgotPasswordComponent {
+  /** ROUTES */
   readonly routes = RoutesClass;
 }

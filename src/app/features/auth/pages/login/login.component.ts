@@ -18,18 +18,24 @@ import { LoginRequest } from '../../models/login.dto';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  /** INJECTORS */
   private authSE = inject(AuthService);
   private router = inject(Router);
   private toast = inject(ToastService);
 
+  /** ICONS */
   readonly icons = IconsClass;
+
+  /** ROUTES */
   readonly routes = RoutesClass;
 
+  /** STATE */
   isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   isPasswordVisible = signal<boolean>(true);
   serverError = signal<string | null>(null);
 
+  /** FORM */
   loginForm = new FormGroup({
     email: new FormControl('', {
       nonNullable: true,
@@ -41,6 +47,7 @@ export class LoginComponent {
     }),
   });
 
+  /** ACTIONS */
   onSubmit() {
     this.isPasswordVisible.set(true);
     this.isSubmitted.set(true);

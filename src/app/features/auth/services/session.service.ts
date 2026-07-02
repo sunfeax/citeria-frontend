@@ -4,11 +4,12 @@ import { computed, Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class SessionService {
-
+  /** STATE */
   private readonly accessToken = signal<string | null>(null);
-  
+
   readonly isAuthenticated = computed(() => !!this.accessToken());
 
+  /** ACTIONS */
   getAccessToken(): string | null {
     return this.accessToken();
   }

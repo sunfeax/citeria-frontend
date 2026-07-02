@@ -34,21 +34,28 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
+  /** INJECTORS */
   private authSE = inject(AuthService);
   private router = inject(Router);
   private toast = inject(ToastService);
 
+  /** ENUMS */
   readonly UserType = UserType;
 
+  /** ICONS */
   readonly icons = IconsClass;
+
+  /** ROUTES */
   readonly routes = RoutesClass;
 
+  /** STATE */
   isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   isPasswordVisible = signal<boolean>(true);
   isConfirmPasswordVisible = signal<boolean>(true);
   serverErrors = signal<RegisterServerErrors>({});
 
+  /** FORM */
   registerForm = new FormGroup(
     {
       firstName: new FormControl('', {
@@ -99,6 +106,7 @@ export class RegisterComponent {
     },
   );
 
+  /** ACTIONS */
   onSubmit() {
     this.isPasswordVisible.set(true);
     this.isConfirmPasswordVisible.set(true);
@@ -140,6 +148,7 @@ export class RegisterComponent {
       });
   }
 
+  /** HELPERS */
   passwordComparator(): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       const { password, confirmPassword } = group.value;

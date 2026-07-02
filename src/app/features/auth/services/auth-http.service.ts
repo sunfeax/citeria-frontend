@@ -9,9 +9,10 @@ import { RegisterRequest, RegisterResponse } from '../models/register.dto';
   providedIn: 'root',
 })
 export class AuthHttpService {
-
+  /** INJECTORS */
   http = inject(HttpClient);
-  
+
+  /** ACTIONS */
   login(payload: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(
       `${environment.baseUrl}/auth/login`,

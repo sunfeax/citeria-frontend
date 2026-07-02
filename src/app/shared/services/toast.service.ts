@@ -5,8 +5,10 @@ import { ToastItem } from '../types/toast.type';
   providedIn: 'root',
 })
 export class ToastService {
+  /** STATE */
   readonly toasts = signal<ToastItem[]>([]);
 
+  /** ACTIONS */
   success(message: string, title = 'Success', duration = 3000): void {
     this.show({ type: 'success', title, message, duration });
   }
@@ -27,6 +29,7 @@ export class ToastService {
     this.toasts.update(items => items.filter(item => item.id !== id));
   }
 
+  /** HELPERS */
   private show(input: Omit<ToastItem, 'id'>): void {
     const id = crypto.randomUUID();
 

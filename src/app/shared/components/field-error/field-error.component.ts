@@ -8,7 +8,8 @@ import { AbstractControl } from '@angular/forms';
   styleUrl: './field-error.component.scss',
 })
 export class FieldErrorComponent {
-  @Input({ required: true }) control!: AbstractControl; 
+  /** INPUTS */
+  @Input({ required: true }) control!: AbstractControl;
   @Input() serverError?: string | null;
 
   get shouldShowError(): boolean {

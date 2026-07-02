@@ -12,8 +12,10 @@ import IconsClass from '../../util/icons-class';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToastComponent {
+  /** INJECTORS */
   readonly toastSE = inject(ToastService);
 
+  /** ICONS */
   protected readonly icons = IconsClass;
 
   iconFor(type: ToastType) {

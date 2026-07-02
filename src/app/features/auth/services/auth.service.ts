@@ -9,9 +9,11 @@ import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
+  /** INJECTORS */
   private readonly authHttpSE = inject(AuthHttpService);
   private readonly sessionSE = inject(SessionService);
 
+  /** ACTIONS */
   login(payload: LoginRequest): Observable<LoginResponse> {
     return this.authHttpSE.login(payload).pipe(
       tap((response) => {
