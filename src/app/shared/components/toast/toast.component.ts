@@ -1,7 +1,8 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { LucideAngularModule, CheckCircle2Icon, CircleAlertIcon, InfoIcon, TriangleAlertIcon, XIcon } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { ToastService } from '../../services/toast.service';
 import { ToastType } from '../../types/toast.type';
+import IconsClass from '../../util/icons-class';
 
 @Component({
   selector: 'app-toast',
@@ -13,22 +14,18 @@ import { ToastType } from '../../types/toast.type';
 export class ToastComponent {
   readonly toastSE = inject(ToastService);
 
-  protected readonly CheckCircle2Icon = CheckCircle2Icon;
-  protected readonly CircleAlertIcon = CircleAlertIcon;
-  protected readonly InfoIcon = InfoIcon;
-  protected readonly TriangleAlertIcon = TriangleAlertIcon;
-  protected readonly XIcon = XIcon;
+  protected readonly icons = IconsClass;
 
   iconFor(type: ToastType) {
     switch (type) {
       case 'success':
-        return this.CheckCircle2Icon;
+        return this.icons.checkCircle;
       case 'error':
-        return this.CircleAlertIcon;
+        return this.icons.circleAlert;
       case 'warning':
-        return this.TriangleAlertIcon;
+        return this.icons.triangleAlert;
       default:
-        return this.InfoIcon;
+        return this.icons.info;
     }
   }
 }

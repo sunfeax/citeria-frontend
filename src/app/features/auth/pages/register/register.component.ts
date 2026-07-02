@@ -10,11 +10,12 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { LucideAngularModule, ZapIcon, EyeIcon, EyeOff, InfoIcon } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
+import IconsClass from '../../../../shared/util/icons-class';
 import { RegisterRequest, RegisterServerErrors } from '../../models/register.dto';
 import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
 import { AuthService } from '../../services/auth.service';
@@ -38,10 +39,7 @@ export class RegisterComponent {
 
   readonly UserType = UserType;
 
-  readonly ZapIcon = ZapIcon;
-  readonly EyeIcon = EyeIcon;
-  readonly EyeOff = EyeOff;
-  readonly InfoIcon = InfoIcon;
+  readonly icons = IconsClass;
 
   isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);

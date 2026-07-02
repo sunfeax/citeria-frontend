@@ -1,11 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators as v } from '@angular/forms';
-import { LucideAngularModule, ZapIcon, EyeIcon, EyeOff } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
+import IconsClass from '../../../../shared/util/icons-class';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/login.dto';
 
@@ -21,9 +22,7 @@ export class LoginComponent {
   private router = inject(Router);
   private toast = inject(ToastService);
 
-  readonly ZapIcon = ZapIcon;
-  readonly EyeIcon = EyeIcon;
-  readonly EyeOff = EyeOff;
+  readonly icons = IconsClass;
   
   isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);

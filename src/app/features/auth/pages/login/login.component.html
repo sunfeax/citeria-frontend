@@ -3,7 +3,7 @@
     <div class="auth-card__header">
       <div class="brand-block">
         <div class="brand-block__icon">
-          <lucide-icon class="brand-block__icon-svg" [img]="ZapIcon"></lucide-icon>
+          <lucide-icon class="brand-block__icon-svg" [img]="icons.zap"></lucide-icon>
         </div>
         <h1 class="brand-block__title">Citeria</h1>
         <p class="brand-block__subtitle">Please enter your details to sign in</p>
@@ -40,7 +40,7 @@
             type="button"
             aria-label="Toggle password visibility"
             (click)="isPasswordVisible.set(!isPasswordVisible())">
-            <lucide-icon [img]="isPasswordVisible() ? EyeIcon : EyeOff" class="password-field__icon"></lucide-icon>
+            <lucide-icon [img]="isPasswordVisible() ? icons.eye : icons.eyeOff" class="password-field__icon"></lucide-icon>
           </button>
         </div>
         <div class="auth-actions auth-actions--end">

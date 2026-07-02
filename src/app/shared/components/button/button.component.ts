@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, booleanAttribute, Component, Input } from '@angular/core';
-import { LoaderCircleIcon, LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
+import IconsClass from '../../util/icons-class';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'outline';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -12,7 +13,7 @@ type ButtonSize = 'sm' | 'md' | 'lg';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
-  protected readonly loaderCircleIcon = LoaderCircleIcon;
+  protected readonly icons = IconsClass;
 
   @Input() text: string = '';
   @Input() type: 'button' | 'submit' = 'button';

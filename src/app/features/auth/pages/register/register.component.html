@@ -4,7 +4,7 @@
       <div>
         <div class="register-hero__brand">
           <span class="register-hero__mark">
-            <lucide-icon [img]="ZapIcon" class="register-hero__mark-icon"></lucide-icon>
+            <lucide-icon [img]="icons.zap" class="register-hero__mark-icon"></lucide-icon>
           </span>
           <span>Citeria</span>
         </div>
@@ -112,7 +112,7 @@
                     class="password-help__button"
                     aria-label="Show password requirements"
                   >
-                    <lucide-icon [img]="InfoIcon" class="password-help__icon"></lucide-icon>
+                    <lucide-icon [img]="icons.info" class="password-help__icon"></lucide-icon>
                   </button>
                 </div>
 
@@ -144,7 +144,7 @@
                 (click)="isPasswordVisible.set(!isPasswordVisible())"
               >
                 <lucide-icon
-                  [img]="isPasswordVisible() ? EyeIcon : EyeOff"
+                  [img]="isPasswordVisible() ? icons.eye : icons.eyeOff"
                   class="password-field__icon"
                 ></lucide-icon>
               </button>
@@ -175,7 +175,7 @@
                 (click)="isConfirmPasswordVisible.set(!isConfirmPasswordVisible())"
               >
                 <lucide-icon
-                  [img]="isConfirmPasswordVisible() ? EyeIcon : EyeOff"
+                  [img]="isConfirmPasswordVisible() ? icons.eye : icons.eyeOff"
                   class="password-field__icon"
                 ></lucide-icon>
               </button>
