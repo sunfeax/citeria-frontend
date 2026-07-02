@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import RoutesClass from '../../../../shared/util/routes-class';
 
 @Component({
   selector: 'app-forgot-password',
@@ -7,4 +8,6 @@ import { RouterLink } from '@angular/router';
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss',
 })
-export class ForgotPasswordComponent {}
+export class ForgotPasswordComponent {
+  readonly routes = RoutesClass;
+}

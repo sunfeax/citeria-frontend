@@ -45,7 +45,7 @@
         </div>
         <div class="auth-actions auth-actions--end">
           <a
-            routerLink="/forgot-password"
+            [routerLink]="routes.forgotPassword"
             class="auth-link auth-link--small"
           >
             Forgot password?
@@ -63,7 +63,7 @@
 
       <p class="auth-switch">
         Don't have an account?
-        <a routerLink="/register" class="auth-link">
+        <a [routerLink]="routes.register" class="auth-link">
           Sign up
         </a>
       </p>

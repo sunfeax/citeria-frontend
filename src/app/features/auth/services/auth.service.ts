@@ -9,7 +9,6 @@ import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-
   private readonly authHttpSE = inject(AuthHttpService);
   private readonly sessionSE = inject(SessionService);
 
@@ -17,7 +16,7 @@ export class AuthService {
     return this.authHttpSE.login(payload).pipe(
       tap((response) => {
         this.sessionSE.setAccessToken(response.token);
-      })
+      }),
     );
   }
 
@@ -33,7 +32,7 @@ export class AuthService {
       catchError((err) => {
         this.sessionSE.clearSession();
         return throwError(() => err);
-      }) 
+      }),
     );
   }
 
@@ -41,7 +40,7 @@ export class AuthService {
     return this.authHttpSE.logout().pipe(
       finalize(() => {
         this.sessionSE.clearSession();
-      })
+      }),
     );
   }
 }

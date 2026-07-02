@@ -7,6 +7,7 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import IconsClass from '../../../../shared/util/icons-class';
+import RoutesClass from '../../../../shared/util/routes-class';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/login.dto';
 
@@ -17,13 +18,13 @@ import { LoginRequest } from '../../models/login.dto';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-
   private authSE = inject(AuthService);
   private router = inject(Router);
   private toast = inject(ToastService);
 
   readonly icons = IconsClass;
-  
+  readonly routes = RoutesClass;
+
   isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   isPasswordVisible = signal<boolean>(true);
@@ -55,17 +56,18 @@ export class LoginComponent {
 
     const payload: LoginRequest = this.loginForm.getRawValue();
 
-    this.authSE.login(payload)
+    this.authSE
+      .login(payload)
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
-        })
+        }),
       )
       .subscribe({
         next: () => {
           this.serverError.set(null);
           this.toast.success('You have signed in successfully.', 'Welcome back');
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl(RoutesClass.profile);
         },
         error: (err: HttpErrorResponse) => {
           if (err.status === 401) {

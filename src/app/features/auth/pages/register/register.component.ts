@@ -16,6 +16,7 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import IconsClass from '../../../../shared/util/icons-class';
+import RoutesClass from '../../../../shared/util/routes-class';
 import { RegisterRequest, RegisterServerErrors } from '../../models/register.dto';
 import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
 import { AuthService } from '../../services/auth.service';
@@ -40,6 +41,7 @@ export class RegisterComponent {
   readonly UserType = UserType;
 
   readonly icons = IconsClass;
+  readonly routes = RoutesClass;
 
   isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
@@ -126,7 +128,7 @@ export class RegisterComponent {
         next: () => {
           this.serverErrors.set({});
           this.toast.success('You have signed up successfully.', 'Welcome!');
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl(RoutesClass.home);
         },
         error: (err: HttpErrorResponse) => {
           if (err.error.errors) {
