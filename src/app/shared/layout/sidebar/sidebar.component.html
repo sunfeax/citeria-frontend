@@ -1,0 +1,20 @@
+<aside>
+  <header>
+    <h3>Citeria</h3>
+    <p>EXPERTISE MARKET</p>
+  </header>
+  <nav>
+    @for (item of data; track item.label) {
+      <a [class.disabled]="item.disabled">
+        <lucide-icon [img]="item.icon" aria-hidden="true"></lucide-icon>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+  <footer>
+    <span>Username</span>
+    <button type="button" aria-label="Logout">
+      <lucide-icon [img]="icons.logOut"></lucide-icon>
+    </button>
+  </footer>
+</aside>
