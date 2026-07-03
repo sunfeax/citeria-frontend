@@ -9,7 +9,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import IconsClass from '../../../../shared/util/icons-class';
 import RoutesClass from '../../../../shared/util/routes-class';
 import { AuthService } from '../../services/auth.service';
-import { LoginRequest } from '../../models/login.dto';
+import { iLoginRequest } from '../../models/iLogin';
 
 @Component({
   selector: 'app-login',
@@ -61,7 +61,7 @@ export class LoginComponent {
 
     this.isLoading.set(true);
 
-    const payload: LoginRequest = this.loginForm.getRawValue();
+    const payload: iLoginRequest = this.loginForm.getRawValue();
 
     this.authSE
       .login(payload)

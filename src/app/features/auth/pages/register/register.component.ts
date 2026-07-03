@@ -1,4 +1,4 @@
-import { UserType } from '../../models/user-type.enum';
+import { eUserType } from '../../models/eUserType';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import {
@@ -17,7 +17,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import IconsClass from '../../../../shared/util/icons-class';
 import RoutesClass from '../../../../shared/util/routes-class';
-import { RegisterRequest, RegisterServerErrors } from '../../models/register.dto';
+import { iRegisterRequest, tRegisterServerErrors } from '../../models/iRegister';
 import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
 import { AuthService } from '../../services/auth.service';
 
@@ -40,7 +40,7 @@ export class RegisterComponent {
   private toast = inject(ToastService);
 
   /** ENUMS */
-  readonly UserType = UserType;
+  readonly UserType = eUserType;
 
   /** ICONS */
   readonly icons = IconsClass;
@@ -53,7 +53,7 @@ export class RegisterComponent {
   isLoading = signal<boolean>(false);
   isPasswordVisible = signal<boolean>(true);
   isConfirmPasswordVisible = signal<boolean>(true);
-  serverErrors = signal<RegisterServerErrors>({});
+  serverErrors = signal<tRegisterServerErrors>({});
 
   /** FORM */
   registerForm = new FormGroup(
@@ -96,7 +96,7 @@ export class RegisterComponent {
         nonNullable: true,
         validators: [v.required],
       }),
-      type: new FormControl(UserType.CLIENT, {
+      type: new FormControl(eUserType.CLIENT, {
         nonNullable: true,
         validators: [v.required],
       }),
@@ -159,8 +159,8 @@ export class RegisterComponent {
     };
   }
 
-  getPayload(raw: RegisterRequest) {
-    const payload: RegisterRequest = {
+  getPayload(raw: iRegisterRequest) {
+    const payload: iRegisterRequest = {
       firstName: raw.firstName.trim(),
       lastName: raw.lastName.trim(),
       email: raw.email.trim(),

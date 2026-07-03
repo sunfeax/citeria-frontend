@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LoginRequest, LoginResponse } from '../models/login.dto';
+import { iLoginRequest, iLoginResponse } from '../models/iLogin';
 import { environment } from '../../../../environments/environment';
-import { RegisterRequest, RegisterResponse } from '../models/register.dto';
+import { iRegisterRequest, tRegisterResponse } from '../models/iRegister';
+import { iUser } from '../models/iUser';
 
 @Injectable({
   providedIn: 'root',
@@ -13,35 +14,31 @@ export class AuthHttpService {
   http = inject(HttpClient);
 
   /** ACTIONS */
-  login(payload: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(
-      `${environment.baseUrl}/auth/login`,
-      payload,
-      { withCredentials: true }
-    );
+  login(payload: iLoginRequest): Observable<iLoginResponse> {
+    return this.http.post<iLoginResponse>(`${environment.baseUrl}/auth/login`, payload, {
+      withCredentials: true,
+    });
   }
-
-  register(payload: RegisterRequest): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(
-      `${environment.baseUrl}/auth/register`,
-      payload,
-      { withCredentials: true }
-    );
+  register(payload: iRegisterRequest): Observable<tRegisterResponse> {
+    return this.http.post<tRegisterResponse>(`${environment.baseUrl}/auth/register`, payload, {
+      withCredentials: true,
+    });
   }
-
-  refresh(): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(
+  refresh(): Observable<iLoginResponse> {
+    return this.http.post<iLoginResponse>(
       `${environment.baseUrl}/auth/refresh`,
       {},
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
-
   logout(): Observable<void> {
     return this.http.post<void>(
       `${environment.baseUrl}/auth/logout`,
       {},
-      { withCredentials: true }
+      { withCredentials: true },
     );
+  }
+  getMe(): Observable<iUser> {
+    return this.http.get<iUser>(`${environment.baseUrl}/user/me`, { withCredentials: true });
   }
 }
