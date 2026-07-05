@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { SessionService } from './session.service';
 import { iLoginRequest, iLoginResponse } from '../models/iLogin';
 import { iRegisterRequest, tRegisterResponse } from '../models/iRegister';
-import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
+import { catchError, finalize, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { iUser } from '../models/iUser';
 
 @Injectable({
@@ -13,6 +13,9 @@ export class AuthService {
   /** INJECTORS */
   private readonly authHttpSE = inject(AuthHttpService);
   private readonly sessionSE = inject(SessionService);
+
+  /** STATE */
+  private refresh$: Observable<iLoginResponse> | null = null;
 
   /** ACTIONS */
   login(payload: iLoginRequest): Observable<iLoginResponse> {
@@ -27,15 +30,18 @@ export class AuthService {
     return this.authHttpSE.register(payload);
   }
   refresh(): Observable<iLoginResponse> {
-    return this.authHttpSE.refresh().pipe(
-      tap((response) => {
-        this.sessionSE.setAccessToken(response.token);
-      }),
-      catchError((err) => {
-        this.sessionSE.clearSession();
-        return throwError(() => err);
-      }),
-    );
+    if (!this.refresh$) {
+      this.refresh$ = this.authHttpSE.refresh().pipe(
+        tap((response) => {
+          this.sessionSE.setAccessToken(response.token);
+        }),
+        catchError((err) => {
+          this.sessionSE.clearSession();
+          return throwError(() => err);
+        }),
+      );
+    }
+    return this.refresh$;
   }
   logout(): Observable<void> {
     return this.authHttpSE.logout().pipe(
@@ -52,6 +58,14 @@ export class AuthService {
       catchError((err) => {
         this.sessionSE.clearSession();
         return throwError(() => err);
+      }),
+    );
+  }
+  restoreSession(): Observable<iUser | null> {
+    return this.refresh().pipe(
+      switchMap(() => this.getMe()),
+      catchError(() => {
+        return of(null);
       }),
     );
   }
