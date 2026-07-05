@@ -27,7 +27,7 @@ export class SidebarComponent {
   protected readonly displayName = computed(() => {
     const user = this.sessionSE.user();
     if (!user) return 'Guest';
-    const fullName = user.firstName + user.lastName;
+    const fullName = `${user.firstName} ${user.lastName}`;
     return fullName || user.email;
   });
 

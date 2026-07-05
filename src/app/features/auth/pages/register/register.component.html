@@ -45,7 +45,7 @@
             <div class="form-field__header">
               <label class="form-label">First Name</label>
             </div>
-            <input type="text" class="form-input" placeholder="Jane" formControlName="firstName" />
+            <input type="text" class="form-input" placeholder="Jane" formControlName="firstName" autocomplete="given-name" />
             <app-field-error
               [control]="registerForm.controls.firstName"
               [serverError]="serverErrors().firstName"
@@ -58,7 +58,7 @@
             <div class="form-field__header">
               <label class="form-label">Last Name</label>
             </div>
-            <input type="text" class="form-input" placeholder="Doe" formControlName="lastName" />
+            <input type="text" class="form-input" placeholder="Doe" formControlName="lastName" autocomplete="family-name" />
             <app-field-error
               [control]="registerForm.controls.lastName"
               [serverError]="serverErrors().lastName"
@@ -76,6 +76,7 @@
               class="form-input"
               placeholder="name@example.com"
               formControlName="email"
+              autocomplete="email"
             />
             <app-field-error
               [control]="registerForm.controls.email"
@@ -94,6 +95,7 @@
               class="form-input"
               placeholder="+1 234 567 890"
               formControlName="phone"
+              autocomplete="tel"
             />
             <app-field-error
               [control]="registerForm.controls.phone"
@@ -135,6 +137,7 @@
                 class="form-input form-input--with-action"
                 placeholder="Password"
                 formControlName="password"
+                autocomplete="new-password"
               />
 
               <button
@@ -166,6 +169,7 @@
                 class="form-input form-input--with-action"
                 placeholder="Confirm"
                 formControlName="confirmPassword"
+                autocomplete="new-password"
               />
 
               <button
@@ -180,13 +184,15 @@
                 ></lucide-icon>
               </button>
             </div>
-            @if (
-              (registerForm.controls.confirmPassword.touched || isSubmitted()) &&
-              registerForm.hasError('passwordMismatch') &&
-              !registerForm.controls.confirmPassword.hasError('required')
-            ) {
-              <p class="form-error">Passwords don't match</p>
-            }
+            <p class="form-error">
+              @if (
+                (registerForm.controls.confirmPassword.touched || isSubmitted()) &&
+                registerForm.hasError('passwordMismatch') &&
+                !registerForm.controls.confirmPassword.hasError('required')
+              ) {
+                Passwords don't match
+              }
+            </p>
           </div>
 
           <!-- Type -->
@@ -216,11 +222,13 @@
                 <span class="type-choice__label">Specialist</span>
               </label>
             </div>
-            @if (serverErrors().type) {
-              <p class="form-error">{{ serverErrors().type }}</p>
-            } @else if (isSubmitted() && registerForm.controls.type.hasError('required')) {
-              <p class="form-error">Please select user type</p>
-            }
+            <p class="form-error">
+              @if (serverErrors().type) {
+                {{ serverErrors().type }}
+              } @else if (isSubmitted() && registerForm.controls.type.hasError('required')) {
+                Please select user type
+              }
+            </p>
           </div>
 
           <div class="auth-form__full">

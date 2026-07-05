@@ -136,7 +136,7 @@ export class RegisterComponent {
         next: () => {
           this.serverErrors.set({});
           this.toast.success('You have signed up successfully.', 'Welcome!');
-          this.router.navigateByUrl(RoutesClass.home);
+          this.router.navigateByUrl(RoutesClass.login);
         },
         error: (err: HttpErrorResponse) => {
           if (err.error.errors) {

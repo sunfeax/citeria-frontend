@@ -132,11 +132,11 @@
 
   .auth-form--register {
     padding: 0;
-    gap: var(--space-5);
+    gap: var(--space-6);
 
     @media (min-width: 768px) {
       column-gap: var(--gap-lg);
-      row-gap: var(--space-5);
+      row-gap: var(--space-6);
       padding: 0;
     }
   }
@@ -658,6 +658,7 @@
   }
 
   .auth-card--register .form-field {
+    position: relative;
     gap: var(--space-1-5);
   }
 
@@ -665,14 +666,16 @@
     align-items: center;
   }
 
-  .auth-card--register .field-error,
+  .auth-card--register app-field-error .field-error,
   .auth-card--register .form-error {
-    overflow: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     margin: 0;
     color: var(--color-danger);
-    font-size: 0.5625rem;
-    line-height: 0.75rem;
-    text-overflow: ellipsis;
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-tight);
     white-space: nowrap;
   }
 

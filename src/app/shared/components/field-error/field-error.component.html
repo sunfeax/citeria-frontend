@@ -1,5 +1,5 @@
-@if (shouldShowError) {
-  <div class="field-error">
+<div class="field-error">
+  @if (shouldShowError) {
     @if (serverError) {
       {{ serverError }}
     } @else if (control.hasError('required')) {
@@ -13,5 +13,5 @@
     } @else if (control.hasError('email')) {
       Invalid email address
     }
-  </div>
-}
+  }
+</div>
