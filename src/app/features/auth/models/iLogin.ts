@@ -6,7 +6,7 @@ export interface iLoginRequest {
 }
 
 export interface iLoginResponse {
-  token: string;
+  accessToken: string;
   tokenType: string;
   user: iUser;
 }

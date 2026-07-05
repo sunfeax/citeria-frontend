@@ -12,7 +12,7 @@
     }
   </nav>
   <footer>
-    <span>Username</span>
+    <span>{{ displayName() }}</span>
     <button type="button" aria-label="Logout" (click)="logout()">
       <lucide-icon [img]="icons.logOut"></lucide-icon>
     </button>

@@ -5,6 +5,7 @@ import { iLoginRequest, iLoginResponse } from '../models/iLogin';
 import { environment } from '../../../../environments/environment';
 import { iRegisterRequest, tRegisterResponse } from '../models/iRegister';
 import { iUser } from '../models/iUser';
+import { iRefreshResponse } from '../models/iRefresh';
 
 @Injectable({
   providedIn: 'root',
@@ -24,8 +25,8 @@ export class AuthHttpService {
       withCredentials: true,
     });
   }
-  refresh(): Observable<iLoginResponse> {
-    return this.http.post<iLoginResponse>(
+  refresh(): Observable<iRefreshResponse> {
+    return this.http.post<iRefreshResponse>(
       `${environment.baseUrl}/auth/refresh`,
       {},
       { withCredentials: true },
@@ -39,6 +40,6 @@ export class AuthHttpService {
     );
   }
   getMe(): Observable<iUser> {
-    return this.http.get<iUser>(`${environment.baseUrl}/user/me`, { withCredentials: true });
+    return this.http.get<iUser>(`${environment.baseUrl}/users/me`, { withCredentials: true });
   }
 }

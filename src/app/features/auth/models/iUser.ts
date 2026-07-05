@@ -2,7 +2,7 @@ import { eUserRole } from './eUserRole';
 import { eUserType } from './eUserType';
 
 export interface iUser {
-  uuid: string;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;

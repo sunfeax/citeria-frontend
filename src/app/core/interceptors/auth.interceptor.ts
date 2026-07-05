@@ -23,7 +23,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return authSE.refresh().pipe(
           switchMap((response) => {
             const retryReq = req.clone({
-              setHeaders: { Authorization: `Bearer ${response.token}` },
+              setHeaders: { Authorization: `Bearer ${response.accessToken}` },
             });
             return next(retryReq);
           })
