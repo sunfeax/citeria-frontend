@@ -27,55 +27,7 @@
 
 .confirm__actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: var(--gap-sm);
   margin-top: var(--space-6);
-}
-
-.confirm__btn {
-  min-width: 6rem;
-  padding: var(--space-2) var(--space-4);
-  border: var(--border-width-sm) solid transparent;
-  border-radius: var(--radius-2xl);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition:
-    background-color var(--transition-base),
-    border-color var(--transition-base),
-    box-shadow var(--transition-base),
-    color var(--transition-base);
-}
-
-.confirm__btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
-}
-
-.confirm__btn--cancel {
-  border-color: var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text-soft);
-}
-
-.confirm__btn--cancel:hover {
-  background: var(--color-slate-100);
-}
-
-.confirm__btn--confirm {
-  background: var(--color-primary);
-  color: var(--color-white);
-}
-
-.confirm__btn--confirm:hover {
-  background: var(--color-primary-hover);
-}
-
-.confirm__btn--danger {
-  background: var(--color-danger);
-  color: var(--color-white);
-}
-
-.confirm__btn--danger:hover {
-  background: var(--color-danger-strong);
 }

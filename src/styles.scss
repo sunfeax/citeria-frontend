@@ -1,4 +1,5 @@
 @use './styles/auth-page' as auth;
+@use './styles/button' as button;
 @import '@angular/cdk/overlay-prebuilt.css';
 
 :root {
@@ -79,6 +80,7 @@
   --color-sky-950: #082f49;
   --color-amber-200: #fde68a;
   --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
   --color-amber-950: #451a03;
 
   --color-background: var(--color-slate-50);
@@ -162,6 +164,7 @@ input {
 }
 
 @include auth.styles;
+@include button.styles;
 
 // Backdrop for CDK dialogs — rendered in the overlay container, so it must be global.
 .confirm-backdrop {

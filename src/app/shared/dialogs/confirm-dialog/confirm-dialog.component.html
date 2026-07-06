@@ -2,19 +2,23 @@
   class="confirm"
   role="alertdialog"
   aria-labelledby="confirm-title"
-  aria-describedby="confirm-msg"
+  [attr.aria-describedby]="data.message ? 'confirm-msg' : null"
 >
   <h2 id="confirm-title" class="confirm__title">{{ data.title }}</h2>
-  <p id="confirm-msg" class="confirm__message">{{ data.message }}</p>
+  @if (data.message) {
+    <p id="confirm-msg" class="confirm__message">{{ data.message }}</p>
+  }
 
   <div class="confirm__actions">
-    <button type="button" class="btn" (click)="onCancel()">
+    <button type="button" class="btn btn--secondary" (click)="onCancel()">
       {{ data.cancelText ?? 'Cancel' }}
     </button>
     <button
       type="button"
       class="btn"
       [class.btn--danger]="data.variant === 'danger'"
+      [class.btn--warning]="data.variant === 'warning'"
+      [class.btn--primary]="data.variant !== 'danger' && data.variant !== 'warning'"
       (click)="onConfirm()"
     >
       {{ data.confirmText ?? 'Confirm' }}

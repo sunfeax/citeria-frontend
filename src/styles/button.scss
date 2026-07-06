@@ -1,0 +1,71 @@
+// Shared button styles used from the global stylesheet.
+@mixin styles {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-sm);
+    min-width: 6rem;
+    min-height: 2.625rem;
+    padding: var(--space-2) var(--space-5);
+    border: var(--border-width-sm) solid transparent;
+    border-radius: var(--radius-2xl);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    cursor: pointer;
+    transition:
+      background-color var(--transition-base),
+      border-color var(--transition-base),
+      box-shadow var(--transition-base),
+      color var(--transition-base);
+  }
+
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* TYPES */
+  .btn--primary {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .btn--primary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+  }
+
+  .btn--secondary {
+    border-color: var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-soft);
+  }
+
+  .btn--secondary:hover:not(:disabled) {
+    background: var(--color-slate-100);
+  }
+
+  .btn--danger {
+    background: var(--color-danger);
+    color: var(--color-white);
+  }
+
+  .btn--danger:hover:not(:disabled) {
+    background: var(--color-danger-strong);
+  }
+
+  .btn--warning {
+    background: var(--color-amber-500);
+    color: var(--color-slate-900);
+  }
+
+  .btn--warning:hover:not(:disabled) {
+    background: var(--color-amber-600);
+  }
+}
