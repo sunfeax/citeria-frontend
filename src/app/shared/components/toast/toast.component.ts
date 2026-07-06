@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { ToastService } from '../../services/toast.service';
-import { ToastType } from '../../types/toast.type';
+import { ToastType } from '../../types/toast';
 import IconsClass from '../../util/icons-class';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { ToastItem } from '../types/toast.type';
+import { ToastItem } from '../types/toast';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +26,7 @@ export class ToastService {
   }
 
   remove(id: string): void {
-    this.toasts.update(items => items.filter(item => item.id !== id));
+    this.toasts.update((items) => items.filter((item) => item.id !== id));
   }
 
   /** HELPERS */
@@ -38,7 +38,7 @@ export class ToastService {
       ...input,
     };
 
-    this.toasts.update(items => [...items, toast]);
+    this.toasts.update((items) => [...items, toast]);
 
     window.setTimeout(() => {
       this.remove(id);
