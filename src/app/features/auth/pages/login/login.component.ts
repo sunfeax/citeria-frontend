@@ -81,7 +81,7 @@ export class LoginComponent {
             this.toast.error('Invalid email or password.');
             return;
           } else {
-            this.toast.error('Unable to sign in right now. Please try again.', 'Login failed');
+            this.toast.error('Unable to sign in right now. Please try later.', 'Login failed');
           }
         },
       });

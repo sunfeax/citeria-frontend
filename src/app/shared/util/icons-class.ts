@@ -11,8 +11,10 @@ import {
   LoaderCircleIcon,
   LogOutIcon,
   MessagesSquareIcon,
+  SearchIcon,
   SettingsIcon,
   TriangleAlertIcon,
+  UserIcon,
   WalletIcon,
   XIcon,
   ZapIcon,
@@ -35,12 +37,20 @@ export default class IconsClass {
     return MessagesSquareIcon;
   }
 
+  static get search() {
+    return SearchIcon;
+  }
+
   static get wallet() {
     return WalletIcon;
   }
 
   static get settings() {
     return SettingsIcon;
+  }
+
+  static get user() {
+    return UserIcon;
   }
 
   static get help() {
