@@ -1,1 +1,10 @@
-<p>profile works!</p>
+<form [formGroup]="profileForm">
+  <label for="first-name">First Name: </label>
+  <input id="first-name" type="text" formControlName="firstName" />
+  <label for="last-name">Last Name: </label>
+  <input id="last-name" type="text" formControlName="lastName" />
+  <label for="last-name">Email: </label>
+  <input id="last-name" type="text" formControlName="email" />
+  <label for="last-name">Phone: </label>
+  <input id="last-name" type="text" formControlName="phone" />
+</form>
