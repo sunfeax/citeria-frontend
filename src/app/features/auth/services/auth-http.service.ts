@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { iLoginRequest, iLoginResponse } from '../models/iLogin';
+import { iLoginRequest, iLoginResponse } from '../models/login';
 import { environment } from '../../../../environments/environment';
-import { iRegisterRequest, tRegisterResponse } from '../models/iRegister';
-import { iUser } from '../models/iUser';
-import { iRefreshResponse } from '../models/iRefresh';
+import { iRegisterRequest, tRegisterResponse } from '../models/register';
+import { iUser } from '../models/user';
+import { iRefreshResponse } from '../models/refresh';
 
 @Injectable({
   providedIn: 'root',

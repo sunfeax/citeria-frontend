@@ -1,5 +1,5 @@
-import { eUserType } from './eUserType';
-import { iUser } from './iUser';
+import { eUserType } from './user-type';
+import { iUser } from './user';
 
 export interface iRegisterRequest {
   firstName: string;

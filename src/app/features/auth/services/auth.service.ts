@@ -1,9 +1,9 @@
 import { AuthHttpService } from './auth-http.service';
 import { inject, Injectable } from '@angular/core';
 import { SessionService } from './session.service';
-import { iLoginRequest, iLoginResponse } from '../models/iLogin';
-import { iRefreshResponse } from '../models/iRefresh';
-import { iRegisterRequest, tRegisterResponse } from '../models/iRegister';
+import { iLoginRequest, iLoginResponse } from '../models/login';
+import { iRefreshResponse } from '../models/refresh';
+import { iRegisterRequest, tRegisterResponse } from '../models/register';
 import {
   catchError,
   finalize,
@@ -14,7 +14,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { iUser } from '../models/iUser';
+import { iUser } from '../models/user';
 
 @Injectable({
   providedIn: 'root',

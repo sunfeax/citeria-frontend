@@ -1,5 +1,5 @@
-import { eUserRole } from './eUserRole';
-import { eUserType } from './eUserType';
+import { eUserRole } from './user-role';
+import { eUserType } from './user-type';
 
 export interface iUser {
   id: string;

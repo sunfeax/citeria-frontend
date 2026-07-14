@@ -1,4 +1,4 @@
-import { eUserType } from '../../models/eUserType';
+import { eUserType } from '../../models/user-type';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import {
@@ -17,7 +17,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import IconsClass from '../../../../shared/util/icons-class';
 import RoutesClass from '../../../../shared/util/routes-class';
-import { iRegisterRequest, tRegisterServerErrors } from '../../models/iRegister';
+import { iRegisterRequest, tRegisterServerErrors } from '../../models/register';
 import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
 import { AuthService } from '../../services/auth.service';
 

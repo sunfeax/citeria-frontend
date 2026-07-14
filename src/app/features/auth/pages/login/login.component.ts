@@ -9,7 +9,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import IconsClass from '../../../../shared/util/icons-class';
 import RoutesClass from '../../../../shared/util/routes-class';
 import { AuthService } from '../../services/auth.service';
-import { iLoginRequest } from '../../models/iLogin';
+import { iLoginRequest } from '../../models/login';
 
 @Component({
   selector: 'app-login',

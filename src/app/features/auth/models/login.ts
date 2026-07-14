@@ -1,4 +1,4 @@
-import { iUser } from './iUser';
+import { iUser } from './user';
 
 export interface iLoginRequest {
   email: string;

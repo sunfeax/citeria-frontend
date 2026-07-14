@@ -7,18 +7,25 @@
 
 ---
 
-## Текущее состояние проекта (срез на 2026-07-13)
+## Текущее состояние проекта (срез на 2026-07-14)
 
 **Core**
-- ✅ `core/guards/access.guard.ts` — гвард доступа
-- ✅ `core/interceptors/auth.interceptor.ts` — интерцептор (auth/refresh)
+- ✅ `core/guards/access.guard.ts` — гвард доступа (refresh при отсутствии сессии, редирект на `/login`)
+- ✅ `core/interceptors/auth.interceptor.ts` — интерцептор (Bearer-заголовок, авто-refresh на 401)
 
 **Auth (`features/auth`)**
-- 🔄 `pages/login` — частично готов
+- ✅ `pages/login` — форма, обработка 401, редирект на профиль
 - ✅ `pages/register`
-- ✅ `pages/forgot-password` (страница)
-- ✅ services: `auth.service`, `auth-http.service`, `session.service`
+- 🔄 `pages/forgot-password` — пока только статическая страница-заглушка (нет формы/запроса);
+  в `API.md` нет эндпоинта восстановления пароля — есть только `PATCH /users/{id}/password`
+  (смена пароля залогиненным пользователем). Решить позже: ждать бэкенд-эндпоинт или
+  переориентировать страницу на смену пароля из профиля.
+- ✅ services: `auth.service` (login/register/refresh/logout/getMe/restoreSession,
+  refresh задедуплен через `shareReplay`), `auth-http.service`, `session.service` (signals)
+- ✅ `restoreSession()` подключён в `provideAppInitializer` (`app.config.ts`) — сессия
+  восстанавливается при загрузке приложения
 - ✅ models: `iUser`, `iLogin`, `iRegister`, `iRefresh`, `eUserRole`, `eUserType`
+- ✅ `logout()` подключён в sidebar
 
 **Shared**
 - ✅ layout: `header`, `footer`, `main-layout`, `sidebar-layout`, `sidebar` (навигация настроена)
@@ -68,8 +75,12 @@
 Каждый milestone = реальная фича из `API.md` + темы, которые на ней разбираем.
 
 ### M1 — Доделать Auth 🔄
-- Довести login, refresh-цикл в интерцепторе, session на signals, обработку 401/429.
-- **Темы:** RxJS (`switchMap`, refresh-флоу), interop `toSignal`, ревью Reactive Forms, DI/интерцепторы.
+- Костяк готов (login/register/session/interceptor/guard/restoreSession). Остаётся разобрать
+  тонкости: почему `refresh()` дедуплен через `shareReplay(1)` + `finalize`, обработка `429`
+  на login/register (rate limit), поведение интерцептора при параллельных 401-запросах,
+  судьба `forgot-password`.
+- **Темы:** RxJS (`switchMap`, `shareReplay`, refresh-флоу), interop `toSignal`, ревью Reactive
+  Forms, DI/интерцепторы.
 
 ### M2 — Профиль ⬜
 - `GET /users/me`, `PATCH /users/{id}`, смена пароля `PATCH /users/{id}/password`.
