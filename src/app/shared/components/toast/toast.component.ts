@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { ToastService } from '../../services/toast.service';
 import { ToastType } from '../../types/toast';
-import IconsClass from '../../util/icons-class';
+import { icons } from '../../util/icons';
 
 @Component({
   selector: 'app-toast',
@@ -16,7 +16,7 @@ export class ToastComponent {
   readonly toastSE = inject(ToastService);
 
   /** ICONS */
-  protected readonly icons = IconsClass;
+  protected readonly icons = icons;
 
   iconFor(type: ToastType) {
     switch (type) {

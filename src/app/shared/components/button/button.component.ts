@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, booleanAttribute, Component, Input } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
-import IconsClass from '../../util/icons-class';
+import { icons } from '../../util/icons';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'outline';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -14,7 +14,7 @@ type ButtonSize = 'sm' | 'md' | 'lg';
 })
 export class ButtonComponent {
   /** ICONS */
-  protected readonly icons = IconsClass;
+  protected readonly icons = icons;
 
   /** INPUTS */
   @Input() text: string = '';

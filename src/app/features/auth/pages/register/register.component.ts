@@ -1,3 +1,4 @@
+import { getRegisterPayload } from './../../../../shared/util/payload-handler';
 import { eUserType } from '../../models/user-type';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
@@ -15,8 +16,8 @@ import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
-import IconsClass from '../../../../shared/util/icons-class';
-import RoutesClass from '../../../../shared/util/routes-class';
+import { icons } from '../../../../shared/util/icons';
+import { routes } from '../../../../shared/util/routes';
 import { iRegisterRequest, tRegisterServerErrors } from '../../models/register';
 import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
 import { AuthService } from '../../services/auth.service';
@@ -43,10 +44,10 @@ export class RegisterComponent {
   readonly UserType = eUserType;
 
   /** ICONS */
-  readonly icons = IconsClass;
+  readonly icons = icons;
 
   /** ROUTES */
-  readonly routes = RoutesClass;
+  readonly routes = routes;
 
   /** STATE */
   isSubmitted = signal<boolean>(false);
@@ -121,7 +122,7 @@ export class RegisterComponent {
 
     this.isLoading.set(true);
 
-    const payload = this.getPayload(this.registerForm.getRawValue());
+    const payload = getRegisterPayload(this.registerForm.getRawValue());
 
     this.authSE
       .register(payload)
@@ -136,7 +137,7 @@ export class RegisterComponent {
         next: () => {
           this.serverErrors.set({});
           this.toast.success('You have signed up successfully.', 'Welcome!');
-          this.router.navigateByUrl(RoutesClass.login);
+          this.router.navigateByUrl(routes.login);
         },
         error: (err: HttpErrorResponse) => {
           if (err.error.errors) {
@@ -157,18 +158,5 @@ export class RegisterComponent {
 
       return password === confirmPassword ? null : { passwordMismatch: true };
     };
-  }
-
-  getPayload(raw: iRegisterRequest) {
-    const payload: iRegisterRequest = {
-      firstName: raw.firstName.trim(),
-      lastName: raw.lastName.trim(),
-      email: raw.email.trim(),
-      phone: raw.phone.trim(),
-      password: raw.password,
-      type: raw.type,
-    };
-
-    return payload;
   }
 }

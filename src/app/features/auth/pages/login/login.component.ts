@@ -6,8 +6,8 @@ import { finalize } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
-import IconsClass from '../../../../shared/util/icons-class';
-import RoutesClass from '../../../../shared/util/routes-class';
+import { icons } from '../../../../shared/util/icons';
+import { routes } from '../../../../shared/util/routes';
 import { AuthService } from '../../services/auth.service';
 import { iLoginRequest } from '../../models/login';
 
@@ -24,10 +24,10 @@ export class LoginComponent {
   private toast = inject(ToastService);
 
   /** ICONS */
-  readonly icons = IconsClass;
+  readonly icons = icons;
 
   /** ROUTES */
-  readonly routes = RoutesClass;
+  readonly routes = routes;
 
   /** STATE */
   isSubmitted = signal<boolean>(false);
@@ -74,7 +74,7 @@ export class LoginComponent {
         next: () => {
           this.serverError.set(null);
           this.toast.success('You have signed in successfully.', 'Welcome back');
-          this.router.navigateByUrl(RoutesClass.profile);
+          this.router.navigateByUrl(routes.profile);
         },
         error: (err: HttpErrorResponse) => {
           if (err.status === 401) {

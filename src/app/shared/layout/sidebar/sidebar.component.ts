@@ -2,9 +2,9 @@ import { AuthService } from './../../../features/auth/services/auth.service';
 import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-import IconsClass from '../../util/icons-class';
-import RoutesClass from '../../util/routes-class';
-import StaticDataClass from '../../util/static-data-class';
+import { icons } from '../../util/icons';
+import { routes } from '../../util/routes';
+import { sidebarData } from '../../util/static-data';
 import { SessionService } from '../../../features/auth/services/session.service';
 import { DialogService } from '../../services/dialog-service';
 import { ToastService } from '../../services/toast.service';
@@ -24,10 +24,10 @@ export class SidebarComponent {
   private readonly toastSE = inject(ToastService);
 
   /** ICONS */
-  protected readonly icons = IconsClass;
+  protected readonly icons = icons;
 
   /** DATA */
-  data = StaticDataClass.sidebarData;
+  data = sidebarData;
   protected readonly displayName = computed(() => {
     const user = this.sessionSE.user();
     if (!user) return 'Guest';
@@ -38,7 +38,7 @@ export class SidebarComponent {
   logout(): void {
     this.authSE.logout().subscribe(() => {
       this.toastSE.success('You have successfully logged out');
-      this.router.navigateByUrl(RoutesClass.login);
+      this.router.navigateByUrl(routes.login);
     });
   }
 

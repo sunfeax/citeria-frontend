@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { getUserUpdatePayload } from './../../../../shared/util/payload-handler';
+import { iUser } from './../../../auth/models/user';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SessionService } from '../../../auth/services/session.service';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -8,10 +12,34 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './profile.component.scss',
 })
 export class ProfileComponent {
+  /** INJECTORS */
+  private readonly sessionSE = inject(SessionService);
+  private readonly profileSE = inject(ProfileService);
+
+  /** DATA */
+  user: iUser | null = this.sessionSE.user();
+
+  /** FORM */
   profileForm = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
-    email: new FormControl(''),
-    phone: new FormControl(''),
+    firstName: new FormControl(this.user?.firstName, {
+      nonNullable: true,
+    }),
+    lastName: new FormControl(this.user?.lastName, {
+      nonNullable: true,
+    }),
+    email: new FormControl(this.user?.email, {
+      nonNullable: true,
+    }),
+    phone: new FormControl(this.user?.phone, {
+      nonNullable: true,
+    }),
   });
+
+  /** ACTIONS */
+  update(): void {
+    this.profileSE.update(
+      this.user!.id,
+      getUserUpdatePayload(this.profileForm.getRawValue()),
+    );
+  }
 }
