@@ -13,6 +13,13 @@ export class SessionService {
   readonly user = computed(() => this.currentUser());
 
   /** ACTIONS */
+  requireUser(): iUser {
+    const user = this.currentUser();
+    if (!user) {
+      throw new Error('Session service doesn´t have an authenticated session');
+    }
+    return user;
+  }
   getAccessToken(): string | null {
     return this.accessToken();
   }

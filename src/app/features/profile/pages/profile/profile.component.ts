@@ -17,29 +17,26 @@ export class ProfileComponent {
   private readonly profileSE = inject(ProfileService);
 
   /** DATA */
-  user: iUser | null = this.sessionSE.user();
+  user: iUser = this.sessionSE.requireUser();
 
   /** FORM */
   profileForm = new FormGroup({
-    firstName: new FormControl(this.user?.firstName, {
+    firstName: new FormControl(this.user.firstName, {
       nonNullable: true,
     }),
-    lastName: new FormControl(this.user?.lastName, {
+    lastName: new FormControl(this.user.lastName, {
       nonNullable: true,
     }),
-    email: new FormControl(this.user?.email, {
+    email: new FormControl(this.user.email, {
       nonNullable: true,
     }),
-    phone: new FormControl(this.user?.phone, {
+    phone: new FormControl(this.user.phone, {
       nonNullable: true,
     }),
   });
 
   /** ACTIONS */
   update(): void {
-    this.profileSE.update(
-      this.user!.id,
-      getUserUpdatePayload(this.profileForm.getRawValue()),
-    );
+    this.profileSE.update(this.user.id, getUserUpdatePayload(this.profileForm.getRawValue()));
   }
 }
