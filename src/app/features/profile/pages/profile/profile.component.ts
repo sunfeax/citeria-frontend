@@ -1,13 +1,16 @@
 import { getUserUpdatePayload } from './../../../../shared/util/payload-handler';
 import { iUser } from './../../../auth/models/user';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SessionService } from '../../../auth/services/session.service';
 import { ProfileService } from '../../services/profile.service';
+import { ButtonComponent } from '../../../../shared/components/button/button.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ButtonComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
@@ -15,9 +18,13 @@ export class ProfileComponent {
   /** INJECTORS */
   private readonly sessionSE = inject(SessionService);
   private readonly profileSE = inject(ProfileService);
+  private readonly toastSE = inject(ToastService);
 
   /** DATA */
   user: iUser = this.sessionSE.requireUser();
+
+  /** CONTROL VARIABLES */
+  isLoading = signal<boolean>(false);
 
   /** FORM */
   profileForm = new FormGroup({
@@ -37,6 +44,17 @@ export class ProfileComponent {
 
   /** ACTIONS */
   update(): void {
-    this.profileSE.update(this.user.id, getUserUpdatePayload(this.profileForm.getRawValue()));
+    this.profileSE
+      .update(this.user.id, getUserUpdatePayload(this.profileForm.getRawValue()))
+      .subscribe({
+        next: () => {
+          this.toastSE.success('The information has been successfully updated', 'Update!');
+        },
+        error: (err: HttpErrorResponse) => {
+          if (err) {
+            this.toastSE.error(err.error.detail ?? 'Update failed', 'Error');
+          }
+        },
+      });
   }
 }
