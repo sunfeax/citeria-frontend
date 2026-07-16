@@ -1,44 +1,176 @@
-<div class="profile-card">
-  <h1 class="profile-card__title">Profile</h1>
+<section class="profile-page" aria-labelledby="profile-title">
+  <header class="profile-page__header">
+    <p class="profile-page__eyebrow">Account</p>
+    <h1 id="profile-title" class="profile-page__title">Profile settings</h1>
+    <p class="profile-page__subtitle">Manage your personal details and keep your account secure.</p>
+  </header>
 
-  <h2>General information</h2>
-  <form [formGroup]="profileForm" (ngSubmit)="submitProfileForm()" class="profile-form">
-    <div class="form-field">
-      <label for="first-name" class="form-label">First Name</label>
-      <input id="first-name" type="text" class="form-input" formControlName="firstName" />
-    </div>
-    <div class="form-field">
-      <label for="last-name" class="form-label">Last Name</label>
-      <input id="last-name" type="text" class="form-input" formControlName="lastName" />
-    </div>
-    <div class="form-field">
-      <label for="email" class="form-label">Email</label>
-      <input id="email" type="text" class="form-input" formControlName="email" />
-    </div>
-    <div class="form-field">
-      <label for="phone" class="form-label">Phone</label>
-      <input id="phone" type="text" class="form-input" formControlName="phone" />
-    </div>
-    <app-button text="Update" type="submit" size="md" fullWidth [loading]="isLoading()">
-    </app-button>
-  </form>
+  <div class="profile-page__grid">
+    <section class="profile-card" aria-labelledby="general-information-title">
+      <header class="profile-card__header">
+        <span class="profile-card__icon" aria-hidden="true">
+          <lucide-icon [img]="icons.user"></lucide-icon>
+        </span>
 
-  <h2>Password</h2>
-  <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordForm()" class="profile-form">
-    <div class="form-field">
-      <label for="current-password" class="form-label">Current password</label>
-      <input
-        id="current-password"
-        type="password"
-        class="form-input"
-        formControlName="currentPassword"
-      />
-    </div>
-    <div class="form-field">
-      <label for="new-password" class="form-label">New password</label>
-      <input id="new-password" type="password" class="form-input" formControlName="newPassword" />
-    </div>
-    <app-button text="Change password" type="submit" size="md" fullWidth [loading]="isLoading()">
-    </app-button>
-  </form>
-</div>
+        <div>
+          <h2 id="general-information-title" class="profile-card__title">General information</h2>
+          <p class="profile-card__description">Update the details shown on your profile.</p>
+        </div>
+      </header>
+
+      <form [formGroup]="profileForm" (ngSubmit)="submitProfileForm()" class="profile-form">
+        <div class="profile-form__grid">
+          <div class="form-field">
+            <label for="first-name" class="form-label">First name</label>
+            <input
+              id="first-name"
+              type="text"
+              class="form-input"
+              formControlName="firstName"
+              autocomplete="given-name"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="last-name" class="form-label">Last name</label>
+            <input
+              id="last-name"
+              type="text"
+              class="form-input"
+              formControlName="lastName"
+              autocomplete="family-name"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="email" class="form-label">Email address</label>
+            <input
+              id="email"
+              type="email"
+              class="form-input"
+              formControlName="email"
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="phone" class="form-label">Phone number</label>
+            <input
+              id="phone"
+              type="tel"
+              class="form-input"
+              formControlName="phone"
+              autocomplete="tel"
+            />
+          </div>
+        </div>
+
+        <div class="profile-form__actions">
+          <app-button
+            class="profile-form__submit"
+            text="Save changes"
+            type="submit"
+            size="md"
+            fullWidth
+            [loading]="isLoading()"
+          >
+          </app-button>
+        </div>
+      </form>
+    </section>
+
+    <section class="profile-card profile-card--security" aria-labelledby="password-title">
+      <header class="profile-card__header">
+        <span class="profile-card__icon" aria-hidden="true">
+          <lucide-icon [img]="icons.shieldCheck"></lucide-icon>
+        </span>
+
+        <div>
+          <h2 id="password-title" class="profile-card__title">Password</h2>
+          <p class="profile-card__description">Choose a strong password you do not reuse.</p>
+        </div>
+      </header>
+
+      <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordForm()" class="profile-form">
+        <div class="form-field">
+          <label for="current-password" class="form-label">Current password</label>
+          <div class="password-field">
+            <input
+              #currentPasswordInput
+              id="current-password"
+              type="password"
+              class="form-input form-input--with-action"
+              formControlName="currentPassword"
+              autocomplete="current-password"
+            />
+
+            <button
+              class="password-field__toggle"
+              type="button"
+              [attr.aria-label]="
+                currentPasswordInput.type === 'password'
+                  ? 'Show current password'
+                  : 'Hide current password'
+              "
+              [attr.aria-pressed]="currentPasswordInput.type === 'text'"
+              (click)="
+                currentPasswordInput.type =
+                  currentPasswordInput.type === 'password' ? 'text' : 'password'
+              "
+            >
+              <lucide-icon
+                [img]="currentPasswordInput.type === 'password' ? icons.eye : icons.eyeOff"
+                class="password-field__icon"
+                aria-hidden="true"
+              ></lucide-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="new-password" class="form-label">New password</label>
+          <div class="password-field">
+            <input
+              #newPasswordInput
+              id="new-password"
+              type="password"
+              class="form-input form-input--with-action"
+              formControlName="newPassword"
+              autocomplete="new-password"
+            />
+
+            <button
+              class="password-field__toggle"
+              type="button"
+              [attr.aria-label]="
+                newPasswordInput.type === 'password' ? 'Show new password' : 'Hide new password'
+              "
+              [attr.aria-pressed]="newPasswordInput.type === 'text'"
+              (click)="
+                newPasswordInput.type = newPasswordInput.type === 'password' ? 'text' : 'password'
+              "
+            >
+              <lucide-icon
+                [img]="newPasswordInput.type === 'password' ? icons.eye : icons.eyeOff"
+                class="password-field__icon"
+                aria-hidden="true"
+              ></lucide-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-form__actions">
+          <app-button
+            class="profile-form__submit"
+            text="Change password"
+            type="submit"
+            size="md"
+            fullWidth
+            [loading]="isLoading()"
+          >
+          </app-button>
+        </div>
+      </form>
+    </section>
+  </div>
+</section>

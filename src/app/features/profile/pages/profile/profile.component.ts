@@ -9,11 +9,13 @@ import { SessionService } from '../../../auth/services/session.service';
 import { ProfileService } from '../../services/profile.service';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LucideAngularModule } from 'lucide-angular';
 import { ToastService } from '../../../../shared/services/toast.service';
+import { icons } from '../../../../shared/util/icons';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, ButtonComponent],
+  imports: [ReactiveFormsModule, ButtonComponent, LucideAngularModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
@@ -22,6 +24,9 @@ export class ProfileComponent {
   private readonly sessionSE = inject(SessionService);
   private readonly profileSE = inject(ProfileService);
   private readonly toastSE = inject(ToastService);
+
+  /** ICONS */
+  readonly icons = icons;
 
   /** DATA */
   user: iUser = this.sessionSE.requireUser();
