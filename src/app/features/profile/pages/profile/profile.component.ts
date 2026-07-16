@@ -1,4 +1,7 @@
-import { getUserUpdatePayload } from './../../../../shared/util/payload-handler';
+import {
+  getChangePasswordPayload,
+  getUserUpdatePayload,
+} from './../../../../shared/util/payload-handler';
 import { iUser } from './../../../auth/models/user';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -41,9 +44,17 @@ export class ProfileComponent {
       nonNullable: true,
     }),
   });
+  passwordForm = new FormGroup({
+    currentPassword: new FormControl('', {
+      nonNullable: true,
+    }),
+    newPassword: new FormControl('', {
+      nonNullable: true,
+    }),
+  });
 
   /** ACTIONS */
-  update(): void {
+  submitProfileForm(): void {
     this.profileSE
       .update(this.user.id, getUserUpdatePayload(this.profileForm.getRawValue()))
       .subscribe({
@@ -53,6 +64,21 @@ export class ProfileComponent {
         error: (err: HttpErrorResponse) => {
           if (err) {
             this.toastSE.error(err.error.detail ?? 'Update failed', 'Error');
+          }
+        },
+      });
+  }
+  submitPasswordForm(): void {
+    this.profileSE
+      .changePassword(this.user.id, getChangePasswordPayload(this.passwordForm.getRawValue()))
+      .subscribe({
+        next: () => {
+          this.toastSE.success('The password has been successfully updated', 'Update!');
+        },
+        error: (err: HttpErrorResponse) => {
+          if (err) {
+            const errors = Object.values(err.error.errors).join('/n');
+            this.toastSE.error(errors ?? 'Passsword update failed', 'Error');
           }
         },
       });

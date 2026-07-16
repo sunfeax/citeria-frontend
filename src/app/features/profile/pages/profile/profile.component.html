@@ -1,7 +1,8 @@
 <div class="profile-card">
   <h1 class="profile-card__title">Profile</h1>
 
-  <form [formGroup]="profileForm" (ngSubmit)="update()" class="profile-form">
+  <h2>General information</h2>
+  <form [formGroup]="profileForm" (ngSubmit)="submitProfileForm()" class="profile-form">
     <div class="form-field">
       <label for="first-name" class="form-label">First Name</label>
       <input id="first-name" type="text" class="form-input" formControlName="firstName" />
@@ -18,8 +19,26 @@
       <label for="phone" class="form-label">Phone</label>
       <input id="phone" type="text" class="form-input" formControlName="phone" />
     </div>
-
     <app-button text="Update" type="submit" size="md" fullWidth [loading]="isLoading()">
+    </app-button>
+  </form>
+
+  <h2>Password</h2>
+  <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordForm()" class="profile-form">
+    <div class="form-field">
+      <label for="current-password" class="form-label">Current password</label>
+      <input
+        id="current-password"
+        type="password"
+        class="form-input"
+        formControlName="currentPassword"
+      />
+    </div>
+    <div class="form-field">
+      <label for="new-password" class="form-label">New password</label>
+      <input id="new-password" type="password" class="form-input" formControlName="newPassword" />
+    </div>
+    <app-button text="Change password" type="submit" size="md" fullWidth [loading]="isLoading()">
     </app-button>
   </form>
 </div>

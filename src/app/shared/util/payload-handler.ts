@@ -1,4 +1,5 @@
 import { iRegisterRequest } from '../../features/auth/models/register';
+import { iChangePasswordRequest } from '../../features/profile/models/user-change-password';
 import { iUserUpdateRequest } from '../../features/profile/models/user-update-request';
 
 export function getRegisterPayload(raw: iRegisterRequest) {
@@ -11,12 +12,17 @@ export function getRegisterPayload(raw: iRegisterRequest) {
     type: raw.type,
   };
 }
-
 export function getUserUpdatePayload(raw: iUserUpdateRequest) {
   return {
     firstName: raw.firstName?.trim(),
     lastName: raw.lastName?.trim(),
     email: raw.email?.trim(),
     phone: raw.phone?.trim(),
+  };
+}
+export function getChangePasswordPayload(raw: iChangePasswordRequest) {
+  return {
+    currentPassword: raw.currentPassword.trim(),
+    newPassword: raw.newPassword.trim(),
   };
 }
