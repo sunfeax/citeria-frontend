@@ -107,6 +107,7 @@ export class ProfileComponent {
         next: (user) => {
           this.sessionSE.setUser(user);
           this.toastSE.success('The information has been successfully updated', 'Update!');
+          this.profileForm.markAsPristine();
         },
         error: (err: HttpErrorResponse) => {
           if (err.error.errors) {
@@ -122,7 +123,10 @@ export class ProfileComponent {
 
     if (this.passwordForm.invalid) {
       this.passwordForm.markAllAsTouched();
-      this.toastSE.warning('Please fill in all required fields correctly.', 'Password update failed');
+      this.toastSE.warning(
+        'Please fill in all required fields correctly.',
+        'Password update failed',
+      );
       return;
     }
 

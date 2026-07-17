@@ -88,6 +88,7 @@
             type="submit"
             size="md"
             fullWidth
+            [disabled]="profileForm.pristine"
             [loading]="isProfileLoading()"
           />
         </div>
@@ -189,6 +190,7 @@
             type="submit"
             size="md"
             fullWidth
+            [disabled]="passwordForm.pristine"
             [loading]="isPasswordLoading()"
           />
         </div>
