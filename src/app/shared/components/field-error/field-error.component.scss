@@ -1,4 +1,11 @@
 .field-error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0;
   color: var(--color-danger);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
 }

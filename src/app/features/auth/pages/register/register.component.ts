@@ -18,7 +18,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { icons } from '../../../../shared/util/icons';
 import { routes } from '../../../../shared/util/routes';
-import { iRegisterRequest, tRegisterServerErrors } from '../../models/register';
+import { tRegisterServerErrors } from '../../models/register';
 import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
 import { AuthService } from '../../services/auth.service';
 
@@ -37,8 +37,8 @@ import { AuthService } from '../../services/auth.service';
 export class RegisterComponent {
   /** INJECTORS */
   private authSE = inject(AuthService);
+  private toastSE = inject(ToastService);
   private router = inject(Router);
-  private toast = inject(ToastService);
 
   /** ENUMS */
   readonly UserType = eUserType;
@@ -116,16 +116,13 @@ export class RegisterComponent {
 
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
-      this.toast.warning('Please fill in all required fields correctly.', 'Registration failed');
+      this.toastSE.warning('Please fill in all required fields correctly.', 'Registration failed');
       return;
     }
 
     this.isLoading.set(true);
-
-    const payload = getRegisterPayload(this.registerForm.getRawValue());
-
     this.authSE
-      .register(payload)
+      .register(getRegisterPayload(this.registerForm.getRawValue()))
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
@@ -136,14 +133,14 @@ export class RegisterComponent {
       .subscribe({
         next: () => {
           this.serverErrors.set({});
-          this.toast.success('You have signed up successfully.', 'Welcome!');
+          this.toastSE.success('You have signed up successfully.', 'Welcome!');
           this.router.navigateByUrl(routes.login);
         },
         error: (err: HttpErrorResponse) => {
           if (err.error.errors) {
             this.serverErrors.set(err.error.errors);
           } else {
-            this.toast.error(err.error.detail ?? 'Registration failed', 'Error');
+            this.toastSE.error(err.error.detail ?? 'Registration failed', 'Error');
           }
         },
       });
@@ -153,9 +150,7 @@ export class RegisterComponent {
   passwordComparator(): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       const { password, confirmPassword } = group.value;
-
       if (!password || !confirmPassword) return null;
-
       return password === confirmPassword ? null : { passwordMismatch: true };
     };
   }
