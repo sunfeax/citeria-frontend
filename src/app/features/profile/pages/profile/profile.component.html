@@ -29,6 +29,10 @@
               formControlName="firstName"
               autocomplete="given-name"
             />
+            <app-field-error
+              [control]="profileForm.controls.firstName"
+              [serverError]="userUpdateServerErrors().firstName"
+            />
           </div>
 
           <div class="form-field">
@@ -39,6 +43,10 @@
               class="form-input"
               formControlName="lastName"
               autocomplete="family-name"
+            />
+            <app-field-error
+              [control]="profileForm.controls.lastName"
+              [serverError]="userUpdateServerErrors().lastName"
             />
           </div>
 
@@ -51,6 +59,10 @@
               formControlName="email"
               autocomplete="email"
             />
+            <app-field-error
+              [control]="profileForm.controls.email"
+              [serverError]="userUpdateServerErrors().email"
+            />
           </div>
 
           <div class="form-field">
@@ -62,6 +74,10 @@
               formControlName="phone"
               autocomplete="tel"
             />
+            <app-field-error
+              [control]="profileForm.controls.phone"
+              [serverError]="userUpdateServerErrors().phone"
+            />
           </div>
         </div>
 
@@ -72,9 +88,8 @@
             type="submit"
             size="md"
             fullWidth
-            [loading]="isLoading()"
-          >
-          </app-button>
+            [loading]="isProfileLoading()"
+          />
         </div>
       </form>
     </section>
@@ -102,6 +117,10 @@
               class="form-input form-input--with-action"
               formControlName="currentPassword"
               autocomplete="current-password"
+            />
+            <app-field-error
+              [control]="passwordForm.controls.currentPassword"
+              [serverError]="passwordChangeServerErrors().currentPassword"
             />
 
             <button
@@ -138,6 +157,10 @@
               formControlName="newPassword"
               autocomplete="new-password"
             />
+            <app-field-error
+              [control]="passwordForm.controls.newPassword"
+              [serverError]="passwordChangeServerErrors().newPassword"
+            />
 
             <button
               class="password-field__toggle"
@@ -166,9 +189,8 @@
             type="submit"
             size="md"
             fullWidth
-            [loading]="isLoading()"
-          >
-          </app-button>
+            [loading]="isPasswordLoading()"
+          />
         </div>
       </form>
     </section>
