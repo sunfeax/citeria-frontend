@@ -3,7 +3,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
-import { iDialogData } from '../types/dialog-data';
+import { iDialogData } from '../models/dialog-data';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {

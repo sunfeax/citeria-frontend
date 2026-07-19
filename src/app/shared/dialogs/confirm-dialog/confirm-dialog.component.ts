@@ -1,6 +1,6 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
-import { iDialogData } from '../../types/dialog-data';
+import { iDialogData } from '../../models/dialog-data';
 
 @Component({
   selector: 'app-confirm-dialog',

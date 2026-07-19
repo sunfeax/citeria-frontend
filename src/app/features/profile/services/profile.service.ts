@@ -11,7 +11,7 @@ import { iChangePasswordRequest } from '../models/user-change-password';
 })
 export class ProfileService {
   /** INJECTORS */
-  http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   /** ACTIONS */
   update(id: string, payload: iUserUpdateRequest): Observable<iUser> {
