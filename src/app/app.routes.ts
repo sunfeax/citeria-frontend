@@ -6,6 +6,7 @@ import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.com
 import { SidebarLayoutComponent } from './shared/layout/sidebar-layout/sidebar-layout.component';
 import { accessGuard } from './core/guards/access.guard';
 import { ProfileComponent } from './features/profile/pages/profile/profile.component';
+import { ServiceComponent } from './features/service/pages/service/service.component';
 
 export const routes: Routes = [
   {
@@ -14,7 +15,7 @@ export const routes: Routes = [
     canActivate: [accessGuard],
     children: [
       // { path: 'home', component: HomeComponent },
-      // { path: 'search', component: SearchComponent },
+      { path: 'services', component: ServiceComponent },
     ],
   },
   {
