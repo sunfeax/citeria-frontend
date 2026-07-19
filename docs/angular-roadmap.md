@@ -7,7 +7,7 @@
 
 ---
 
-## Текущее состояние проекта (срез на 2026-07-14)
+## Текущее состояние проекта (срез на 2026-07-18)
 
 **Core**
 - ✅ `core/guards/access.guard.ts` — гвард доступа (refresh при отсутствии сессии, редирект на `/login`)
@@ -15,27 +15,38 @@
 
 **Auth (`features/auth`)**
 - ✅ `pages/login` — форма, обработка 401, редирект на профиль
-- ✅ `pages/register`
+- ✅ `pages/register` — поле-ошибки через `serverErrors`/`app-field-error`, group-level
+  `passwordComparator`, `isSubmitted` для radio/group-ошибок
 - 🔄 `pages/forgot-password` — пока только статическая страница-заглушка (нет формы/запроса);
   в `API.md` нет эндпоинта восстановления пароля — есть только `PATCH /users/{id}/password`
   (смена пароля залогиненным пользователем). Решить позже: ждать бэкенд-эндпоинт или
   переориентировать страницу на смену пароля из профиля.
 - ✅ services: `auth.service` (login/register/refresh/logout/getMe/restoreSession,
-  refresh задедуплен через `shareReplay`), `auth-http.service`, `session.service` (signals)
+  refresh задедуплен через `shareReplay`), `auth-http.service`, `session.service` (signals,
+  плюс `requireUser()` — throws-аксессор для мест, гарантированных гвардом)
 - ✅ `restoreSession()` подключён в `provideAppInitializer` (`app.config.ts`) — сессия
   восстанавливается при загрузке приложения
 - ✅ models: `iUser`, `iLogin`, `iRegister`, `iRefresh`, `eUserRole`, `eUserType`
+  (файлы в kebab-case: `user.ts`, `login.ts`, `register.ts`, `refresh.ts`, `user-role.ts`, `user-type.ts`)
 - ✅ `logout()` подключён в sidebar
+
+**Profile (`features/profile`) ✅**
+- ✅ `pages/profile` — две формы (личные данные + смена пароля), типизированные Reactive Forms
+  с валидаторами, `app-field-error` на каждом поле, `pristine`/`markAsPristine()` для disabled
+  кнопки, write-through в `sessionSE.setUser()` после успешного PATCH
+- ✅ services: `profile.service` (`update`, `changePassword`)
+- ✅ models: `iUserUpdateRequest`/`tUserUpdateServerErrors`, `iChangePasswordRequest`/`tChangePasswordServerErrors`
 
 **Shared**
 - ✅ layout: `header`, `footer`, `main-layout`, `sidebar-layout`, `sidebar` (навигация настроена)
-- ✅ components: `button`, `field-error`, `toast`
+- ✅ components: `button` (variants incl. `outline`, self-closing `/>` везде), `field-error`
+  (абсолютное позиционирование ошибки — не двигает layout, глобально в самом компоненте), `toast`
 - ✅ dialogs: `confirm-dialog` (на CDK Dialog) + `dialog-service`
 - ✅ services: `toast.service` (на signals)
-- ✅ util: `routes-class`, `icons-class`, `static-data-class`
+- ✅ util: функции-модули вместо классов-неймспейсов — `routes.ts`, `icons.ts`, `static-data.ts`,
+  `payload-handler.ts` (были `*-class.ts`, мигрировали осознанно, см. лог)
 
 **Features дальше**
-- ⬜ `features/profile` — есть заглушка страницы, логики нет
 - ⬜ поиск специалистов, услуги, часы работы, слоты, бронирования (по `API.md`)
 
 ---
@@ -74,25 +85,32 @@
 
 Каждый milestone = реальная фича из `API.md` + темы, которые на ней разбираем.
 
-### M1 — Доделать Auth 🔄
-- Костяк готов (login/register/session/interceptor/guard/restoreSession). Остаётся разобрать
-  тонкости: почему `refresh()` дедуплен через `shareReplay(1)` + `finalize`, обработка `429`
-  на login/register (rate limit), поведение интерцептора при параллельных 401-запросах,
-  судьба `forgot-password`.
-- **Темы:** RxJS (`switchMap`, `shareReplay`, refresh-флоу), interop `toSignal`, ревью Reactive
-  Forms, DI/интерцепторы.
+### M1 — Auth ✅
+- Костяк + тонкости разобраны: `shareReplay(1)` + `finalize` в `refresh()`, обработка 401 в
+  интерцепторе, ревью Reactive Forms в login/register. `forgot-password` осознанно оставлен
+  🔄 до появления бэкенд-эндпоинта.
+- **Темы закрыты:** RxJS (`switchMap`, `shareReplay`, refresh-флоу), Reactive Forms, DI/интерцепторы.
 
-### M2 — Профиль ⬜
-- `GET /users/me`, `PATCH /users/{id}`, смена пароля `PATCH /users/{id}/password`.
-- **Темы:** типизированные Reactive Forms, signals-состояние, `input()/output()` в под-компонентах,
-  маппинг ошибок в ProblemDetail.
+### M2 — Профиль 🔄
+- `GET /users/me` (через сессию, без лишнего запроса), `PATCH /users/{id}`,
+  `PATCH /users/{id}/password` — обе формы с валидацией, серверными ошибками по полям,
+  `pristine`-гейтингом кнопки, write-through в session. ✅ готово.
+- 🔄 Аватар — функционал есть на бэкенде, но не описан в `docs/API.md` (нет поля в `iUser`,
+  нет эндпоинта загрузки). Нужен точный контракт от пользователя, прежде чем строить.
+- ~~Привязка карты~~ — убрано из профиля: по `API.md` это не профильная сущность, а разовый ввод
+  карты при оплате конкретной записи (`POST /appointments/{id}/pay`). Перенесено в M4.
+- **Темы закрыты:** типизированные Reactive Forms (`nonNullable`, sync-валидаторы, group-level
+  валидатор), signals-состояние, RxJS (`finalize`, cold observables, `Subject`/`exhaustMap` теория),
+  self-closing шаблоны, файловые конвенции (kebab-case, функции-модули вместо классов).
 
-### M3 — Поиск специалистов и услуги ⬜
+### M3 — Поиск специалистов и услуги 🔄
 - `GET /services` (фильтры `search`, `minPrice`, `maxPrice`), `GET /specialist-detail/{id}`.
 - **Темы:** RxJS живой поиск (`debounceTime` + `switchMap`), signals, `@for/@defer`, route-параметры, resolvers.
 
 ### M4 — Слоты и бронирование ⬜
-- `GET /services/{id}/slots`, `POST /appointments` (lifecycle PENDING→…→COMPLETED).
+- `GET /services/{id}/slots`, `POST /appointments` (lifecycle PENDING→…→COMPLETED),
+  форма ввода карты на экране оплаты (`POST /appointments/{id}/pay`, mocked, разовый ввод —
+  перенесено сюда из M2).
 - **Темы:** работа с датами (`Instant`/`LocalDate`/`LocalTime`), композиция RxJS, состояние-«машина» статусов.
 
 ### M5 — Мои записи ⬜
@@ -104,3 +122,10 @@
 ## Лог прогресса
 
 _(наставник дописывает по ходу: дата — что разобрали / что построили)_
+
+- **2026-07-18** — M1 и M2 закрыты. Профиль: две формы (личные данные + смена пароля) с
+  типизированными Reactive Forms, `app-field-error` на каждом поле, `pristine`/`markAsPristine()`,
+  write-through в `SessionService` после успешного `PATCH`. По пути: `SessionService.requireUser()`
+  (throws-аксессор вместо разрозненных `!`/`?.`), миграция `*-class.ts` → функции-модули,
+  kebab-case для файлов моделей в `auth`, self-closing теги в шаблонах, теория по `exhaustMap`/
+  `Subject`/hot-cold в противовес `switchMap`/`mergeMap`/`concatMap`. Начинаем M3.
