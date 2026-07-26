@@ -1,1 +1,38 @@
-<p>service works!</p>
+<section class="specialists" aria-labelledby="specialists-title">
+  <div class="specialists__container">
+    <header class="specialists__header">
+      <span class="specialists__eyebrow">Professional services</span>
+      <h1 id="specialists-title">Find your specialist</h1>
+      <p>Choose an expert and book a service that fits your needs.</p>
+    </header>
+
+    <div class="specialists__grid">
+      @for (specialist of services(); track specialist.id) {
+        <article class="specialist-card">
+          <div class="specialist-card__media" aria-hidden="true">
+            <span class="specialist-card__tag">{{ specialist.name }}</span>
+            <img class="specialist-card__avatar" src="/assets/images/default-avatar.png" alt="" />
+          </div>
+
+          <div class="specialist-card__content">
+            <div class="specialist-card__heading">
+              <h2>{{ specialist.specialistName }}</h2>
+            </div>
+
+            <p class="specialist-card__description">{{ specialist.description }}</p>
+
+            <div class="specialist-card__footer">
+              <span class="specialist-card__price">
+                <strong>{{ specialist.priceAmount }} {{ specialist.currency }}</strong>
+                <small>/ {{ specialist.durationMinutes }} min</small>
+              </span>
+              <app-button text="Book" type="button" size="sm" />
+            </div>
+          </div>
+        </article>
+      } @empty {
+        <p class="specialists__empty">No specialists are available right now.</p>
+      }
+    </div>
+  </div>
+</section>
