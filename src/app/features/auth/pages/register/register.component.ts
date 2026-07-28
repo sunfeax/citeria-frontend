@@ -19,6 +19,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import { icons } from '../../../../shared/util/icons';
 import { routes } from '../../../../shared/util/routes';
 import { tRegisterServerErrors } from '../../models/register';
+import { iApiError } from '../../../../shared/models/api-error';
 import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
 import { AuthService } from '../../services/auth.service';
 
@@ -137,10 +138,11 @@ export class RegisterComponent {
           this.router.navigateByUrl(routes.login);
         },
         error: (err: HttpErrorResponse) => {
-          if (err.error.errors) {
-            this.serverErrors.set(err.error.errors);
+          const apiError = err.error as iApiError;
+          if (apiError.errors) {
+            this.serverErrors.set(apiError.errors);
           } else {
-            this.toastSE.error(err.error.detail ?? 'Registration failed', 'Error');
+            this.toastSE.error(apiError.detail ?? 'Registration failed', 'Error');
           }
         },
       });

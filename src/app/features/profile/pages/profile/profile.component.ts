@@ -16,6 +16,7 @@ import { icons } from '../../../../shared/util/icons';
 import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
 import { tUserUpdateServerErrors } from '../../models/user-update-request';
 import { tChangePasswordServerErrors } from '../../models/user-change-password';
+import { iApiError } from '../../../../shared/models/api-error';
 
 @Component({
   selector: 'app-profile',
@@ -110,10 +111,11 @@ export class ProfileComponent {
           this.profileForm.markAsPristine();
         },
         error: (err: HttpErrorResponse) => {
-          if (err.error.errors) {
-            this.userUpdateServerErrors.set(err.error.errors);
+          const apiError = err.error as iApiError;
+          if (apiError.errors) {
+            this.userUpdateServerErrors.set(apiError.errors);
           } else {
-            this.toastSE.error('Update failed', 'Error');
+            this.toastSE.error(apiError.detail ?? 'Update failed', 'Error');
           }
         },
       });
@@ -144,10 +146,11 @@ export class ProfileComponent {
           this.passwordForm.reset();
         },
         error: (err: HttpErrorResponse) => {
-          if (err.error.errors) {
-            this.passwordChangeServerErrors.set(err.error.errors);
+          const apiError = err.error as iApiError;
+          if (apiError.errors) {
+            this.passwordChangeServerErrors.set(apiError.errors);
           } else {
-            this.toastSE.error('Passsword update failed', 'Error');
+            this.toastSE.error(apiError.detail ?? 'Password update failed', 'Error');
           }
         },
       });

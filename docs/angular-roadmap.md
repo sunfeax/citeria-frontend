@@ -41,6 +41,7 @@
 - ✅ layout: `header`, `footer`, `main-layout`, `sidebar-layout`, `sidebar` (навигация настроена)
 - ✅ components: `button` (variants incl. `outline`, self-closing `/>` везде), `field-error`
   (абсолютное позиционирование ошибки — не двигает layout, глобально в самом компоненте), `toast`
+- ⬜ `pagination` — план в M3, свой компонент на сигнальных `input()/output()`, не сторонняя либа
 - ✅ dialogs: `confirm-dialog` (на CDK Dialog) + `dialog-service`
 - ✅ services: `toast.service` (на signals)
 - ✅ util: функции-модули вместо классов-неймспейсов — `routes.ts`, `icons.ts`, `static-data.ts`,
@@ -105,7 +106,20 @@
 
 ### M3 — Поиск специалистов и услуги 🔄
 - `GET /services` (фильтры `search`, `minPrice`, `maxPrice`), `GET /specialist-detail/{id}`.
-- **Темы:** RxJS живой поиск (`debounceTime` + `switchMap`), signals, `@for/@defer`, route-параметры, resolvers.
+- ✅ `features/service`: `iServiceList` + `iPageableContent<T>` (generic, переиспользуемый на будущих
+  list-эндпоинтах), `ServiceService.getList()`, роут `/services`. Ответ бэкенда сверен вручную —
+  форма модели совпала.
+- 🔄 Дальше: единый `page` signal под весь `iPageableContent<iServiceList>` (не растаскивать
+  `totalPages`/`totalElements`/`content` по отдельным сигналам — они меняются атомарно одним
+  ответом), рендер списка через `@for` + `track service.id`, живой поиск (`valueChanges` →
+  `debounceTime` → `distinctUntilChanged` → `switchMap`).
+- ⬜ **`shared/components/pagination`** — свой компонент вместо стороннего UI-kit (не тащить Angular
+  Material/`ngx-pagination` ради одного маленького виджета — see решение выше). Вход:
+  `page`/`totalPages` через сигнальные `input()`, выход — `pageChange` через `output()`/`model()`.
+  Это первое реальное применение темы 5 (`input()/output()/model()`) — до этого она только
+  числилась в списке тем, не была закреплена на практике.
+- **Темы:** RxJS живой поиск (`debounceTime` + `switchMap`), signals (гранулярность/single source of
+  truth), `input()/output()/model()` (пагинация), `@for/@defer`, route-параметры, resolvers.
 
 ### M4 — Слоты и бронирование ⬜
 - `GET /services/{id}/slots`, `POST /appointments` (lifecycle PENDING→…→COMPLETED),
