@@ -124,26 +124,23 @@
               [serverError]="passwordChangeServerErrors().currentPassword"
             />
 
-            <button
+            <app-button
               class="password-field__toggle"
-              type="button"
-              [attr.aria-label]="
+              [icon]="currentPasswordInput.type === 'password' ? icons.eye : icons.eyeOff"
+              [ariaLabel]="
                 currentPasswordInput.type === 'password'
                   ? 'Show current password'
                   : 'Hide current password'
               "
-              [attr.aria-pressed]="currentPasswordInput.type === 'text'"
+              [ariaPressed]="currentPasswordInput.type === 'text'"
+              variant="icon"
+              size="2xs"
+              type="button"
               (click)="
                 currentPasswordInput.type =
                   currentPasswordInput.type === 'password' ? 'text' : 'password'
               "
-            >
-              <lucide-icon
-                [img]="currentPasswordInput.type === 'password' ? icons.eye : icons.eyeOff"
-                class="password-field__icon"
-                aria-hidden="true"
-              ></lucide-icon>
-            </button>
+            />
           </div>
         </div>
 
@@ -163,23 +160,20 @@
               [serverError]="passwordChangeServerErrors().newPassword"
             />
 
-            <button
+            <app-button
               class="password-field__toggle"
-              type="button"
-              [attr.aria-label]="
+              [icon]="newPasswordInput.type === 'password' ? icons.eye : icons.eyeOff"
+              [ariaLabel]="
                 newPasswordInput.type === 'password' ? 'Show new password' : 'Hide new password'
               "
-              [attr.aria-pressed]="newPasswordInput.type === 'text'"
+              [ariaPressed]="newPasswordInput.type === 'text'"
+              variant="icon"
+              size="2xs"
+              type="button"
               (click)="
                 newPasswordInput.type = newPasswordInput.type === 'password' ? 'text' : 'password'
               "
-            >
-              <lucide-icon
-                [img]="newPasswordInput.type === 'password' ? icons.eye : icons.eyeOff"
-                class="password-field__icon"
-                aria-hidden="true"
-              ></lucide-icon>
-            </button>
+            />
           </div>
         </div>
 

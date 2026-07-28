@@ -8,10 +8,11 @@ import { sidebarData } from '../../util/static-data';
 import { SessionService } from '../../../features/auth/services/session.service';
 import { DialogService } from '../../services/dialog-service';
 import { ToastService } from '../../services/toast.service';
+import { ButtonComponent } from '../../components/button/button.component';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, ButtonComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })

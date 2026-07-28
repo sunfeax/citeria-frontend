@@ -1,5 +1,4 @@
 @use './styles/auth-page' as auth;
-@use './styles/button' as button;
 @import '@angular/cdk/overlay-prebuilt.css';
 
 :root {
@@ -164,7 +163,6 @@ input {
 }
 
 @include auth.styles;
-@include button.styles;
 
 .confirm-backdrop {
   background: rgb(15 23 42 / 0.55);

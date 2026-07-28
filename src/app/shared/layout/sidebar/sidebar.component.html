@@ -13,8 +13,12 @@
   </nav>
   <footer>
     <span>{{ displayName() }}</span>
-    <button type="button" aria-label="Logout" (click)="openConfirmDialogToLogout()">
-      <lucide-icon [img]="icons.logOut"></lucide-icon>
-    </button>
+    <app-button
+      [icon]="icons.logOut"
+      ariaLabel="Logout"
+      variant="tertiary"
+      size="sm"
+      (click)="openConfirmDialogToLogout()"
+    />
   </footer>
 </aside>

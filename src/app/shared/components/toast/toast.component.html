@@ -27,14 +27,14 @@
       </div>
     </div>
 
-    <button
+    <app-button
       class="toast__dismiss"
-      type="button"
-      aria-label="Dismiss notification"
+      [icon]="icons.close"
+      ariaLabel="Dismiss notification"
+      variant="quaternary"
+      size="sm"
       (click)="toastSE.remove(toast.id)"
-    >
-      <lucide-icon [img]="icons.close" class="toast__dismiss-icon"></lucide-icon>
-    </button>
+    />
 
   </div>
 

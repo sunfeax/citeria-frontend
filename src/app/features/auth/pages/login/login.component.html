@@ -37,13 +37,15 @@
             autocomplete="current-password"
           />
 
-          <button
+          <app-button
             class="password-field__toggle"
+            [icon]="isPasswordVisible() ? icons.eye : icons.eyeOff"
+            ariaLabel="Toggle password visibility"
+            variant="icon"
+            size="2xs"
             type="button"
-            aria-label="Toggle password visibility"
-            (click)="isPasswordVisible.set(!isPasswordVisible())">
-            <lucide-icon [img]="isPasswordVisible() ? icons.eye : icons.eyeOff" class="password-field__icon"></lucide-icon>
-          </button>
+            (click)="isPasswordVisible.set(!isPasswordVisible())"
+          />
         </div>
         <div class="auth-actions auth-actions--end">
           <a
@@ -77,10 +79,13 @@
         <div class="auth-divider__line"></div>
       </div>
 
-      <button type="button" class="social-button">
-        <img src="assets/img/logo/google-logo.svg" class="social-button__icon" alt="Google">
-        <span class="social-button__text">Google</span>
-      </button>
+      <app-button
+        text="Google"
+        image="assets/logos/google-logo.svg"
+        type="button"
+        variant="outline"
+        fullWidth
+      />
     </form>
   </div>
 </div>

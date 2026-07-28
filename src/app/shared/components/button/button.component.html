@@ -3,14 +3,20 @@
   [disabled]="disabled || loading"
   [class]="buttonClasses"
   [attr.aria-busy]="loading"
+  [attr.aria-label]="ariaLabel || null"
+  [attr.aria-pressed]="ariaPressed ?? null"
 >
   @if (loading) {
     <lucide-icon [img]="icons.loaderCircle" [class]="loaderClasses" aria-hidden="true">
     </lucide-icon>
   } @else {
-    @if (icon) {
-      <lucide-icon [img]="icon" aria-hidden="true"></lucide-icon>
+    @if (image) {
+      <img [src]="image" [class]="iconClasses" alt="" />
+    } @else if (icon) {
+      <lucide-icon [img]="icon" [class]="iconClasses" aria-hidden="true"></lucide-icon>
     }
-    <span>{{ text }}</span>
+    @if (text) {
+      <span>{{ text }}</span>
+    }
   }
 </button>

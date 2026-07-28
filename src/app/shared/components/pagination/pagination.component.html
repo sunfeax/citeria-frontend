@@ -1,8 +1,4 @@
 <div>
-  <button type="button" aria-label="Toggle password visibility" (click)="(null)">
-    <lucide-icon [img]="icons.arrowLeft"></lucide-icon>
-  </button>
-  <button type="button" aria-label="Toggle password visibility" (click)="(null)">
-    <lucide-icon [img]="icons.arrowRight"></lucide-icon>
-  </button>
+  <app-button [icon]="icons.arrowLeft" ariaLabel="Previous page" variant="outline" size="sm" />
+  <app-button [icon]="icons.arrowRight" ariaLabel="Next page" variant="outline" size="sm" />
 </div>

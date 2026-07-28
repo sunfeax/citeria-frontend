@@ -10,18 +10,17 @@
   }
 
   <div class="confirm__actions">
-    <button type="button" class="btn btn--secondary" (click)="onCancel()">
-      {{ data.cancelText ?? 'Cancel' }}
-    </button>
-    <button
+    <app-button
+      [text]="data.cancelText ?? 'Cancel'"
       type="button"
-      class="btn"
-      [class.btn--danger]="data.variant === 'danger'"
-      [class.btn--warning]="data.variant === 'warning'"
-      [class.btn--primary]="data.variant !== 'danger' && data.variant !== 'warning'"
+      variant="secondary"
+      (click)="onCancel()"
+    />
+    <app-button
+      [text]="data.confirmText ?? 'Confirm'"
+      type="button"
+      [variant]="confirmVariant"
       (click)="onConfirm()"
-    >
-      {{ data.confirmText ?? 'Confirm' }}
-    </button>
+    />
   </div>
 </div>

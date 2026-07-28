@@ -1,10 +1,11 @@
+import { ButtonComponent } from './../button/button.component';
 import { Component } from '@angular/core';
 import { icons } from '../../util/icons';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-pagination',
-  imports: [LucideAngularModule],
+  imports: [ButtonComponent, LucideAngularModule],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.scss',
 })

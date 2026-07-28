@@ -105,13 +105,13 @@
               <div class="password-help">
                 <div class="password-help__trigger">
                   <label class="form-label">Password</label>
-                  <button
+                  <app-button
+                    [icon]="icons.info"
+                    ariaLabel="Show password requirements"
                     type="button"
-                    class="password-help__button"
-                    aria-label="Show password requirements"
-                  >
-                    <lucide-icon [img]="icons.info" class="password-help__icon"></lucide-icon>
-                  </button>
+                    variant="icon"
+                    size="2xs"
+                  />
                 </div>
 
                 <div class="password-help__popover">
@@ -136,17 +136,15 @@
                 autocomplete="new-password"
               />
 
-              <button
+              <app-button
                 class="password-field__toggle"
+                [icon]="isPasswordVisible() ? icons.eye : icons.eyeOff"
+                ariaLabel="Toggle password visibility"
+                variant="icon"
+                size="2xs"
                 type="button"
-                aria-label="Toggle password visibility"
                 (click)="isPasswordVisible.set(!isPasswordVisible())"
-              >
-                <lucide-icon
-                  [img]="isPasswordVisible() ? icons.eye : icons.eyeOff"
-                  class="password-field__icon"
-                ></lucide-icon>
-              </button>
+              />
             </div>
             <app-field-error
               [control]="registerForm.controls.password"
@@ -167,17 +165,15 @@
                 autocomplete="new-password"
               />
 
-              <button
+              <app-button
                 class="password-field__toggle"
+                [icon]="isConfirmPasswordVisible() ? icons.eye : icons.eyeOff"
+                ariaLabel="Toggle confirm password visibility"
+                variant="icon"
+                size="2xs"
                 type="button"
-                aria-label="Toggle confirm password visibility"
                 (click)="isConfirmPasswordVisible.set(!isConfirmPasswordVisible())"
-              >
-                <lucide-icon
-                  [img]="isConfirmPasswordVisible() ? icons.eye : icons.eyeOff"
-                  class="password-field__icon"
-                ></lucide-icon>
-              </button>
+              />
             </div>
             <p class="form-error">
               @if (
@@ -243,10 +239,14 @@
           </div>
 
           <div class="social-button-grid auth-form__full">
-            <button type="button" class="social-button social-button--compact">
-              <img src="assets/img/logo/google-logo.svg" class="social-button__icon" alt="Google" />
-              <span class="social-button__text">Google</span>
-            </button>
+            <app-button
+              text="Google"
+              image="assets/logos/google-logo.svg"
+              type="button"
+              variant="outline"
+              size="sm"
+              fullWidth
+            />
           </div>
 
           <p class="auth-switch auth-form__full">

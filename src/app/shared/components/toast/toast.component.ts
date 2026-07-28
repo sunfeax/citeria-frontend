@@ -3,10 +3,11 @@ import { LucideAngularModule } from 'lucide-angular';
 import { ToastService } from '../../services/toast.service';
 import { ToastType } from '../../models/toast';
 import { icons } from '../../util/icons';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-toast',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, ButtonComponent],
   templateUrl: './toast.component.html',
   styleUrl: './toast.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
