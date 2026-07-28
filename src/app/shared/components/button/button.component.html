@@ -2,14 +2,15 @@
   [type]="type"
   [disabled]="disabled || loading"
   [class]="buttonClasses"
-  [attr.aria-busy]="loading">
+  [attr.aria-busy]="loading"
+>
   @if (loading) {
-    <lucide-icon
-      [img]="icons.loaderCircle"
-      [class]="loaderClasses"
-      aria-hidden="true">
+    <lucide-icon [img]="icons.loaderCircle" [class]="loaderClasses" aria-hidden="true">
     </lucide-icon>
   } @else {
+    @if (icon) {
+      <lucide-icon [img]="icon" aria-hidden="true"></lucide-icon>
+    }
     <span>{{ text }}</span>
   }
 </button>

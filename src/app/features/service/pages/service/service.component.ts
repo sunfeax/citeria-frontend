@@ -6,10 +6,11 @@ import { iServiceList } from '../../models/service-list';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { iApiError } from '../../../../shared/models/api-error';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-service',
-  imports: [ButtonComponent],
+  imports: [ButtonComponent, PaginationComponent],
   templateUrl: './service.component.html',
   styleUrl: './service.component.scss',
 })

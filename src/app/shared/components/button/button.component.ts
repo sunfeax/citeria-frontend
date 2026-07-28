@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, booleanAttribute, Component, Input } from '@angular/core';
-import { LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule, LucideIconData } from 'lucide-angular';
 import { icons } from '../../util/icons';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'outline';
@@ -17,8 +17,10 @@ export class ButtonComponent {
   protected readonly icons = icons;
 
   /** INPUTS */
-  @Input() text: string = '';
+  @Input() icon?: LucideIconData;
+  @Input() text?: string = '';
   @Input() type: 'button' | 'submit' = 'button';
+  @Input() ariaLabel: string = '';
   @Input({ transform: booleanAttribute }) loading: boolean = false;
   @Input({ transform: booleanAttribute }) disabled: boolean = false;
   @Input({ transform: booleanAttribute }) fullWidth: boolean = false;

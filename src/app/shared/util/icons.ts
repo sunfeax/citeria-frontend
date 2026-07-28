@@ -1,6 +1,8 @@
 import {
   CalendarDaysIcon,
   CheckCircle2Icon,
+  ChevronLeft,
+  ChevronRight,
   CircleAlertIcon,
   CircleQuestionMarkIcon,
   EyeIcon,
@@ -42,4 +44,6 @@ export const icons = {
   triangleAlert: TriangleAlertIcon,
   close: XIcon,
   loaderCircle: LoaderCircleIcon,
+  arrowLeft: ChevronLeft,
+  arrowRight: ChevronRight,
 };

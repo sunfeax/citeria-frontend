@@ -166,7 +166,6 @@ input {
 @include auth.styles;
 @include button.styles;
 
-// Backdrop for CDK dialogs — rendered in the overlay container, so it must be global.
 .confirm-backdrop {
   background: rgb(15 23 42 / 0.55);
 }
