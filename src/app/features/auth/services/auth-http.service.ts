@@ -26,18 +26,10 @@ export class AuthHttpService {
     });
   }
   refresh(): Observable<iRefreshResponse> {
-    return this.http.post<iRefreshResponse>(
-      `${environment.baseUrl}/auth/refresh`,
-      {},
-      { withCredentials: true },
-    );
+    return this.http.post<iRefreshResponse>(`${environment.baseUrl}/auth/refresh`, {}, { withCredentials: true });
   }
   logout(): Observable<void> {
-    return this.http.post<void>(
-      `${environment.baseUrl}/auth/logout`,
-      {},
-      { withCredentials: true },
-    );
+    return this.http.post<void>(`${environment.baseUrl}/auth/logout`, {}, { withCredentials: true });
   }
   getMe(): Observable<iUser> {
     return this.http.get<iUser>(`${environment.baseUrl}/users/me`, { withCredentials: true });

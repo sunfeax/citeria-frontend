@@ -4,7 +4,6 @@
   "singleQuote": true,
   "tabWidth": 2,
   "arrowParens": "avoid",
-  "singleAttributePerLine": true,
   "htmlWhitespaceSensitivity": "ignore",
   "endOfLine": "lf",
   "bracketSpacing": true,

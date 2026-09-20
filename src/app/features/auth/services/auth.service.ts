@@ -4,16 +4,7 @@ import { SessionService } from './session.service';
 import { iLoginRequest, iLoginResponse } from '../models/login';
 import { iRefreshResponse } from '../models/refresh';
 import { iRegisterRequest, tRegisterResponse } from '../models/register';
-import {
-  catchError,
-  finalize,
-  Observable,
-  of,
-  shareReplay,
-  switchMap,
-  tap,
-  throwError,
-} from 'rxjs';
+import { catchError, finalize, Observable, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { iUser } from '../models/user';
 
 @Injectable({
@@ -30,7 +21,7 @@ export class AuthService {
   /** ACTIONS */
   login(payload: iLoginRequest): Observable<iLoginResponse> {
     return this.authHttpSE.login(payload).pipe(
-      tap((response) => {
+      tap(response => {
         this.sessionSE.setAccessToken(response.accessToken);
         this.sessionSE.setUser(response.user);
       }),
@@ -42,8 +33,8 @@ export class AuthService {
   refresh(): Observable<iRefreshResponse> {
     if (!this.refresh$) {
       this.refresh$ = this.authHttpSE.refresh().pipe(
-        tap((response) => this.sessionSE.setAccessToken(response.accessToken)),
-        catchError((err) => {
+        tap(response => this.sessionSE.setAccessToken(response.accessToken)),
+        catchError(err => {
           this.sessionSE.clearSession();
           return throwError(() => err);
         }),
@@ -63,10 +54,10 @@ export class AuthService {
   }
   getMe(): Observable<iUser> {
     return this.authHttpSE.getMe().pipe(
-      tap((response) => {
+      tap(response => {
         this.sessionSE.setUser(response);
       }),
-      catchError((err) => {
+      catchError(err => {
         this.sessionSE.clearSession();
         return throwError(() => err);
       }),
