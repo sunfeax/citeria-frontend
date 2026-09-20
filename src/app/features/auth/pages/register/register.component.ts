@@ -1,36 +1,51 @@
-import { getRegisterPayload } from './../../../../shared/util/payload-handler';
-import { eUserType } from '../../models/user-type';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   FormGroup,
+  FormGroupDirective,
+  NgForm,
   ReactiveFormsModule,
   Validators as v,
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { LucideAngularModule } from 'lucide-angular';
-import { finalize } from 'rxjs';
-import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { Router, RouterLink } from '@angular/router';
-import { ToastService } from '../../../../shared/services/toast.service';
-import { icons } from '../../../../shared/util/icons';
-import { routes } from '../../../../shared/util/routes';
-import { tRegisterServerErrors } from '../../models/register';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatTooltip } from '@angular/material/tooltip';
+import { finalize } from 'rxjs';
 import { iApiError } from '../../../../shared/models/api-error';
-import { FieldErrorComponent } from '../../../../shared/components/field-error/field-error.component';
+import { ToastService } from '../../../../shared/services/toast.service';
+import { applyServerErrors, clearServerErrors, getFieldError } from '../../../../shared/util/form-errors';
+import { routes } from '../../../../shared/util/routes';
+import { eUserType } from '../../models/user-type';
 import { AuthService } from '../../services/auth.service';
+import { getRegisterPayload } from './../../../../shared/util/payload-handler';
 
 @Component({
   selector: 'app-register',
   imports: [
     ReactiveFormsModule,
-    ButtonComponent,
-    LucideAngularModule,
     RouterLink,
-    FieldErrorComponent,
+    MatButton,
+    MatIconButton,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatFormField,
+    MatLabel,
+    MatError,
+    MatSuffix,
+    MatInput,
+    MatIcon,
+    MatProgressSpinner,
+    MatTooltip,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
@@ -44,39 +59,36 @@ export class RegisterComponent {
   /** ENUMS */
   readonly UserType = eUserType;
 
-  /** ICONS */
-  readonly icons = icons;
-
   /** ROUTES */
   readonly routes = routes;
 
+  /** TEMPLATE HELPERS */
+  readonly getFieldError = getFieldError;
+  readonly confirmPasswordMatcher = new ConfirmPasswordErrorMatcher();
+  readonly passwordRequirements = [
+    'Only Latin letters',
+    'At least 8 characters',
+    'At least one digit',
+    'At least one uppercase Latin letter',
+    'At least one special character: @#$%^&+=!',
+    'No spaces',
+  ].join('\n');
+
   /** STATE */
-  isSubmitted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
-  isPasswordVisible = signal<boolean>(true);
-  isConfirmPasswordVisible = signal<boolean>(true);
-  serverErrors = signal<tRegisterServerErrors>({});
+  isPasswordVisible = signal<boolean>(false);
+  isConfirmPasswordVisible = signal<boolean>(false);
 
   /** FORM */
   registerForm = new FormGroup(
     {
       firstName: new FormControl('', {
         nonNullable: true,
-        validators: [
-          v.required,
-          v.minLength(2),
-          v.maxLength(50),
-          v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
-        ],
+        validators: [v.required, v.minLength(2), v.maxLength(50), v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u)],
       }),
       lastName: new FormControl('', {
         nonNullable: true,
-        validators: [
-          v.required,
-          v.minLength(2),
-          v.maxLength(50),
-          v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
-        ],
+        validators: [v.required, v.minLength(2), v.maxLength(50), v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u)],
       }),
       email: new FormControl('', {
         nonNullable: true,
@@ -88,11 +100,7 @@ export class RegisterComponent {
       }),
       password: new FormControl('', {
         nonNullable: true,
-        validators: [
-          v.required,
-          v.minLength(8),
-          v.pattern(/^(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z0-9@#$%^&+=!]+$/),
-        ],
+        validators: [v.required, v.minLength(8), v.pattern(/^(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z0-9@#$%^&+=!]+$/)],
       }),
       confirmPassword: new FormControl('', {
         nonNullable: true,
@@ -110,14 +118,12 @@ export class RegisterComponent {
 
   /** ACTIONS */
   onSubmit() {
-    this.isPasswordVisible.set(true);
-    this.isConfirmPasswordVisible.set(true);
-    this.isSubmitted.set(true);
-    this.serverErrors.set({});
+    this.isPasswordVisible.set(false);
+    this.isConfirmPasswordVisible.set(false);
+    clearServerErrors(this.registerForm);
 
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
-      this.toastSE.warning('Please fill in all required fields correctly.', 'Registration failed');
       return;
     }
 
@@ -127,22 +133,18 @@ export class RegisterComponent {
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
-          this.isSubmitted.set(false);
-          this.serverErrors.set({});
         }),
       )
       .subscribe({
         next: () => {
-          this.serverErrors.set({});
-          this.toastSE.success('You have signed up successfully.', 'Welcome!');
           this.router.navigateByUrl(routes.login);
         },
         error: (err: HttpErrorResponse) => {
           const apiError = err.error as iApiError;
           if (apiError.errors) {
-            this.serverErrors.set(apiError.errors);
+            applyServerErrors(this.registerForm, apiError.errors);
           } else {
-            this.toastSE.error(apiError.detail ?? 'Registration failed', 'Error');
+            this.toastSE.error(apiError.detail ?? 'Registration failed.');
           }
         },
       });
@@ -155,5 +157,13 @@ export class RegisterComponent {
       if (!password || !confirmPassword) return null;
       return password === confirmPassword ? null : { passwordMismatch: true };
     };
+  }
+}
+
+class ConfirmPasswordErrorMatcher implements ErrorStateMatcher {
+  isErrorState(control: AbstractControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    if (!control) return false;
+    const isInteracted = control.touched || !!form?.submitted;
+    return isInteracted && (control.invalid || !!control.parent?.hasError('passwordMismatch'));
   }
 }

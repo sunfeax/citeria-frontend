@@ -1,21 +1,23 @@
 import { Injectable, inject } from '@angular/core';
-import { Dialog } from '@angular/cdk/dialog';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 import { iDialogData } from '../models/dialog-data';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
-  private readonly dialogSE = inject(Dialog);
+  /** INJECTORS */
+  private readonly dialogSE = inject(MatDialog);
 
+  /** ACTIONS */
   confirm(data: iDialogData): void {
     this.dialogSE
-      .open<boolean, iDialogData>(ConfirmDialogComponent, {
+      .open<ConfirmDialogComponent, iDialogData, boolean>(ConfirmDialogComponent, {
         data,
-        backdropClass: 'confirm-backdrop',
+        width: 'min(28rem, calc(100vw - 2rem))',
+        autoFocus: 'dialog',
       })
-      .closed.subscribe((confirmed) => {
+      .afterClosed()
+      .subscribe(confirmed => {
         if (confirmed === true) {
           data.onConfirm();
         }

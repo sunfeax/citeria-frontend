@@ -4,7 +4,7 @@
       <div>
         <div class="register-hero__brand">
           <span class="register-hero__mark">
-            <lucide-icon [img]="icons.zap" class="register-hero__mark-icon"></lucide-icon>
+            <mat-icon class="register-hero__mark-icon">bolt</mat-icon>
           </span>
           <span>Citeria</span>
         </div>
@@ -35,223 +35,133 @@
           <p class="register-panel__subtitle">Join our community of world-class experts.</p>
         </div>
 
-        <form
-          [formGroup]="registerForm"
-          (ngSubmit)="onSubmit()"
-          class="auth-form auth-form--grid auth-form--register"
-        >
-          <!-- First Name -->
-          <div class="form-field">
-            <div class="form-field__header">
-              <label class="form-label">First Name</label>
-            </div>
-            <input type="text" class="form-input" placeholder="Jane" formControlName="firstName" autocomplete="given-name" />
-            <app-field-error
-              [control]="registerForm.controls.firstName"
-              [serverError]="serverErrors().firstName"
-            />
-          </div>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form auth-form--grid auth-form--register">
+          <mat-form-field>
+            <mat-label>First name</mat-label>
+            <input matInput type="text" placeholder="Jane" formControlName="firstName" autocomplete="given-name" />
+            <mat-error>{{ getFieldError(registerForm.controls.firstName) }}</mat-error>
+          </mat-form-field>
 
-          <!-- Last Name -->
-          <div class="form-field">
-            <div class="form-field__header">
-              <label class="form-label">Last Name</label>
-            </div>
-            <input type="text" class="form-input" placeholder="Doe" formControlName="lastName" autocomplete="family-name" />
-            <app-field-error
-              [control]="registerForm.controls.lastName"
-              [serverError]="serverErrors().lastName"
-            />
-          </div>
+          <mat-form-field>
+            <mat-label>Last name</mat-label>
+            <input matInput type="text" placeholder="Doe" formControlName="lastName" autocomplete="family-name" />
+            <mat-error>{{ getFieldError(registerForm.controls.lastName) }}</mat-error>
+          </mat-form-field>
 
-          <!-- Email -->
-          <div class="form-field">
-            <div class="form-field__header">
-              <label class="form-label">Email Address</label>
-            </div>
+          <mat-form-field>
+            <mat-label>Email address</mat-label>
+            <input matInput type="email" placeholder="name@example.com" formControlName="email" autocomplete="email" />
+            <mat-error>{{ getFieldError(registerForm.controls.email) }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Phone number</mat-label>
+            <input matInput type="tel" placeholder="+1 234 567 890" formControlName="phone" autocomplete="tel" />
+            <mat-error>{{ getFieldError(registerForm.controls.phone) }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="auth-form__full">
+            <mat-label>Password</mat-label>
             <input
-              type="email"
-              class="form-input"
-              placeholder="name@example.com"
-              formControlName="email"
-              autocomplete="email"
+              matInput
+              [type]="isPasswordVisible() ? 'text' : 'password'"
+              placeholder="Password"
+              formControlName="password"
+              autocomplete="new-password"
             />
-            <app-field-error
-              [control]="registerForm.controls.email"
-              [serverError]="serverErrors().email"
-            />
-          </div>
+            <span matSuffix class="suffix-actions">
+              <button
+                matIconButton
+                type="button"
+                aria-label="Password requirements"
+                [matTooltip]="passwordRequirements"
+                matTooltipClass="multiline-tooltip"
+              >
+                <mat-icon>info</mat-icon>
+              </button>
+              <button
+                matIconButton
+                type="button"
+                [attr.aria-label]="isPasswordVisible() ? 'Hide password' : 'Show password'"
+                [attr.aria-pressed]="isPasswordVisible()"
+                (click)="isPasswordVisible.update(visible => !visible)"
+              >
+                <mat-icon>{{ isPasswordVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </span>
+            <mat-error>{{ getFieldError(registerForm.controls.password) }}</mat-error>
+          </mat-form-field>
 
-          <!-- Phone -->
-          <div class="form-field">
-            <div class="form-field__header">
-              <label class="form-label">Phone number</label>
-            </div>
+          <mat-form-field class="auth-form__full">
+            <mat-label>Confirm password</mat-label>
             <input
-              type="tel"
-              class="form-input"
-              placeholder="+1 234 567 890"
-              formControlName="phone"
-              autocomplete="tel"
+              matInput
+              [type]="isConfirmPasswordVisible() ? 'text' : 'password'"
+              placeholder="Confirm"
+              formControlName="confirmPassword"
+              autocomplete="new-password"
+              [errorStateMatcher]="confirmPasswordMatcher"
             />
-            <app-field-error
-              [control]="registerForm.controls.phone"
-              [serverError]="serverErrors().phone"
-            />
-          </div>
-
-          <div class="form-field">
-            <div class="form-field__header">
-              <div class="password-help">
-                <div class="password-help__trigger">
-                  <label class="form-label">Password</label>
-                  <app-button
-                    [icon]="icons.info"
-                    ariaLabel="Show password requirements"
-                    type="button"
-                    variant="icon"
-                    size="2xs"
-                  />
-                </div>
-
-                <div class="password-help__popover">
-                  <p class="password-help__title">Password requirements</p>
-                  <ul class="password-help__list">
-                    <li>Only Latin letters</li>
-                    <li>At least 8 characters</li>
-                    <li>At least one digit</li>
-                    <li>At least one uppercase Latin letter</li>
-                    <li>At least one special character: @#$%^&+=!</li>
-                    <li>No spaces</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="password-field">
-              <input
-                [type]="isPasswordVisible() ? 'password' : 'text'"
-                class="form-input form-input--with-action"
-                placeholder="Password"
-                formControlName="password"
-                autocomplete="new-password"
-              />
-
-              <app-button
-                class="password-field__toggle"
-                [icon]="isPasswordVisible() ? icons.eye : icons.eyeOff"
-                ariaLabel="Toggle password visibility"
-                variant="icon"
-                size="2xs"
-                type="button"
-                (click)="isPasswordVisible.set(!isPasswordVisible())"
-              />
-            </div>
-            <app-field-error
-              [control]="registerForm.controls.password"
-              [serverError]="serverErrors().password"
-            />
-          </div>
-
-          <div class="form-field">
-            <div class="form-field__header">
-              <label class="form-label">Confirm Password</label>
-            </div>
-            <div class="password-field">
-              <input
-                [type]="isConfirmPasswordVisible() ? 'password' : 'text'"
-                class="form-input form-input--with-action"
-                placeholder="Confirm"
-                formControlName="confirmPassword"
-                autocomplete="new-password"
-              />
-
-              <app-button
-                class="password-field__toggle"
-                [icon]="isConfirmPasswordVisible() ? icons.eye : icons.eyeOff"
-                ariaLabel="Toggle confirm password visibility"
-                variant="icon"
-                size="2xs"
-                type="button"
-                (click)="isConfirmPasswordVisible.set(!isConfirmPasswordVisible())"
-              />
-            </div>
-            <p class="form-error">
-              @if (
-                (registerForm.controls.confirmPassword.touched || isSubmitted()) &&
-                registerForm.hasError('passwordMismatch') &&
-                !registerForm.controls.confirmPassword.hasError('required')
-              ) {
+            <button
+              matIconButton
+              matSuffix
+              type="button"
+              [attr.aria-label]="isConfirmPasswordVisible() ? 'Hide confirm password' : 'Show confirm password'"
+              [attr.aria-pressed]="isConfirmPasswordVisible()"
+              (click)="isConfirmPasswordVisible.update(visible => !visible)"
+            >
+              <mat-icon>{{ isConfirmPasswordVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error>
+              @if (registerForm.controls.confirmPassword.invalid) {
+                {{ getFieldError(registerForm.controls.confirmPassword) }}
+              } @else {
                 Passwords don't match
               }
-            </p>
-          </div>
+            </mat-error>
+          </mat-form-field>
 
-          <!-- Type -->
-          <div class="form-field auth-form__full">
+          <div class="auth-form__full">
             <span class="form-label">Are you joining as a</span>
-
-            <div class="type-choice-grid">
-              <label class="type-choice">
-                <input
-                  class="type-choice__input"
-                  type="radio"
-                  formControlName="type"
-                  [value]="UserType.CLIENT"
-                />
-
-                <span class="type-choice__label">Client</span>
-              </label>
-
-              <label class="type-choice">
-                <input
-                  class="type-choice__input"
-                  type="radio"
-                  formControlName="type"
-                  [value]="UserType.SPECIALIST"
-                />
-
-                <span class="type-choice__label">Specialist</span>
-              </label>
-            </div>
-            <p class="form-error">
-              @if (serverErrors().type) {
-                {{ serverErrors().type }}
-              } @else if (isSubmitted() && registerForm.controls.type.hasError('required')) {
-                Please select user type
-              }
-            </p>
+            <mat-button-toggle-group
+              class="type-toggle"
+              formControlName="type"
+              hideSingleSelectionIndicator
+              aria-label="Account type"
+            >
+              <mat-button-toggle [value]="UserType.CLIENT">Client</mat-button-toggle>
+              <mat-button-toggle [value]="UserType.SPECIALIST">Specialist</mat-button-toggle>
+            </mat-button-toggle-group>
+            @if (registerForm.controls.type.hasError('server')) {
+              <p class="form-error">{{ getFieldError(registerForm.controls.type) }}</p>
+            }
           </div>
 
           <div class="auth-form__full">
-            <app-button
-              text="Create Account"
-              type="submit"
-              size="md"
-              fullWidth
-              [loading]="isLoading()"
-            />
+            <button matButton="filled" type="submit" class="btn-block" [disabled]="isLoading()">
+              @if (isLoading()) {
+                <mat-progress-spinner mode="indeterminate" diameter="20" />
+              }
+              Create Account
+            </button>
           </div>
 
           <div class="auth-divider auth-divider--compact auth-form__full">
             <div class="auth-divider__line"></div>
-            <span class="auth-divider__text"> OR CONTINUE WITH </span>
+            <span class="auth-divider__text">OR CONTINUE WITH</span>
             <div class="auth-divider__line"></div>
           </div>
 
-          <div class="social-button-grid auth-form__full">
-            <app-button
-              text="Google"
-              image="assets/logos/google-logo.svg"
-              type="button"
-              variant="outline"
-              size="sm"
-              fullWidth
-            />
+          <div class="auth-form__full">
+            <button matButton="outlined" type="button" class="btn-block">
+              <img class="btn-brand-icon" src="assets/logos/google-logo.svg" alt="" />
+              Google
+            </button>
           </div>
 
           <p class="auth-switch auth-form__full">
             Already have an account?
-            <a [routerLink]="routes.login" class="auth-link"> Log in </a>
+            <a [routerLink]="routes.login" class="auth-link">Log in</a>
           </p>
         </form>
       </div>

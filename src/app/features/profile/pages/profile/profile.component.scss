@@ -71,9 +71,10 @@
   color: var(--color-primary);
 }
 
-.profile-card__icon lucide-icon {
+.profile-card__icon mat-icon {
   width: 1.25rem;
   height: 1.25rem;
+  font-size: 1.25rem;
 }
 
 .profile-card__title {
@@ -103,47 +104,8 @@
   gap: var(--space-5) var(--space-4);
 }
 
-.form-field {
-  gap: var(--space-1-5);
-}
-
-.form-label {
-  color: var(--color-text-soft);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-}
-
-.form-input {
-  min-height: 2.75rem;
-  border-color: transparent;
-  border-radius: var(--radius-xl);
-  padding-inline: var(--space-4);
-  background: var(--color-slate-50);
-  font-size: var(--font-size-sm);
-}
-
-.form-input:hover {
-  border-color: var(--color-border-soft);
-}
-
-.form-input:focus {
-  border-color: var(--color-primary);
-  background: var(--color-surface);
-}
-
-.form-input--with-action {
-  padding-right: 3rem;
-}
-
-.password-field__toggle {
-  right: var(--space-2);
-  width: 2rem;
-  height: 2rem;
-}
-
-.password-field__icon {
-  width: 1.125rem;
-  height: 1.125rem;
+mat-form-field {
+  width: 100%;
 }
 
 .profile-form__actions {
@@ -154,7 +116,6 @@
 }
 
 .profile-form__submit {
-  display: inline-block;
   width: 10.5rem;
 }
 

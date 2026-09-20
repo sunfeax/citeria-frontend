@@ -3,89 +3,69 @@
     <div class="auth-card__header">
       <div class="brand-block">
         <div class="brand-block__icon">
-          <lucide-icon class="brand-block__icon-svg" [img]="icons.zap"></lucide-icon>
+          <mat-icon class="brand-block__icon-svg">bolt</mat-icon>
         </div>
         <h1 class="brand-block__title">Citeria</h1>
         <p class="brand-block__subtitle">Please enter your details to sign in</p>
       </div>
     </div>
 
-    <form
-      [formGroup]="loginForm"
-      (ngSubmit)="onSubmit()"
-      class="auth-form"
-    >
-      <div class="form-field">
-        <label class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-input"
-          placeholder="name@example.com"
-          formControlName="email"
-          autocomplete="email"
-          />
-      </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput type="email" placeholder="name@example.com" formControlName="email" autocomplete="email" />
+        <mat-error>{{ getFieldError(loginForm.controls.email) }}</mat-error>
+      </mat-form-field>
 
-      <div class="form-field">
-        <label class="form-label">Password</label>
-        <div class="password-field">
+      <div class="password-block">
+        <mat-form-field>
+          <mat-label>Password</mat-label>
           <input
-            [type]="isPasswordVisible() ? 'password' : 'text'"
-            class="form-input form-input--with-action"
+            matInput
+            [type]="isPasswordVisible() ? 'text' : 'password'"
             placeholder="••••••••"
             formControlName="password"
             autocomplete="current-password"
           />
-
-          <app-button
-            class="password-field__toggle"
-            [icon]="isPasswordVisible() ? icons.eye : icons.eyeOff"
-            ariaLabel="Toggle password visibility"
-            variant="icon"
-            size="2xs"
+          <button
+            matIconButton
+            matSuffix
             type="button"
-            (click)="isPasswordVisible.set(!isPasswordVisible())"
-          />
-        </div>
-        <div class="auth-actions auth-actions--end">
-          <a
-            [routerLink]="routes.forgotPassword"
-            class="auth-link auth-link--small"
+            [attr.aria-label]="isPasswordVisible() ? 'Hide password' : 'Show password'"
+            [attr.aria-pressed]="isPasswordVisible()"
+            (click)="isPasswordVisible.update(visible => !visible)"
           >
-            Forgot password?
-          </a>
+            <mat-icon>{{ isPasswordVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error>{{ getFieldError(loginForm.controls.password) }}</mat-error>
+        </mat-form-field>
+        <div class="auth-actions auth-actions--end">
+          <a [routerLink]="routes.forgotPassword" class="auth-link auth-link--small">Forgot password?</a>
         </div>
       </div>
 
-      <app-button
-        text="Login"
-        type="submit"
-        size="lg"
-        fullWidth
-        [loading]="isLoading()" />
+      <button matButton="filled" type="submit" class="btn-block btn-lg" [disabled]="isLoading()">
+        @if (isLoading()) {
+          <mat-progress-spinner mode="indeterminate" diameter="20" />
+        }
+        Login
+      </button>
 
       <p class="auth-switch">
         Don't have an account?
-        <a [routerLink]="routes.register" class="auth-link">
-          Sign up
-        </a>
+        <a [routerLink]="routes.register" class="auth-link">Sign up</a>
       </p>
 
       <div class="auth-divider">
         <div class="auth-divider__line"></div>
-        <span class="auth-divider__text">
-          OR CONTINUE WITH
-        </span>
+        <span class="auth-divider__text">OR CONTINUE WITH</span>
         <div class="auth-divider__line"></div>
       </div>
 
-      <app-button
-        text="Google"
-        image="assets/logos/google-logo.svg"
-        type="button"
-        variant="outline"
-        fullWidth
-      />
+      <button matButton="outlined" type="button" class="btn-block">
+        <img class="btn-brand-icon" src="assets/logos/google-logo.svg" alt="" />
+        Google
+      </button>
     </form>
   </div>
 </div>

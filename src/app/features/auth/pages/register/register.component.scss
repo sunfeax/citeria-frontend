@@ -1,34 +1,26 @@
 :host {
-  .form-field__header {
-    height: 1.25rem;
+  mat-form-field {
+    width: 100%;
   }
 
   .form-label {
-    line-height: 1.25rem;
+    display: block;
+    margin-bottom: var(--space-2);
+    color: var(--color-text-soft);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
   }
 
-  .password-help,
-  .password-help__trigger {
-    height: 100%;
+  .type-toggle {
+    width: 100%;
   }
 
-  .password-help__trigger {
-    display: flex;
+  .type-toggle mat-button-toggle {
+    flex: 1;
+  }
+
+  .suffix-actions {
+    display: inline-flex;
     align-items: center;
-  }
-
-  .password-help__trigger app-button {
-    display: flex;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .password-field__toggle {
-    display: flex;
-    width: 1.25rem;
-    height: 1.25rem;
-    align-items: center;
-    justify-content: center;
   }
 }

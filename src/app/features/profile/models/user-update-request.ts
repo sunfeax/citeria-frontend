@@ -4,7 +4,3 @@ export interface iUserUpdateRequest {
   email?: string;
   phone?: string;
 }
-
-export type tUserUpdateServerErrors = Partial<
-  Record<'firstName' | 'lastName' | 'email' | 'phone', string>
->;

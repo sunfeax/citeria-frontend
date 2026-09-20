@@ -1,26 +1,16 @@
-<div
-  class="confirm"
-  role="alertdialog"
-  aria-labelledby="confirm-title"
-  [attr.aria-describedby]="data.message ? 'confirm-msg' : null"
->
-  <h2 id="confirm-title" class="confirm__title">{{ data.title }}</h2>
-  @if (data.message) {
-    <p id="confirm-msg" class="confirm__message">{{ data.message }}</p>
-  }
+<h2 mat-dialog-title>{{ data.title }}</h2>
 
-  <div class="confirm__actions">
-    <app-button
-      [text]="data.cancelText ?? 'Cancel'"
-      type="button"
-      variant="secondary"
-      (click)="onCancel()"
-    />
-    <app-button
-      [text]="data.confirmText ?? 'Confirm'"
-      type="button"
-      [variant]="confirmVariant"
-      (click)="onConfirm()"
-    />
-  </div>
-</div>
+@if (data.message) {
+  <mat-dialog-content>
+    <p class="confirm__message">{{ data.message }}</p>
+  </mat-dialog-content>
+}
+
+<mat-dialog-actions align="end">
+  <button matButton="text" type="button" (click)="onCancel()">
+    {{ data.cancelText ?? 'Cancel' }}
+  </button>
+  <button matButton="filled" type="button" [class]="confirmClass" (click)="onConfirm()">
+    {{ data.confirmText ?? 'Confirm' }}
+  </button>
+</mat-dialog-actions>

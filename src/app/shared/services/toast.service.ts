@@ -1,47 +1,45 @@
-import { Injectable, signal } from '@angular/core';
-import { ToastItem } from '../models/toast';
+import { inject, Injectable } from '@angular/core';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+
+type tToastType = 'success' | 'error' | 'info' | 'warning';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastService {
-  /** STATE */
-  readonly toasts = signal<ToastItem[]>([]);
+  /** INJECTORS */
+  private readonly snackBarSE = inject(MatSnackBar);
 
   /** ACTIONS */
-  success(message: string, title = 'Success', duration = 3000): void {
-    this.show({ type: 'success', title, message, duration });
+  success(message: string, duration = 3000): void {
+    this.show(message, 'success', duration);
   }
 
-  error(message: string, title = 'Error', duration = 4000): void {
-    this.show({ type: 'error', title, message, duration });
+  error(message: string, duration = 5000): void {
+    this.show(message, 'error', duration);
   }
 
-  info(message: string, title = 'Info', duration = 3000): void {
-    this.show({ type: 'info', title, message, duration });
+  info(message: string, duration = 3000): void {
+    this.show(message, 'info', duration);
   }
 
-  warning(message: string, title = 'Warning', duration = 3500): void {
-    this.show({ type: 'warning', title, message, duration });
+  warning(message: string, duration = 4000): void {
+    this.show(message, 'warning', duration);
   }
 
-  remove(id: string): void {
-    this.toasts.update((items) => items.filter((item) => item.id !== id));
+  dismiss(): void {
+    this.snackBarSE.dismiss();
   }
 
   /** HELPERS */
-  private show(input: Omit<ToastItem, 'id'>): void {
-    const id = crypto.randomUUID();
-
-    const toast: ToastItem = {
-      id,
-      ...input,
+  private show(message: string, type: tToastType, duration: number): void {
+    const config: MatSnackBarConfig = {
+      duration,
+      panelClass: ['app-snack-bar', `app-snack-bar--${type}`],
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
     };
 
-    this.toasts.update((items) => [...items, toast]);
-
-    window.setTimeout(() => {
-      this.remove(id);
-    }, toast.duration);
+    this.snackBarSE.open(message, 'Dismiss', config);
   }
 }

@@ -9,7 +9,7 @@
     <section class="profile-card" aria-labelledby="general-information-title">
       <header class="profile-card__header">
         <span class="profile-card__icon" aria-hidden="true">
-          <lucide-icon [img]="icons.user"></lucide-icon>
+          <mat-icon>person</mat-icon>
         </span>
 
         <div>
@@ -20,77 +20,43 @@
 
       <form [formGroup]="profileForm" (ngSubmit)="submitProfileForm()" class="profile-form">
         <div class="profile-form__grid">
-          <div class="form-field">
-            <label for="first-name" class="form-label">First name</label>
-            <input
-              id="first-name"
-              type="text"
-              class="form-input"
-              formControlName="firstName"
-              autocomplete="given-name"
-            />
-            <app-field-error
-              [control]="profileForm.controls.firstName"
-              [serverError]="userUpdateServerErrors().firstName"
-            />
-          </div>
+          <mat-form-field>
+            <mat-label>First name</mat-label>
+            <input matInput type="text" formControlName="firstName" autocomplete="given-name" />
+            <mat-error>{{ getFieldError(profileForm.controls.firstName) }}</mat-error>
+          </mat-form-field>
 
-          <div class="form-field">
-            <label for="last-name" class="form-label">Last name</label>
-            <input
-              id="last-name"
-              type="text"
-              class="form-input"
-              formControlName="lastName"
-              autocomplete="family-name"
-            />
-            <app-field-error
-              [control]="profileForm.controls.lastName"
-              [serverError]="userUpdateServerErrors().lastName"
-            />
-          </div>
+          <mat-form-field>
+            <mat-label>Last name</mat-label>
+            <input matInput type="text" formControlName="lastName" autocomplete="family-name" />
+            <mat-error>{{ getFieldError(profileForm.controls.lastName) }}</mat-error>
+          </mat-form-field>
 
-          <div class="form-field">
-            <label for="email" class="form-label">Email address</label>
-            <input
-              id="email"
-              type="email"
-              class="form-input"
-              formControlName="email"
-              autocomplete="email"
-            />
-            <app-field-error
-              [control]="profileForm.controls.email"
-              [serverError]="userUpdateServerErrors().email"
-            />
-          </div>
+          <mat-form-field>
+            <mat-label>Email address</mat-label>
+            <input matInput type="email" formControlName="email" autocomplete="email" />
+            <mat-error>{{ getFieldError(profileForm.controls.email) }}</mat-error>
+          </mat-form-field>
 
-          <div class="form-field">
-            <label for="phone" class="form-label">Phone number</label>
-            <input
-              id="phone"
-              type="tel"
-              class="form-input"
-              formControlName="phone"
-              autocomplete="tel"
-            />
-            <app-field-error
-              [control]="profileForm.controls.phone"
-              [serverError]="userUpdateServerErrors().phone"
-            />
-          </div>
+          <mat-form-field>
+            <mat-label>Phone number</mat-label>
+            <input matInput type="tel" formControlName="phone" autocomplete="tel" />
+            <mat-error>{{ getFieldError(profileForm.controls.phone) }}</mat-error>
+          </mat-form-field>
         </div>
 
         <div class="profile-form__actions">
-          <app-button
-            class="profile-form__submit"
-            text="Save changes"
+          <button
+            matButton="filled"
             type="submit"
-            size="md"
-            fullWidth
-            [disabled]="profileForm.pristine"
-            [loading]="isProfileLoading()"
-          />
+            class="profile-form__submit"
+            [disabled]="profileForm.pristine || isProfileLoading()"
+          >
+            @if (isProfileLoading()) {
+              <mat-progress-spinner mode="indeterminate" diameter="20" />
+            }
+            Save changes
+          </button>
         </div>
       </form>
     </section>
@@ -98,7 +64,7 @@
     <section class="profile-card profile-card--security" aria-labelledby="password-title">
       <header class="profile-card__header">
         <span class="profile-card__icon" aria-hidden="true">
-          <lucide-icon [img]="icons.shieldCheck"></lucide-icon>
+          <mat-icon>verified_user</mat-icon>
         </span>
 
         <div>
@@ -108,85 +74,60 @@
       </header>
 
       <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordForm()" class="profile-form">
-        <div class="form-field">
-          <label for="current-password" class="form-label">Current password</label>
-          <div class="password-field">
-            <input
-              #currentPasswordInput
-              id="current-password"
-              type="password"
-              class="form-input form-input--with-action"
-              formControlName="currentPassword"
-              autocomplete="current-password"
-            />
-            <app-field-error
-              [control]="passwordForm.controls.currentPassword"
-              [serverError]="passwordChangeServerErrors().currentPassword"
-            />
+        <mat-form-field>
+          <mat-label>Current password</mat-label>
+          <input
+            matInput
+            [type]="isCurrentPasswordVisible() ? 'text' : 'password'"
+            formControlName="currentPassword"
+            autocomplete="current-password"
+          />
+          <button
+            matIconButton
+            matSuffix
+            type="button"
+            [attr.aria-label]="isCurrentPasswordVisible() ? 'Hide current password' : 'Show current password'"
+            [attr.aria-pressed]="isCurrentPasswordVisible()"
+            (click)="isCurrentPasswordVisible.update(visible => !visible)"
+          >
+            <mat-icon>{{ isCurrentPasswordVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error>{{ getFieldError(passwordForm.controls.currentPassword) }}</mat-error>
+        </mat-form-field>
 
-            <app-button
-              class="password-field__toggle"
-              [icon]="currentPasswordInput.type === 'password' ? icons.eye : icons.eyeOff"
-              [ariaLabel]="
-                currentPasswordInput.type === 'password'
-                  ? 'Show current password'
-                  : 'Hide current password'
-              "
-              [ariaPressed]="currentPasswordInput.type === 'text'"
-              variant="icon"
-              size="2xs"
-              type="button"
-              (click)="
-                currentPasswordInput.type =
-                  currentPasswordInput.type === 'password' ? 'text' : 'password'
-              "
-            />
-          </div>
-        </div>
-
-        <div class="form-field">
-          <label for="new-password" class="form-label">New password</label>
-          <div class="password-field">
-            <input
-              #newPasswordInput
-              id="new-password"
-              type="password"
-              class="form-input form-input--with-action"
-              formControlName="newPassword"
-              autocomplete="new-password"
-            />
-            <app-field-error
-              [control]="passwordForm.controls.newPassword"
-              [serverError]="passwordChangeServerErrors().newPassword"
-            />
-
-            <app-button
-              class="password-field__toggle"
-              [icon]="newPasswordInput.type === 'password' ? icons.eye : icons.eyeOff"
-              [ariaLabel]="
-                newPasswordInput.type === 'password' ? 'Show new password' : 'Hide new password'
-              "
-              [ariaPressed]="newPasswordInput.type === 'text'"
-              variant="icon"
-              size="2xs"
-              type="button"
-              (click)="
-                newPasswordInput.type = newPasswordInput.type === 'password' ? 'text' : 'password'
-              "
-            />
-          </div>
-        </div>
+        <mat-form-field>
+          <mat-label>New password</mat-label>
+          <input
+            matInput
+            [type]="isNewPasswordVisible() ? 'text' : 'password'"
+            formControlName="newPassword"
+            autocomplete="new-password"
+          />
+          <button
+            matIconButton
+            matSuffix
+            type="button"
+            [attr.aria-label]="isNewPasswordVisible() ? 'Hide new password' : 'Show new password'"
+            [attr.aria-pressed]="isNewPasswordVisible()"
+            (click)="isNewPasswordVisible.update(visible => !visible)"
+          >
+            <mat-icon>{{ isNewPasswordVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error>{{ getFieldError(passwordForm.controls.newPassword) }}</mat-error>
+        </mat-form-field>
 
         <div class="profile-form__actions">
-          <app-button
-            class="profile-form__submit"
-            text="Change password"
+          <button
+            matButton="filled"
             type="submit"
-            size="md"
-            fullWidth
-            [disabled]="passwordForm.pristine"
-            [loading]="isPasswordLoading()"
-          />
+            class="profile-form__submit"
+            [disabled]="passwordForm.pristine || isPasswordLoading()"
+          >
+            @if (isPasswordLoading()) {
+              <mat-progress-spinner mode="indeterminate" diameter="20" />
+            }
+            Change password
+          </button>
         </div>
       </form>
     </section>

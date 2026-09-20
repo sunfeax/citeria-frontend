@@ -6,19 +6,15 @@
   <nav>
     @for (item of data; track item.label) {
       <a [class.disabled]="item.disabled">
-        <lucide-icon [img]="item.icon" aria-hidden="true"></lucide-icon>
+        <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
         <span>{{ item.label }}</span>
       </a>
     }
   </nav>
   <footer>
     <span>{{ displayName() }}</span>
-    <app-button
-      [icon]="icons.logOut"
-      ariaLabel="Logout"
-      variant="tertiary"
-      size="sm"
-      (click)="openConfirmDialogToLogout()"
-    />
+    <button matIconButton type="button" aria-label="Logout" (click)="openConfirmDialogToLogout()">
+      <mat-icon>logout</mat-icon>
+    </button>
   </footer>
 </aside>

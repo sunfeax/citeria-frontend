@@ -194,6 +194,56 @@ input {
 
 @include auth.styles;
 
-.confirm-backdrop {
-  background: rgb(15 23 42 / 0.55);
+mat-form-field {
+  --mat-form-field-container-height: 48px;
+  --mat-form-field-container-vertical-padding: 12px;
+  --mat-form-field-outlined-container-shape: var(--radius-xl);
+  --mat-form-field-outlined-outline-color: var(--color-border);
+  --mat-form-field-outlined-hover-outline-color: var(--color-slate-500);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-lg {
+  --mat-button-filled-container-height: 48px;
+}
+
+.btn-brand-icon {
+  display: inline-block;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-right: var(--space-2);
+  vertical-align: text-bottom;
+}
+
+button mat-progress-spinner {
+  margin-right: var(--space-2);
+  --mat-progress-spinner-active-indicator-color: currentColor;
+}
+
+.multiline-tooltip {
+  white-space: pre-line;
+}
+
+.app-snack-bar {
+  --mat-snack-bar-supporting-text-color: var(--color-white);
+  --mat-snack-bar-button-color: var(--color-white);
+}
+
+.app-snack-bar--success {
+  --mat-snack-bar-container-color: var(--color-emerald-500);
+}
+
+.app-snack-bar--error {
+  --mat-snack-bar-container-color: var(--color-red-600);
+}
+
+.app-snack-bar--warning {
+  --mat-snack-bar-container-color: var(--color-amber-600);
+}
+
+.app-snack-bar--info {
+  --mat-snack-bar-container-color: var(--color-sky-500);
 }

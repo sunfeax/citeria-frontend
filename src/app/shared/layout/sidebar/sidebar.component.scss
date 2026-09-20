@@ -48,9 +48,11 @@ nav a {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-soft);
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
 
-  lucide-icon {
+  mat-icon {
     color: var(--color-icon-muted);
   }
 
@@ -58,7 +60,7 @@ nav a {
     background: var(--color-primary-soft);
     color: var(--color-primary);
 
-    lucide-icon {
+    mat-icon {
       color: var(--color-primary);
     }
   }
@@ -84,13 +86,6 @@ footer {
   }
 
   button {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    color: var(--color-danger);
-
-    &:hover {
-      color: var(--color-danger-strong);
-    }
+    --mat-icon-button-icon-color: var(--color-danger);
   }
 }

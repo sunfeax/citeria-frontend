@@ -1,4 +1,3 @@
-// Shared auth page styles used from the global stylesheet.
 @mixin styles {
   app-login,
   app-register,
@@ -84,6 +83,7 @@
   .brand-block__icon-svg {
     width: 1.5rem;
     height: 1.5rem;
+    font-size: 1.5rem;
   }
 
   .brand-block__title,
@@ -139,69 +139,6 @@
       row-gap: var(--space-6);
       padding: 0;
     }
-  }
-
-  .form-field {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-sm);
-  }
-
-  .form-field__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--gap-sm);
-  }
-
-  .form-field__error {
-    text-align: right;
-  }
-
-  .form-label {
-    color: var(--color-text-soft);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  .form-input {
-    width: 100%;
-    min-height: 2.625rem;
-    border: var(--border-width-sm) solid var(--color-border);
-    border-radius: var(--radius-2xl);
-    outline: none;
-    padding: var(--space-2) var(--space-3);
-    background: var(--color-surface);
-    color: var(--color-text);
-    transition:
-      border-color var(--transition-base),
-      box-shadow var(--transition-base);
-  }
-
-  .form-input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgb(191 219 254 / 0.75);
-  }
-
-  .form-input--with-action {
-    padding-right: var(--space-10);
-  }
-
-  .password-field {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .password-field__toggle {
-    position: absolute;
-    top: 50%;
-    right: var(--space-2);
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   .auth-actions {
@@ -264,117 +201,23 @@
     padding-inline: var(--space-4);
   }
 
-  .social-button-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-md);
-
-    @media (min-width: 520px) {
-      grid-template-columns: repeat(2, minmax(1fr));
-    }
-  }
-
-  .password-help {
-    position: relative;
-  }
-
-  .password-help__trigger {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-xs);
-  }
-
-  .password-help__popover {
-    position: absolute;
-    z-index: 20;
-    top: calc(100% + var(--space-1));
-    left: 0;
-    display: none;
-    width: 18rem;
-    max-width: calc(100vw - 2rem);
-    border: var(--border-width-sm) solid var(--color-border-soft);
-    border-radius: var(--radius-xl);
-    padding: var(--space-3);
-    background: var(--color-surface);
-    box-shadow: var(--shadow-lg);
-    color: var(--color-text-soft);
-    font-size: var(--font-size-xs);
-    line-height: 1.25rem;
-    pointer-events: none;
-  }
-
-  .password-help:hover .password-help__popover,
-  .password-help:focus-within .password-help__popover {
-    display: block;
-  }
-
-  .password-help__title {
-    margin: 0;
-    color: var(--color-text);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  .password-help__list {
-    margin: var(--space-1) 0 0;
-    padding-left: var(--space-4);
-    list-style: disc;
-  }
-
-  .type-choice-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--gap-lg);
-  }
-
-  .type-choice {
-    position: relative;
-    display: block;
-    cursor: pointer;
-  }
-
-  .type-choice__input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-    clip-path: inset(50%);
-  }
-
-  .type-choice__label {
-    display: flex;
-    height: 3rem;
-    align-items: center;
-    justify-content: center;
-    border: var(--border-width-sm) solid var(--color-border);
-    border-radius: var(--radius-2xl);
-    background: var(--color-surface);
-    color: var(--color-text-soft);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    transition:
-      background-color var(--transition-base),
-      border-color var(--transition-base),
-      box-shadow var(--transition-base),
-      color var(--transition-base);
-  }
-
-  .type-choice__input:checked + .type-choice__label {
-    border-color: var(--color-blue-500);
-    background: var(--color-primary-soft);
-    color: var(--color-primary-hover);
-    box-shadow: inset 0 0 0 1px var(--color-blue-500);
-  }
-
-  .type-choice__input:focus-visible + .type-choice__label {
-    box-shadow: 0 0 0 3px var(--color-focus-ring);
-  }
-
   .form-error {
-    margin: 0;
+    margin: var(--space-1) 0 0;
     color: var(--color-danger);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .auth-form mat-form-field {
+    width: 100%;
+  }
+
+  .password-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .password-block .auth-actions {
+    margin-top: calc(var(--space-2) * -1);
   }
 
   .auth-message {
@@ -447,6 +290,7 @@
   .register-hero__mark-icon {
     width: 1.25rem;
     height: 1.25rem;
+    font-size: 1.25rem;
   }
 
   .register-hero__title {
@@ -552,63 +396,11 @@
     font-size: var(--font-size-sm);
   }
 
-  .auth-card--register .form-label {
-    font-size: var(--font-size-xs);
-    color: var(--color-slate-900);
-  }
-
-  .auth-card--register .form-field {
-    gap: var(--space-1-5);
-  }
-
-  .auth-card--register .form-field__header {
-    min-height: 1.25rem;
-    align-items: center;
-  }
-
-  .auth-card--register .form-error {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    margin: 0;
-    color: var(--color-danger);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-tight);
-    white-space: nowrap;
-  }
-
-  .auth-card--register .form-input {
-    min-height: 2.375rem;
-    border-color: var(--color-border-soft);
-    border-radius: var(--radius-2xl);
-    font-size: var(--font-size-sm);
-  }
-
-  .auth-card--register .form-input::placeholder {
-    color: var(--color-slate-400);
-  }
-
-  .auth-card--register .type-choice-grid {
-    gap: var(--gap-md);
-  }
-
-  .auth-card--register .type-choice__label {
-    height: 2.375rem;
-    border-radius: var(--radius-2xl);
-  }
-
   .auth-card--register .auth-divider {
     margin-block: var(--space-2);
   }
 
   .auth-card--register .auth-switch {
     font-size: var(--font-size-xs);
-  }
-
-  .auth-card--register .app-button--md {
-    height: 2.625rem;
-    border-radius: var(--radius-2xl);
-    box-shadow: 0 10px 18px -10px rgb(37 99 235 / 0.72);
   }
 }

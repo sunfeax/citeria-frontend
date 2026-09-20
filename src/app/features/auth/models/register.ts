@@ -11,10 +11,3 @@ export interface iRegisterRequest {
 }
 
 export type tRegisterResponse = iUser;
-
-export type tRegisterServerErrors = Partial<
-  Record<
-    'firstName' | 'lastName' | 'email' | 'phone' | 'password' | 'confirmPassword' | 'type',
-    string
-  >
->;

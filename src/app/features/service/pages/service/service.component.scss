@@ -1,9 +1,7 @@
 .specialists {
   min-height: 100%;
   padding: clamp(2.5rem, 6vw, 5rem) 1.25rem;
-  background:
-    radial-gradient(circle at 10% 0%, rgb(59 130 246 / 0.1), transparent 28rem),
-    var(--color-background);
+  background: radial-gradient(circle at 10% 0%, rgb(59 130 246 / 0.1), transparent 28rem), var(--color-background);
 }
 
 .specialists__container {
@@ -178,7 +176,7 @@
     flex-direction: column;
   }
 
-  .specialist-card__footer app-button {
+  .specialist-card__footer button {
     align-self: stretch;
   }
 }
