@@ -5,7 +5,7 @@
   min-height: 100%;
   padding: var(--space-6) var(--space-4);
   background: var(--color-surface);
-  border-right: var(--border-width-sm) solid var(--color-border-soft);
+  border-right: var(--border-width-sm) solid var(--color-border);
 }
 
 aside {
@@ -16,12 +16,15 @@ aside {
 
 header {
   margin-bottom: var(--space-8);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   h3 {
     margin: 0;
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+    color: var(--color-primary-text);
   }
 
   p {
@@ -58,10 +61,10 @@ nav a {
 
   &:hover {
     background: var(--color-primary-soft);
-    color: var(--color-primary);
+    color: var(--color-primary-text);
 
     mat-icon {
-      color: var(--color-primary);
+      color: var(--color-primary-text);
     }
   }
 
@@ -85,7 +88,7 @@ footer {
     color: var(--color-text-soft);
   }
 
-  button {
+  .logoutBtn {
     --mat-icon-button-icon-color: var(--color-danger);
   }
 }

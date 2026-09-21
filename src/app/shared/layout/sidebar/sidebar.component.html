@@ -1,7 +1,16 @@
 <aside>
   <header>
-    <h3>Citeria</h3>
-    <p>EXPERTISE MARKET</p>
+    <div>
+      <h3>Citeria</h3>
+      <p>EXPERTISE MARKET</p>
+    </div>
+    <button (click)="toggleSidebar()" type="button">
+      @if (isToggledSidebar()) {
+        <mat-icon>chevron_left</mat-icon>
+      } @else {
+        <mat-icon>chevron_right</mat-icon>
+      }
+    </button>
   </header>
   <nav>
     @for (item of sidebarData; track item.label) {
@@ -13,8 +22,19 @@
   </nav>
   <footer>
     <span>{{ displayName() }}</span>
-    <button matIconButton type="button" aria-label="Logout" (click)="openConfirmDialogToLogout()">
-      <mat-icon>logout</mat-icon>
-    </button>
+    <div>
+      @if (themeSE.theme() === 'dark') {
+        <button matIconButton type="button" aria-label="Dark theme" (click)="toggleTheme()">
+          <mat-icon>dark_mode</mat-icon>
+        </button>
+      } @else {
+        <button matIconButton type="button" aria-label="Light theme" (click)="toggleTheme()">
+          <mat-icon>light_mode</mat-icon>
+        </button>
+      }
+      <button class="logoutBtn" matIconButton type="button" aria-label="Logout" (click)="openConfirmDialogToLogout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
   </footer>
 </aside>
