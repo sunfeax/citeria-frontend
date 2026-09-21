@@ -1,17 +1,17 @@
 .specialists {
   min-height: 100%;
-  padding: clamp(2.5rem, 6vw, 5rem) 1.25rem;
-  background: radial-gradient(circle at 10% 0%, rgb(59 130 246 / 0.1), transparent 28rem), var(--color-background);
+  padding: 40px 20px;
+  background: radial-gradient(circle at 10% 0%, rgb(59 130 246 / 0.1), transparent 448px), var(--color-background);
 }
 
 .specialists__container {
-  width: min(100%, 75rem);
+  width: min(100%, 1200px);
   margin-inline: auto;
 }
 
 .specialists__header {
-  max-width: 40rem;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
+  max-width: 640px;
+  margin-bottom: 32px;
 }
 
 .specialists__eyebrow {
@@ -20,16 +20,16 @@
   color: var(--color-primary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
-  letter-spacing: 0.08em;
+  letter-spacing: 1.12px;
   text-transform: uppercase;
 }
 
 .specialists__header h1 {
   margin: 0;
   color: var(--color-text);
-  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-size: 32px;
   line-height: 1.08;
-  letter-spacing: -0.04em;
+  letter-spacing: -1.28px;
 }
 
 .specialists__header p {
@@ -40,8 +40,8 @@
 
 .specialists__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-  gap: clamp(1rem, 2vw, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 16px;
 }
 
 .specialist-card {
@@ -50,14 +50,14 @@
   flex-direction: column;
   overflow: hidden;
   border: var(--border-width-sm) solid var(--color-border-soft);
-  border-radius: 1.35rem;
+  border-radius: 21.6px;
   background: var(--color-surface);
-  box-shadow: 0 0.75rem 2rem rgb(15 23 42 / 0.08);
+  box-shadow: 0 12px 32px rgb(15 23 42 / 0.08);
 }
 
 .specialist-card__media {
   position: relative;
-  min-height: 11.25rem;
+  min-height: 180px;
   overflow: hidden;
   background: var(--color-slate-100);
 }
@@ -65,17 +65,17 @@
 .specialist-card__tag {
   position: absolute;
   z-index: 2;
-  top: 0.65rem;
-  left: 0.65rem;
-  max-width: calc(100% - 1.3rem);
+  top: 10.4px;
+  left: 10.4px;
+  max-width: calc(100% - 20.8px);
   overflow: hidden;
-  padding: 0.25rem 0.55rem;
+  padding: 4px 8.8px;
   border-radius: var(--radius-full);
   background: rgb(255 255 255 / 0.94);
   color: var(--color-primary);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-bold);
-  letter-spacing: 0.045em;
+  letter-spacing: 0.45px;
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
@@ -83,16 +83,16 @@
 
 .specialist-card__avatar {
   width: 100%;
-  height: 11.25rem;
+  height: 180px;
   object-fit: cover;
 }
 
 .specialist-card__content {
   display: flex;
-  min-height: 10.75rem;
+  min-height: 172px;
   flex: 1;
   flex-direction: column;
-  padding: 1.15rem;
+  padding: 18.4px;
 }
 
 .specialist-card__heading {
@@ -105,9 +105,9 @@
 .specialist-card__heading h2 {
   margin: 0;
   color: var(--color-text);
-  font-size: 1.2rem;
+  font-size: 19.2px;
   line-height: var(--line-height-tight);
-  letter-spacing: -0.025em;
+  letter-spacing: -0.48px;
 }
 
 .specialist-card__description {
@@ -139,7 +139,7 @@
 
 .specialist-card__price strong {
   color: var(--color-primary);
-  font-size: 1.2rem;
+  font-size: 19.2px;
   line-height: 1;
 }
 
@@ -150,7 +150,7 @@
 .specialists__empty {
   grid-column: 1 / -1;
   margin: 0;
-  padding: 3rem;
+  padding: 48px;
   border: var(--border-width-sm) dashed var(--color-border);
   border-radius: var(--radius-3xl);
   background: var(--color-surface);
@@ -158,17 +158,17 @@
   text-align: center;
 }
 
-@media (max-width: 30rem) {
+@media (max-width: 480px) {
   .specialists {
     padding-inline: var(--space-4);
   }
 
   .specialist-card {
-    border-radius: 1.35rem;
+    border-radius: 21.6px;
   }
 
   .specialist-card__media {
-    min-height: 11.25rem;
+    min-height: 180px;
   }
 
   .specialist-card__footer {
@@ -178,5 +178,48 @@
 
   .specialist-card__footer button {
     align-self: stretch;
+  }
+}
+
+@media (min-width: 768px) {
+  .specialists {
+    padding-block: 48px;
+  }
+
+  .specialists__header {
+    margin-bottom: 40px;
+  }
+
+  .specialists__header h1 {
+    font-size: 40px;
+  }
+
+  .specialists__grid {
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .specialists {
+    padding-block: 64px;
+  }
+
+  .specialists__header h1 {
+    font-size: 52px;
+    letter-spacing: -2.08px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .specialists {
+    padding-block: 80px;
+  }
+
+  .specialists__header {
+    margin-bottom: 48px;
+  }
+
+  .specialists__grid {
+    gap: 24px;
   }
 }
