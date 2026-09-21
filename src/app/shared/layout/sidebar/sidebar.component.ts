@@ -1,17 +1,17 @@
-import { AuthService } from './../../../features/auth/services/auth.service';
 import { Component, computed, inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { routes } from '../../util/routes';
-import { sidebarData } from '../../util/static-data';
+import { Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../../features/auth/services/session.service';
 import { DialogService } from '../../services/dialog-service';
 import { ToastService } from '../../services/toast.service';
+import { routes } from '../../util/routes';
+import { SIDEBAR_CONFIG } from '../../util/sidebar.config';
+import { AuthService } from './../../../features/auth/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [MatIcon, MatIconButton],
+  imports: [MatIcon, MatIconButton, RouterLink],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
@@ -24,7 +24,7 @@ export class SidebarComponent {
   private readonly toastSE = inject(ToastService);
 
   /** DATA */
-  data = sidebarData;
+  sidebarData = SIDEBAR_CONFIG;
   protected readonly displayName = computed(() => {
     const user = this.sessionSE.user();
     if (!user) return 'Guest';

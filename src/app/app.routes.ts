@@ -13,13 +13,16 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     canActivate: [accessGuard],
-    children: [{ path: 'services', component: ServiceComponent }],
+    children: [],
   },
   {
     path: '',
     component: SidebarLayoutComponent,
     canActivate: [accessGuard],
-    children: [{ path: 'profile', component: ProfileComponent }],
+    children: [
+      { path: 'profile', component: ProfileComponent },
+      { path: 'services', component: ServiceComponent },
+    ],
   },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'login', component: LoginComponent },

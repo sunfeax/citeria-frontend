@@ -4,8 +4,8 @@
     <p>EXPERTISE MARKET</p>
   </header>
   <nav>
-    @for (item of data; track item.label) {
-      <a [class.disabled]="item.disabled">
+    @for (item of sidebarData; track item.label) {
+      <a [routerLink]="item.path" [class.disabled]="item.disabled">
         <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
         <span>{{ item.label }}</span>
       </a>
