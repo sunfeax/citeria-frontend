@@ -27,16 +27,15 @@ export class SidebarComponent {
 
   /** DATA */
   sidebarData = SIDEBAR_CONFIG;
-  isToggledSidebar = signal<boolean>(true);
+  isExpandedSidebar = signal<boolean>(true);
   protected readonly displayName = computed(() => {
     const user = this.sessionSE.user();
     if (!user) return 'Guest';
-    const fullName = `${user.firstName} ${user.lastName}`;
-    return fullName || user.email;
+    return user.firstName?.trim() || user.email;
   });
 
   toggleSidebar() {
-    this.isToggledSidebar.update(currentState => !currentState);
+    this.isExpandedSidebar.update(currentState => !currentState);
   }
 
   toggleTheme() {
