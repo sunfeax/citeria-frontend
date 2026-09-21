@@ -7,6 +7,7 @@ html {
   @include mat.theme(
     (
       color: (
+        theme-type: color-scheme,
         primary: theme.$primary-palette,
         tertiary: theme.$tertiary-palette,
       ),
@@ -82,22 +83,6 @@ html {
   --border-width-lg: 4px;
 
   --color-white: #ffffff;
-  --color-slate-50: #f8fafc;
-  --color-slate-100: #f1f5f9;
-  --color-slate-200: #e2e8f0;
-  --color-slate-300: #cbd5e1;
-  --color-slate-400: #94a3b8;
-  --color-slate-500: #64748b;
-  --color-slate-700: #334155;
-  --color-slate-900: #0f172a;
-
-  --color-blue-50: #eff6ff;
-  --color-blue-100: #dbeafe;
-  --color-blue-200: #bfdbfe;
-  --color-blue-300: #93c5fd;
-  --color-blue-500: #3b82f6;
-  --color-blue-600: #2563eb;
-  --color-blue-700: #1d4ed8;
 
   --color-red-600: #dc2626;
   --color-red-700: #b91c1c;
@@ -112,21 +97,44 @@ html {
   --color-amber-600: #d97706;
   --color-amber-950: #451a03;
 
-  --color-background: var(--color-slate-50);
+  --color-text: #0a140c;
+  --color-background: #fcfdfc;
+  --color-primary: #3dd156;
+  --color-secondary: #77ee8b;
+  --color-accent: #53f96e;
+
   --color-surface: var(--color-white);
-  --color-text: var(--color-slate-900);
-  --color-text-soft: var(--color-slate-700);
-  --color-text-muted: var(--color-slate-500);
-  --color-border: var(--color-slate-300);
-  --color-border-soft: var(--color-slate-200);
-  --color-primary: var(--color-blue-600);
-  --color-primary-hover: var(--color-blue-700);
-  --color-primary-soft: var(--color-blue-50);
-  --color-primary-tint: var(--color-blue-100);
-  --color-focus-ring: var(--color-blue-200);
+  --color-text-soft: #28422d;
+  --color-text-muted: #526b57;
+  --color-border: #607764;
+  --color-border-soft: #bdc8bf;
+  --color-primary-text: #176f27;
+  --color-primary-text-hover: #0f541c;
+  --color-primary-soft: #e8f9eb;
+  --color-primary-tint: #d7f7dc;
+  --color-focus-ring: var(--color-primary-text);
+  --color-on-primary: var(--color-text);
+  --color-hero-start: #176f27;
+  --color-hero-end: #0f541c;
+  --color-on-hero: var(--color-white);
+  --color-primary-glow: rgb(61 209 86 / 0.14);
   --color-danger: var(--color-red-600);
   --color-danger-strong: var(--color-red-700);
-  --color-icon-muted: #9ca3af;
+  --color-icon-muted: #607764;
+
+  --mat-sys-primary: var(--color-primary);
+  --mat-sys-on-primary: var(--color-on-primary);
+  --mat-sys-primary-container: var(--color-primary-soft);
+  --mat-sys-on-primary-container: var(--color-text);
+  --mat-sys-secondary: var(--color-secondary);
+  --mat-sys-on-secondary: var(--color-on-primary);
+  --mat-sys-tertiary: var(--color-accent);
+  --mat-sys-on-tertiary: var(--color-on-primary);
+  --mat-sys-background: var(--color-background);
+  --mat-sys-surface: var(--color-surface);
+  --mat-sys-on-surface: var(--color-text);
+  --mat-sys-outline: var(--color-border);
+  --mat-sys-outline-variant: var(--color-border-soft);
 
   --shadow-lg: 0 10px 15px -3px rgb(15 23 42 / 0.1), 0 4px 6px -4px rgb(15 23 42 / 0.1);
 
@@ -137,6 +145,35 @@ html {
   --container-5xl: 1024px;
   --container-register: 1056px;
   --z-toast: 1000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --color-text: #ebf5ed;
+    --color-background: #020302;
+    --color-primary: #2ec246;
+    --color-secondary: #118825;
+    --color-accent: #06ac22;
+
+    --color-surface: #0a140c;
+    --color-text-soft: #bed0c2;
+    --color-text-muted: #91aa96;
+    --color-border: #78907d;
+    --color-border-soft: #334b37;
+    --color-primary-text: var(--color-primary);
+    --color-primary-text-hover: var(--color-accent);
+    --color-primary-soft: #12391a;
+    --color-primary-tint: #174d21;
+    --color-focus-ring: var(--color-primary);
+    --color-on-primary: var(--color-background);
+    --color-hero-start: #118825;
+    --color-hero-end: #075f18;
+    --color-primary-glow: rgb(46 194 70 / 0.18);
+
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.42), 0 4px 6px -4px rgb(0 0 0 / 0.35);
+  }
 }
 
 *,
@@ -199,7 +236,8 @@ mat-form-field {
   --mat-form-field-container-vertical-padding: 12px;
   --mat-form-field-outlined-container-shape: var(--radius-xl);
   --mat-form-field-outlined-outline-color: var(--color-border);
-  --mat-form-field-outlined-hover-outline-color: var(--color-slate-500);
+  --mat-form-field-outlined-hover-outline-color: var(--color-primary-text);
+  --mat-form-field-outlined-focus-outline-color: var(--color-primary-text);
 }
 
 .btn-block {

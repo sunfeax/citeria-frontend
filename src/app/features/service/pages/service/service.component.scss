@@ -1,7 +1,8 @@
 .specialists {
   min-height: 100%;
   padding: 40px 20px;
-  background: radial-gradient(circle at 10% 0%, rgb(59 130 246 / 0.1), transparent 448px), var(--color-background);
+  background: radial-gradient(circle at 10% 0%, var(--color-primary-glow), transparent 448px),
+    var(--color-background);
 }
 
 .specialists__container {
@@ -17,7 +18,7 @@
 .specialists__eyebrow {
   display: inline-block;
   margin-bottom: var(--space-3);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   letter-spacing: 1.12px;
@@ -71,8 +72,8 @@
   overflow: hidden;
   padding: 4px 8.8px;
   border-radius: var(--radius-full);
-  background: rgb(255 255 255 / 0.94);
-  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  color: var(--color-primary-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.45px;
@@ -138,7 +139,7 @@
 }
 
 .specialist-card__price strong {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-size: 19.2px;
   line-height: 1;
 }
