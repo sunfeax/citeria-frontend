@@ -1,7 +1,6 @@
 @use '@angular/material' as mat;
 @use './styles/theme-colors' as theme;
 @use './styles/auth-page' as auth;
-@import '@angular/cdk/overlay-prebuilt.css';
 
 html {
   @include mat.theme(
