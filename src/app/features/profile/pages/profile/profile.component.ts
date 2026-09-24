@@ -8,7 +8,7 @@ import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs';
 import { iApiError } from '../../../../shared/models/api-error';
-import { ToastService } from '../../../../shared/services/toast.service';
+import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { applyServerErrors, clearServerErrors, getFieldError } from '../../../../shared/util/form-errors';
 import { SessionService } from '../../../auth/services/session.service';
 import { ProfileService } from '../../services/profile.service';
@@ -36,7 +36,7 @@ export class ProfileComponent {
   /** INJECTORS */
   private readonly sessionSE = inject(SessionService);
   private readonly profileSE = inject(ProfileService);
-  private readonly toastSE = inject(ToastService);
+  private readonly snackbarSE = inject(SnackbarService);
 
   /** TEMPLATE HELPERS */
   readonly getFieldError = getFieldError;
@@ -100,7 +100,7 @@ export class ProfileComponent {
       .subscribe({
         next: user => {
           this.sessionSE.setUser(user);
-          this.toastSE.success('Your information has been updated.');
+          this.snackbarSE.success('Your information has been updated.');
           this.profileForm.markAsPristine();
         },
         error: (err: HttpErrorResponse) => {
@@ -108,7 +108,7 @@ export class ProfileComponent {
           if (apiError.errors) {
             applyServerErrors(this.profileForm, apiError.errors);
           } else {
-            this.toastSE.error(apiError.detail ?? 'Update failed.');
+            this.snackbarSE.error(apiError.detail ?? 'Update failed.');
           }
         },
       });
@@ -131,7 +131,7 @@ export class ProfileComponent {
       )
       .subscribe({
         next: () => {
-          this.toastSE.success('Your password has been updated.');
+          this.snackbarSE.success('Your password has been updated.');
           this.passwordForm.reset();
         },
         error: (err: HttpErrorResponse) => {
@@ -139,7 +139,7 @@ export class ProfileComponent {
           if (apiError.errors) {
             applyServerErrors(this.passwordForm, apiError.errors);
           } else {
-            this.toastSE.error(apiError.detail ?? 'Password update failed.');
+            this.snackbarSE.error(apiError.detail ?? 'Password update failed.');
           }
         },
       });

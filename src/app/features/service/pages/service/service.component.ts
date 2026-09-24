@@ -1,11 +1,11 @@
-import { iPageableContent } from './../../../../shared/models/pageable';
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ServiceService } from '../../services/service.service';
-import { iServiceList } from '../../models/service-list';
-import { ToastService } from '../../../../shared/services/toast.service';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { iApiError } from '../../../../shared/models/api-error';
+import { SnackbarService } from '../../../../shared/services/snackbar.service';
+import { iServiceList } from '../../models/service-list';
+import { ServiceService } from '../../services/service.service';
+import { iPageableContent } from './../../../../shared/models/pageable';
 
 @Component({
   selector: 'app-service',
@@ -16,7 +16,7 @@ import { iApiError } from '../../../../shared/models/api-error';
 export class ServiceComponent implements OnInit {
   /** INJECTORS */
   private readonly serviceSE = inject(ServiceService);
-  private readonly toastSE = inject(ToastService);
+  private readonly snackbarSE = inject(SnackbarService);
 
   /** DATA */
   page = signal<iPageableContent<iServiceList> | null>(null);
@@ -36,7 +36,7 @@ export class ServiceComponent implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         const apiError = err.error as iApiError;
-        this.toastSE.error(apiError.detail ?? 'Unable to load services right now.');
+        this.snackbarSE.error(apiError.detail ?? 'Unable to load services right now.');
       },
     });
   }

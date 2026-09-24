@@ -14,10 +14,12 @@
 ## Текущее состояние проекта (срез на 2026-07-18)
 
 **Core**
+
 - ✅ `core/guards/access.guard.ts` — гвард доступа (refresh при отсутствии сессии, редирект на `/login`)
 - ✅ `core/interceptors/auth.interceptor.ts` — интерцептор (Bearer-заголовок, авто-refresh на 401)
 
 **Auth (`features/auth`)**
+
 - ✅ `pages/login` — форма, обработка 401, редирект на профиль
 - ✅ `pages/register` — поле-ошибки через `serverErrors`/`app-field-error`, group-level
   `passwordComparator`, `isSubmitted` для radio/group-ошибок
@@ -35,6 +37,7 @@
 - ✅ `logout()` подключён в sidebar
 
 **Profile (`features/profile`) ✅**
+
 - ✅ `pages/profile` — две формы (личные данные + смена пароля), типизированные Reactive Forms
   с валидаторами, `app-field-error` на каждом поле, `pristine`/`markAsPristine()` для disabled
   кнопки, write-through в `sessionSE.setUser()` после успешного PATCH
@@ -42,6 +45,7 @@
 - ✅ models: `iUserUpdateRequest`/`tUserUpdateServerErrors`, `iChangePasswordRequest`/`tChangePasswordServerErrors`
 
 **Shared**
+
 - ✅ layout: `header`, `footer`, `main-layout`, `sidebar-layout`, `sidebar` (навигация настроена)
 - ✅ components: `button` (variants incl. `outline`, self-closing `/>` везде), `field-error`
   (абсолютное позиционирование ошибки — не двигает layout, глобально в самом компоненте), `toast`
@@ -52,6 +56,7 @@
   `payload-handler.ts` (были `*-class.ts`, мигрировали осознанно, см. лог)
 
 **Features дальше**
+
 - ⬜ поиск специалистов, услуги, часы работы, слоты, бронирования (по `API.md`)
 
 ---
@@ -62,26 +67,26 @@
 
 1. **RxJS** — Observable, cold/hot, операторы (`map`, `switchMap`, `mergeMap`, `concatMap`,
    `exhaustMap`, `debounceTime`, `catchError`, `retry`), Subjects, отписки (`takeUntilDestroyed`,
-   `async` pipe). → *где:* HTTP-слой, refresh-флоу интерцептора, живой поиск.
-2. **Signals** — `signal`, `computed`, `effect`, `untracked`, `linkedSignal`, `resource`. → *где:*
+   `async` pipe). → _где:_ HTTP-слой, refresh-флоу интерцептора, живой поиск.
+2. **Signals** — `signal`, `computed`, `effect`, `untracked`, `linkedSignal`, `resource`. → _где:_
    состояние session/toasts (уже на signals — разобрать), профиль, списки.
-3. **Interop signal ↔ observable** — `toSignal`, `toObservable`. → *где:* связка HTTP (Observable)
+3. **Interop signal ↔ observable** — `toSignal`, `toObservable`. → _где:_ связка HTTP (Observable)
    и UI-состояния (signal).
 4. **Reactive Forms** — `FormControl/FormGroup`, типизированные формы, валидаторы (sync/async),
-   статусы и ошибки, `updateOn`. → *где:* login/register (отревьюить существующие), профиль, создание услуги.
+   статусы и ошибки, `updateOn`. → _где:_ login/register (отревьюить существующие), профиль, создание услуги.
 5. **Новые `input()` / `output()` / `model()`** — сигнальные вводы/выводы, `required`, `transform`,
-   `alias`, двусторонняя привязка. → *где:* shared-компоненты (`button`, `field-error`), формы-обёртки.
+   `alias`, двусторонняя привязка. → _где:_ shared-компоненты (`button`, `field-error`), формы-обёртки.
 6. **Router** — маршруты, lazy `loadComponent`/`loadChildren`, параметры, функциональные гварды
-   (уже есть `access.guard`), resolvers, привязка route→input. → *где:* `specialist-detail`, детали записи, защита по роли/типу.
+   (уже есть `access.guard`), resolvers, привязка route→input. → _где:_ `specialist-detail`, детали записи, защита по роли/типу.
 7. **`viewChild` / `contentChild`** — сигнальные queries, `viewChildren`, `afterRender`/`afterNextRender`.
-   → *где:* работа с DOM (фокус, элементы форм), диалоги.
+   → _где:_ работа с DOM (фокус, элементы форм), диалоги.
 8. **DI** — `inject()`, providers, injection tokens, `providedIn`, функциональные interceptors/guards.
-   → *где:* сервисы, разбор существующего интерцептора.
-9. **Change detection** — OnPush, zoneless (20–21), как signals двигают CD. → *где:* большие списки
+   → _где:_ сервисы, разбор существующего интерцептора.
+9. **Change detection** — OnPush, zoneless (20–21), как signals двигают CD. → _где:_ большие списки
    (услуги, записи).
 10. **HttpClient** — `provideHttpClient`, `withInterceptors`, типизация, `params`, маппинг ошибок
-    в `ProblemDetail` из `API.md`. → *где:* весь data-слой.
-11. **Control flow & шаблоны** — `@if/@for/@switch/@defer`, `track`, `@let`. → *где:* списки слотов/услуг/записей.
+    в `ProblemDetail` из `API.md`. → _где:_ весь data-слой.
+11. **Control flow & шаблоны** — `@if/@for/@switch/@defer`, `track`, `@let`. → _где:_ списки слотов/услуг/записей.
 12. **(доп) Vitest** — юнит-тесты сервисов и компонентов. → по желанию.
 
 ---
@@ -91,12 +96,14 @@
 Каждый milestone = реальная фича из `API.md` + темы, которые на ней разбираем.
 
 ### M1 — Auth ✅
+
 - Костяк + тонкости разобраны: `shareReplay(1)` + `finalize` в `refresh()`, обработка 401 в
   интерцепторе, ревью Reactive Forms в login/register. `forgot-password` осознанно оставлен
   🔄 до появления бэкенд-эндпоинта.
 - **Темы закрыты:** RxJS (`switchMap`, `shareReplay`, refresh-флоу), Reactive Forms, DI/интерцепторы.
 
 ### M2 — Профиль 🔄
+
 - `GET /users/me` (через сессию, без лишнего запроса), `PATCH /users/{id}`,
   `PATCH /users/{id}/password` — обе формы с валидацией, серверными ошибками по полям,
   `pristine`-гейтингом кнопки, write-through в session. ✅ готово.
@@ -109,6 +116,7 @@
   self-closing шаблоны, файловые конвенции (kebab-case, функции-модули вместо классов).
 
 ### M3 — Поиск специалистов и услуги 🔄
+
 - `GET /services` (фильтры `search`, `minPrice`, `maxPrice`), `GET /specialist-detail/{id}`.
 - ✅ `features/service`: `iServiceList` + `iPageableContent<T>` (generic, переиспользуемый на будущих
   list-эндпоинтах), `ServiceService.getList()`, роут `/services`. Ответ бэкенда сверен вручную —
@@ -144,15 +152,16 @@
 **Фазы миграции** (порядок выбран так, чтобы каждая фаза удаляла код целиком, а не правила его
 дважды; иконки переезжают на `mat-icon` попутно внутри каждой фазы):
 
-| Фаза | Что уходит | Чем заменяется | Кто |
-|---|---|---|---|
-| 1 ✅ | `ToastComponent`, `models/toast.ts`, CDK-обвязка `confirm-dialog` | `MatSnackBar`, `MatDialog` | Claude |
-| 2 ✅ | `ButtonComponent` (+ его `@Input()`-декораторы) | `matButton` / `matIconButton` | Claude |
-| 3 ✅ | `FieldErrorComponent` | `mat-form-field` + `mat-error` | Claude |
-| 4 ✅ | `util/icons.ts`, зависимость `lucide-angular` | `mat-icon` | Claude |
-| 5 ⬜ | заглушка `PaginationComponent` (удалена в фазе 2) | `MatPaginator` прямо в `ServiceComponent` + серверная пагинация | **пользователь** |
+| Фаза | Что уходит                                                        | Чем заменяется                                                  | Кто              |
+| ---- | ----------------------------------------------------------------- | --------------------------------------------------------------- | ---------------- |
+| 1 ✅ | `ToastComponent`, `models/toast.ts`, CDK-обвязка `confirm-dialog` | `MatSnackBar`, `MatDialog`                                      | Claude           |
+| 2 ✅ | `ButtonComponent` (+ его `@Input()`-декораторы)                   | `matButton` / `matIconButton`                                   | Claude           |
+| 3 ✅ | `FieldErrorComponent`                                             | `mat-form-field` + `mat-error`                                  | Claude           |
+| 4 ✅ | `util/icons.ts`, зависимость `lucide-angular`                     | `mat-icon`                                                      | Claude           |
+| 5 ⬜ | заглушка `PaginationComponent` (удалена в фазе 2)                 | `MatPaginator` прямо в `ServiceComponent` + серверная пагинация | **пользователь** |
 
 **Фазы 2–4 сделаны 2026-09-20.** Что важно знать про результат:
+
 - Ошибки валидации и ошибки сервера теперь одним механизмом. Сообщения из `errors` ответа API
   кладутся в контролы через `setErrors({ server })` (`shared/util/form-errors.ts`:
   `applyServerErrors`, `clearServerErrors`, `getFieldError`). Сигналы `serverErrors` и типы
@@ -169,10 +178,10 @@
   Профиль и сайдбар за гвардом — глазами не смотрел.
 
 Известное изменение поведения: `MatSnackBar` показывает по одному уведомлению за раз (очередь),
-самописный `ToastService` их стекал. У снекбара нет заголовка — параметр `title` из API сервиса
+самописный `SnackbarService` их стекал. У снекбара нет заголовка — параметр `title` из API сервиса
 убран, тексты на 15 вызовах переписаны в самодостаточные.
 
-`ToastService` как имя и как API (`success`/`error`/`warning`/`info`) оставлен: внутри теперь
+`SnackbarService` как имя и как API (`success`/`error`/`warning`/`info`) оставлен: внутри теперь
 обёртка над `MatSnackBar`, но вызывающий код не изменился по форме. Конфигурация уведомлений
 (позиция, длительность, panel-классы) лежит в одном месте.
 
@@ -181,12 +190,14 @@
 а разрезать бандл лениво загружаемыми роутами (`loadComponent`), тема 6. Задача пользователя.
 
 ### M4 — Слоты и бронирование ⬜
+
 - `GET /services/{id}/slots`, `POST /appointments` (lifecycle PENDING→…→COMPLETED),
   форма ввода карты на экране оплаты (`POST /appointments/{id}/pay`, mocked, разовый ввод —
   перенесено сюда из M2).
 - **Темы:** работа с датами (`Instant`/`LocalDate`/`LocalTime`), композиция RxJS, состояние-«машина» статусов.
 
 ### M5 — Мои записи ⬜
+
 - Список `GET /appointments` + действия (accept/pay/cancel/complete) по ролям CLIENT/SPECIALIST.
 - **Темы:** списки + OnPush/CD, роли и типы, гварды по типу пользователя, полиморфные действия.
 

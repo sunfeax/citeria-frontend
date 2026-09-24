@@ -4,8 +4,8 @@ import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../../features/auth/services/session.service';
 import { DialogService } from '../../services/dialog.service';
+import { SnackbarService } from '../../services/snackbar.service';
 import { ThemeService } from '../../services/theme.service';
-import { ToastService } from '../../services/toast.service';
 import { routes } from '../../util/routes';
 import { SIDEBAR_CONFIG } from '../../util/sidebar.config';
 import { AuthService } from './../../../features/auth/services/auth.service';
@@ -22,7 +22,7 @@ export class SidebarComponent {
   private readonly sessionSE = inject(SessionService);
   private readonly router = inject(Router);
   private readonly dialogSE = inject(DialogService);
-  private readonly toastSE = inject(ToastService);
+  private readonly snackbarSE = inject(SnackbarService);
   readonly themeSE = inject(ThemeService);
 
   /** DATA */
@@ -44,7 +44,7 @@ export class SidebarComponent {
 
   logout(): void {
     this.authSE.logout().subscribe(() => {
-      this.toastSE.success('You have successfully logged out');
+      this.snackbarSE.success('You have successfully logged out');
       this.router.navigateByUrl(routes.login);
     });
   }

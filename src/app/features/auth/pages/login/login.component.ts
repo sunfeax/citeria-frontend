@@ -1,17 +1,17 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators as v } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { ToastService } from '../../../../shared/services/toast.service';
+import { SnackbarService } from '../../../../shared/services/snackbar.service';
+import { getFieldError } from '../../../../shared/util/form-errors';
 import { routes } from '../../../../shared/util/routes';
 import { iLoginRequest } from '../../models/login';
-import { getFieldError } from '../../../../shared/util/form-errors';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -36,7 +36,7 @@ export class LoginComponent {
   /** INJECTORS */
   private authSE = inject(AuthService);
   private router = inject(Router);
-  private toast = inject(ToastService);
+  private snackbarSE = inject(SnackbarService);
 
   /** ROUTES */
   readonly routes = routes;
@@ -91,10 +91,10 @@ export class LoginComponent {
         },
         error: (err: HttpErrorResponse) => {
           if (err.status === 401) {
-            this.toast.error('Invalid email or password.');
+            this.snackbarSE.error('Invalid email or password.');
             return;
           } else {
-            this.toast.error('Unable to sign in right now. Please try later.');
+            this.snackbarSE.error('Unable to sign in right now. Please try later.');
           }
         },
       });

@@ -144,7 +144,7 @@ html {
   --container-sm: 448px;
   --container-5xl: 1024px;
   --container-register: 1056px;
-  --z-toast: 1000;
+  --z-snackbar: 1000;
 }
 
 :root[data-theme='dark'] {
@@ -270,22 +270,31 @@ button mat-progress-spinner {
 }
 
 .app-snack-bar {
-  --mat-snack-bar-supporting-text-color: var(--color-white);
-  --mat-snack-bar-button-color: var(--color-white);
+  --mat-snack-bar-container-color: var(--color-surface);
+  --mat-snack-bar-supporting-text-color: var(--color-text);
+  --mat-snack-bar-button-color: var(--color-primary-text);
+  --mat-snack-bar-container-shape: var(--radius-xl);
+  --snack-bar-accent: var(--color-primary);
+
+  .mdc-snackbar__surface {
+    border: var(--border-width-sm) solid var(--color-border-soft);
+    border-left: var(--border-width-lg) solid var(--snack-bar-accent);
+    box-shadow: var(--shadow-lg);
+  }
 }
 
 .app-snack-bar--success {
-  --mat-snack-bar-container-color: var(--color-emerald-500);
+  --snack-bar-accent: var(--color-primary);
 }
 
 .app-snack-bar--error {
-  --mat-snack-bar-container-color: var(--color-red-600);
+  --snack-bar-accent: var(--color-danger);
 }
 
 .app-snack-bar--warning {
-  --mat-snack-bar-container-color: var(--color-amber-600);
+  --snack-bar-accent: var(--color-amber-600);
 }
 
 .app-snack-bar--info {
-  --mat-snack-bar-container-color: var(--color-sky-500);
+  --snack-bar-accent: var(--color-sky-500);
 }

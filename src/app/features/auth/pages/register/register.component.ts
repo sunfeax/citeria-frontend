@@ -11,7 +11,6 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -20,9 +19,10 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
+import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { iApiError } from '../../../../shared/models/api-error';
-import { ToastService } from '../../../../shared/services/toast.service';
+import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { applyServerErrors, clearServerErrors, getFieldError } from '../../../../shared/util/form-errors';
 import { routes } from '../../../../shared/util/routes';
 import { eUserType } from '../../models/user-type';
@@ -53,7 +53,7 @@ import { getRegisterPayload } from './../../../../shared/util/payload-handler';
 export class RegisterComponent {
   /** INJECTORS */
   private authSE = inject(AuthService);
-  private toastSE = inject(ToastService);
+  private snackbarSE = inject(SnackbarService);
   private router = inject(Router);
 
   /** ENUMS */
@@ -144,7 +144,7 @@ export class RegisterComponent {
           if (apiError.errors) {
             applyServerErrors(this.registerForm, apiError.errors);
           } else {
-            this.toastSE.error(apiError.detail ?? 'Registration failed.');
+            this.snackbarSE.error(apiError.detail ?? 'Registration failed.');
           }
         },
       });
