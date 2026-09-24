@@ -1,15 +1,17 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { iApiError } from '../../../../shared/models/api-error';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { iServiceList } from '../../models/service-list';
 import { ServiceService } from '../../services/service.service';
 import { iPageableContent } from './../../../../shared/models/pageable';
+import { getMockPage } from './service.mockdata';
 
 @Component({
   selector: 'app-service',
-  imports: [MatButton],
+  imports: [MatButton, MatPaginatorModule],
   templateUrl: './service.component.html',
   styleUrl: './service.component.scss',
 })
@@ -19,20 +21,32 @@ export class ServiceComponent implements OnInit {
   private readonly snackbarSE = inject(SnackbarService);
 
   /** DATA */
-  page = signal<iPageableContent<iServiceList> | null>(null);
+  response = signal<iPageableContent<iServiceList> | null>(null);
 
-  services = computed(() => this.page()?.content ?? []);
-  totalPages = computed(() => this.page()?.totalPages ?? 0);
-  totalElements = computed(() => this.page()?.totalElements ?? 0);
-  size = computed(() => this.page()?.size ?? 0);
-  isFirstPage = computed(() => this.page()?.first ?? false);
-  isLastPage = computed(() => this.page()?.last ?? false);
+  services = computed(() => this.response()?.content ?? []);
+  totalElements = computed(() => this.response()?.totalElements ?? 0);
+
+  page = signal<number>(0);
+  size = signal<number>(20);
+  sizeOptions = [5, 10, 20, 50];
 
   /** ACTIONS */
   ngOnInit(): void {
-    this.serviceSE.getList().subscribe({
-      next: page => {
-        this.page.set(page);
+    this.load();
+  }
+
+  onPage(e: PageEvent) {
+    this.size.set(e.pageSize);
+    this.page.set(e.pageIndex);
+    this.load(e.pageIndex, e.pageSize);
+  }
+
+  load(page = 0, size = this.size()) {
+    this.serviceSE.getList(page, size).subscribe({
+      next: response => {
+        // TODO: заменить на реальный content после разработки пагинации
+        this.response.set(getMockPage(page, size));
+        // this.page.set(response);
       },
       error: (err: HttpErrorResponse) => {
         const apiError = err.error as iApiError;

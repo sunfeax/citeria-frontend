@@ -34,5 +34,12 @@
         <p class="specialists__empty">No specialists are available right now.</p>
       }
     </div>
+    <mat-paginator
+      [length]="totalElements()"
+      [pageIndex]="page()"
+      [pageSize]="size()"
+      [pageSizeOptions]="sizeOptions"
+      (page)="onPage($event)"
+    />
   </div>
 </section>
