@@ -1,10 +1,5 @@
 import { Routes } from '@angular/router';
 import { accessGuard } from './core/guards/access.guard';
-import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/forgot-password.component';
-import { LoginComponent } from './features/auth/pages/login/login.component';
-import { RegisterComponent } from './features/auth/pages/register/register.component';
-import { ProfileComponent } from './features/profile/pages/profile/profile.component';
-import { ServiceComponent } from './features/service/pages/service/service.component';
 import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.component';
 import { SidebarLayoutComponent } from './shared/layout/sidebar-layout/sidebar-layout.component';
 
@@ -20,11 +15,27 @@ export const routes: Routes = [
     component: SidebarLayoutComponent,
     canActivate: [accessGuard],
     children: [
-      { path: 'profile', component: ProfileComponent },
-      { path: 'services', component: ServiceComponent },
+      {
+        path: 'profile',
+        loadComponent: () => import('./features/profile/pages/profile/profile.component').then(m => m.ProfileComponent),
+      },
+      {
+        path: 'services',
+        loadComponent: () => import('./features/service/pages/service/service.component').then(m => m.ServiceComponent),
+      },
     ],
   },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('./features/auth/pages/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent),
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent),
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./features/auth/pages/register/register.component').then(m => m.RegisterComponent),
+  },
 ];

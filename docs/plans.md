@@ -1,5 +1,4 @@
 - переместить снекбак вниз в центр
-- lazy loading in routes
 - session.service: user = computed(() => currentUser()) заменить на currentUser.asReadonly()
 - profile: user = requireUser() это снимок, сделать производным от sessionSE.user()
 - sidebar: ссылки мёртвые, добавить routerLink в sidebarData и /services в routes.ts
