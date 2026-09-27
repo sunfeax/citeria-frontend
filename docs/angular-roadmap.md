@@ -1,272 +1,87 @@
-# Дорожная карта обучения — Citeria Frontend (Angular 20–21)
+# План проекта — Citeria Frontend
 
-Живой файл: наставник обновляет его по ходу (после моего «ок»). Здесь — что уже есть, какие темы
-проходим и в каком порядке строим фичи. Формат обучения — **гибрид**: тема → сразу практика на фиче.
+## Зачем этот проект
 
-**Главная цель проекта — архитектура современных приложений** (см. `CLAUDE.md`): владение
-состоянием, границы фич, data-слой, распространение загрузки и ошибок, роутинг и DI. Всё, что не про
-архитектуру — виджеты, разметка, иконки, стили — берём готовым из UI-библиотеки.
+Научиться по максимуму пользоваться **RxJS и сигналами** на реальном приложении — своими руками,
+с подсказками, а не готовыми решениями. База уже есть (курсы по RxJS и сигналам пройдены), здесь —
+применение на настоящем HTTP, ошибках и гонках.
+
+Инструменты — только проверенные: сигналы (`signal`/`computed`/`linkedSignal`/`effect`), RxJS,
+interop (`toSignal`/`toObservable`), Reactive Forms. `resource`/`httpResource`/`rxResource`
+не используем.
 
 Легенда: ✅ готово · 🔄 в процессе · ⬜ дальше
 
 ---
 
-## Текущее состояние проекта (срез на 2026-07-18)
+## M1 — Auth ✅
 
-**Core**
+- ✅ Логин, регистрация, logout, восстановление сессии при старте приложения.
+- ✅ Интерцептор: Bearer-заголовок, авто-refresh на 401, дедупликация конкурентных refresh.
+- ✅ Гвард доступа.
+- 🔄 `forgot-password` — заглушка. На бэкенде нет эндпоинта восстановления пароля; ждёт его.
 
-- ✅ `core/guards/access.guard.ts` — гвард доступа (refresh при отсутствии сессии, редирект на `/login`)
-- ✅ `core/interceptors/auth.interceptor.ts` — интерцептор (Bearer-заголовок, авто-refresh на 401)
+## M2 — Профиль 🔄
 
-**Auth (`features/auth`)**
+- ✅ Редактирование личных данных — `PATCH /users/{id}`.
+- ✅ Смена пароля — `PATCH /users/{id}/password`.
+- ⬜ **Аватар** — загрузка, замена, удаление; показ в профиле и в сайдбаре.
+  `POST/GET/DELETE /users/{id}/avatar` (multipart).
+- ⬜ **Удаление аккаунта** — подтверждение в диалоге, soft delete, выход из системы.
+  `DELETE /users/{id}`.
 
-- ✅ `pages/login` — форма, обработка 401, редирект на профиль
-- ✅ `pages/register` — поле-ошибки через `serverErrors`/`app-field-error`, group-level
-  `passwordComparator`, `isSubmitted` для radio/group-ошибок
-- 🔄 `pages/forgot-password` — пока только статическая страница-заглушка (нет формы/запроса);
-  в `API.md` нет эндпоинта восстановления пароля — есть только `PATCH /users/{id}/password`
-  (смена пароля залогиненным пользователем). Решить позже: ждать бэкенд-эндпоинт или
-  переориентировать страницу на смену пароля из профиля.
-- ✅ services: `auth.service` (login/register/refresh/logout/getMe/restoreSession,
-  refresh задедуплен через `shareReplay`), `auth-http.service`, `session.service` (signals,
-  плюс `requireUser()` — throws-аксессор для мест, гарантированных гвардом)
-- ✅ `restoreSession()` подключён в `provideAppInitializer` (`app.config.ts`) — сессия
-  восстанавливается при загрузке приложения
-- ✅ models: `iUser`, `iLogin`, `iRegister`, `iRefresh`, `eUserRole`, `eUserType`
-  (файлы в kebab-case: `user.ts`, `login.ts`, `register.ts`, `refresh.ts`, `user-role.ts`, `user-type.ts`)
-- ✅ `logout()` подключён в sidebar
+## M3 — Каталог услуг 🔄
 
-**Profile (`features/profile`) ✅**
+- ✅ Список услуг с серверной пагинацией (`MatPaginator`), индикатор загрузки, отмена устаревших
+  запросов, ошибка не ломает уже показанный список. `GET /services?page&size`.
+- ⬜ **Поиск и фильтры** — строка поиска, диапазон цены. Запрос уходит, когда пользователь
+  перестал печатать; одинаковые значения повторно не запрашиваются; смена фильтра сбрасывает
+  на первую страницу. `GET /services?search&minPrice&maxPrice`.
+- ⬜ **Сортировка** — по имени, цене, дате. `sort=name,asc` и т.п.
+- ⬜ **Состояние каталога переживает перезагрузку** — фильтры, сортировка и страница
+  восстанавливаются после F5 и открываются по присланной ссылке.
+- ⬜ **Страница специалиста** — переход из карточки услуги: профиль, активные услуги, часы
+  работы. `GET /specialist-detail/{id}`.
 
-- ✅ `pages/profile` — две формы (личные данные + смена пароля), типизированные Reactive Forms
-  с валидаторами, `app-field-error` на каждом поле, `pristine`/`markAsPristine()` для disabled
-  кнопки, write-through в `sessionSE.setUser()` после успешного PATCH
-- ✅ services: `profile.service` (`update`, `changePassword`)
-- ✅ models: `iUserUpdateRequest`/`tUserUpdateServerErrors`, `iChangePasswordRequest`/`tChangePasswordServerErrors`
+## M4 — Бронирование ⬜
 
-**Shared**
+- ⬜ **Выбор слота** — на странице услуги выбрать диапазон дат, увидеть свободные слоты.
+  `GET /services/{id}/slots?from&to`.
+- ⬜ **Запись** — клиент бронирует слот → `PENDING`. `POST /appointments`.
+- ⬜ **Оплата** — разовый ввод карты на экране оплаты записи в статусе `AWAITING_PAYMENT`
+  (mocked). `POST /appointments/{id}/pay`.
 
-- ✅ layout: `header`, `footer`, `main-layout`, `sidebar-layout`, `sidebar` (навигация настроена)
-- ✅ components: `button` (variants incl. `outline`, self-closing `/>` везде), `field-error`
-  (абсолютное позиционирование ошибки — не двигает layout, глобально в самом компоненте), `toast`
-- ⬜ `pagination` — план в M3, свой компонент на сигнальных `input()/output()`, не сторонняя либа
-- ✅ dialogs: `confirm-dialog` (на CDK Dialog) + `dialog-service`
-- ✅ services: `toast.service` (на signals)
-- ✅ util: функции-модули вместо классов-неймспейсов — `routes.ts`, `icons.ts`, `static-data.ts`,
-  `payload-handler.ts` (были `*-class.ts`, мигрировали осознанно, см. лог)
+## M5 — Мои записи ⬜
 
-**Features дальше**
+- ⬜ **Список записей** — с фильтром по статусу и датам, пагинацией.
+  `GET /appointments?status&from&to`.
+- ⬜ **Действия по роли** — клиент: оплатить, отменить; специалист: принять, отклонить,
+  завершить. После действия статус в списке обновляется без перезагрузки страницы.
+  `POST /appointments/{id}/accept|reject|pay|cancel|complete`.
+- ⬜ Пункт «My bookings» в сайдбаре становится активным.
 
-- ⬜ поиск специалистов, услуги, часы работы, слоты, бронирования (по `API.md`)
+## M6 — Кабинет специалиста ⬜
 
----
+Доступен только пользователям с типом `SPECIALIST`.
 
-## Копилка: сигнал или RxJS
+- ⬜ **Мои услуги** — список своих услуг (включая неактивные), создание, редактирование,
+  деактивация и восстановление. Новая услуга сразу видна в каталоге.
+  `GET /services?specialistId`, `POST /services`, `PATCH /services/{id}`,
+  `DELETE /services/{id}`, `PATCH /services/{id}/restore`.
+- ⬜ **Часы работы** — окна по дням недели: добавить, изменить, выключить, удалить.
+  `GET/POST/PATCH/DELETE /working-hours`.
 
-_(по одной записи на тему, только когда в задаче была реальная развилка — не сравнение после
-каждой задачи)_
+## M7 — Админка пользователей ⬜
 
-- **Загрузка каталога услуг с пагинацией (CIT-2, 2026-09-27).** Пробовали `rxResource` вместо
-  ручного `Subject`+`switchMap` из CIT-1. Причина отката: у `resource`/`rxResource` (стабильный
-  публичный API, не «недоделка» — в установленной версии помечен `@publicApi`) `.value()` **кидает
-  исключение**, если ресурс в состоянии `error`, независимо от того, был ли до этого успешный
-  ответ (проверено по исходнику `resource()` в `@angular/core`: `SnapshotResource.value` —
-  `if (status === 'error') throw new ResourceValueError(...)`). `hasValue()` тоже не спасает — он
-  строго завязан на текущий статус (`status !== 'error' && value !== undefined`), а не на «был ли
-  когда-то успех». Это осознанный дизайн API (ошибка — полноценное состояние, а не тихий пропуск),
-  но для требования «ошибка не должна прятать уже показанный список» он требует **того же самого
-  ручного кода** (снимок последнего успеха через `effect` + `hasValue()`-guard), который у ручного
-  RxJS-варианта получается бесплатно из самой структуры (`response` сигнал просто не трогается в
-  ветке `error`). Дополнительная находка: ресурс не перезапрашивает сам по себе, когда сеть
-  восстановилась, — только когда `params()` реально меняется, или по явному `.reload()`.
-  Итог: для пагинации/списков с точки зрения «ошибка не ломает уже показанные данные» ручной
-  RxJS выигрывает конкретно здесь. `resource`/`httpResource`/`rxResource` остаются в силе для
-  сценариев, где такое требование не критично, или где важнее декларативность запроса.
+Доступна только роли `ADMIN`.
 
-## Темы (что углубляем на среднем уровне)
-
-Порядок — примерный; реально закрываем по мере фич (колонка «где закрепим»).
-
-1. **RxJS** — Observable, cold/hot, операторы (`map`, `switchMap`, `mergeMap`, `concatMap`,
-   `exhaustMap`, `debounceTime`, `catchError`, `retry`), Subjects, отписки (`takeUntilDestroyed`,
-   `async` pipe). → _где:_ HTTP-слой, refresh-флоу интерцептора, живой поиск.
-2. **Signals** — `signal`, `computed`, `effect`, `untracked`, `linkedSignal`, `resource`. → _где:_
-   состояние session/toasts (уже на signals — разобрать), профиль, списки.
-3. **Interop signal ↔ observable** — `toSignal`, `toObservable`. → _где:_ связка HTTP (Observable)
-   и UI-состояния (signal).
-4. **Reactive Forms** — `FormControl/FormGroup`, типизированные формы, валидаторы (sync/async),
-   статусы и ошибки, `updateOn`. → _где:_ login/register (отревьюить существующие), профиль, создание услуги.
-5. **Новые `input()` / `output()` / `model()`** — сигнальные вводы/выводы, `required`, `transform`,
-   `alias`, двусторонняя привязка. → _где:_ shared-компоненты (`button`, `field-error`), формы-обёртки.
-6. **Router** — маршруты, lazy `loadComponent`/`loadChildren`, параметры, функциональные гварды
-   (уже есть `access.guard`), resolvers, привязка route→input. → _где:_ `specialist-detail`, детали записи, защита по роли/типу.
-7. **`viewChild` / `contentChild`** — сигнальные queries, `viewChildren`, `afterRender`/`afterNextRender`.
-   → _где:_ работа с DOM (фокус, элементы форм), диалоги.
-8. **DI** — `inject()`, providers, injection tokens, `providedIn`, функциональные interceptors/guards.
-   → _где:_ сервисы, разбор существующего интерцептора.
-9. **Change detection** — OnPush, zoneless (20–21), как signals двигают CD. → _где:_ большие списки
-   (услуги, записи).
-10. **HttpClient** — `provideHttpClient`, `withInterceptors`, типизация, `params`, маппинг ошибок
-    в `ProblemDetail` из `API.md`. → _где:_ весь data-слой.
-11. **Control flow & шаблоны** — `@if/@for/@switch/@defer`, `track`, `@let`. → _где:_ списки слотов/услуг/записей.
-12. **(доп) Vitest** — юнит-тесты сервисов и компонентов. → по желанию.
+- ⬜ **Список пользователей** — фильтры по роли, типу, активности, поиск, пагинация.
+  `GET /users?role&type&active&search`.
+- ⬜ **Управление** — деактивация, восстановление, жёсткое удаление с подтверждением.
+  `DELETE /users/{id}`, `PATCH /users/{id}/restore`, `DELETE /users/{id}/hard`.
 
 ---
 
-## План по фичам (milestones)
+## Вне плана
 
-Каждый milestone = реальная фича из `API.md` + темы, которые на ней разбираем.
-
-### M1 — Auth ✅
-
-- Костяк + тонкости разобраны: `shareReplay(1)` + `finalize` в `refresh()`, обработка 401 в
-  интерцепторе, ревью Reactive Forms в login/register. `forgot-password` осознанно оставлен
-  🔄 до появления бэкенд-эндпоинта.
-- **Темы закрыты:** RxJS (`switchMap`, `shareReplay`, refresh-флоу), Reactive Forms, DI/интерцепторы.
-
-### M2 — Профиль 🔄
-
-- `GET /users/me` (через сессию, без лишнего запроса), `PATCH /users/{id}`,
-  `PATCH /users/{id}/password` — обе формы с валидацией, серверными ошибками по полям,
-  `pristine`-гейтингом кнопки, write-through в session. ✅ готово.
-- 🔄 Аватар — функционал есть на бэкенде, но не описан в `docs/API.md` (нет поля в `iUser`,
-  нет эндпоинта загрузки). Нужен точный контракт от пользователя, прежде чем строить.
-- ~~Привязка карты~~ — убрано из профиля: по `API.md` это не профильная сущность, а разовый ввод
-  карты при оплате конкретной записи (`POST /appointments/{id}/pay`). Перенесено в M4.
-- **Темы закрыты:** типизированные Reactive Forms (`nonNullable`, sync-валидаторы, group-level
-  валидатор), signals-состояние, RxJS (`finalize`, cold observables, `Subject`/`exhaustMap` теория),
-  self-closing шаблоны, файловые конвенции (kebab-case, функции-модули вместо классов).
-
-### M3 — Поиск специалистов и услуги 🔄
-
-- `GET /services` (фильтры `search`, `minPrice`, `maxPrice`), `GET /specialist-detail/{id}`.
-- ✅ `features/service`: `iServiceList` + `iPageableContent<T>` (generic, переиспользуемый на будущих
-  list-эндпоинтах), `ServiceService.getList()`, роут `/services`. Ответ бэкенда сверен вручную —
-  форма модели совпала.
-- ✅ Рендер списка через `@for` + `track service.id`. Серверная пагинация закрыта (CIT-1, см. лог) —
-  `MatPaginator` в `ServiceComponent`, `page`/`size` как сигналы выбора пользователя, `response` как
-  снимок ответа сервера, `Subject` + `switchMap` + `takeUntilDestroyed()` для гонок кликов,
-  `isLoading` + `mat-progress-bar`.
-- ~~CIT-2: перевод загрузки списка на `httpResource`/`rxResource`~~ — **решение отменено
-  2026-09-27**, см. «Копилка: сигнал или RxJS» ниже. Загрузка каталога остаётся на ручном
-  `Subject`/`switchMap` из CIT-1 — он уже закрывает все требования, `resource`-подход добавляет
-  ручной код без выгоды именно для этого сценария.
-- ⬜ Живой поиск (`search`/`minPrice`/`maxPrice`, `valueChanges` → `debounceTime` →
-  `distinctUntilChanged` → `switchMap`).
-- ~~свой `shared/components/pagination` на сигнальных `input()/output()`~~ — **решение отменено
-  2026-09-20**, см. «M3.5». Пагинация берётся из Angular Material (`MatPaginator`). Тема 5
-  (`input()/output()/model()`) закрепляется не здесь, а на тех компонентах, которые в Material
-  отсутствуют.
-- **Темы:** RxJS живой поиск (`debounceTime` + `switchMap`), signals (гранулярность/single source of
-  truth), `input()/output()/model()` (пагинация), `@for/@defer`, route-параметры, resolvers.
-
-### M3.5 — Переход на Angular Material 🔄
-
-**Решение от 2026-09-20 (отменяет предыдущее «не тащить Material»).** Причина: главная цель проекта —
-архитектура, а не вёрстка виджетов. Самописные `button`/`field-error`/`toast`/`pagination` времени
-съедают много, а архитектуре не учат ничему. `ngx-pagination` рассмотрен и отклонён: последняя
-публикация 30.06.2023, peer `@angular/core >=13`, построен вокруг клиентского `PaginatePipe` — при
-серверной пагинации не подходит, и вторая UI-либа рядом с Material не нужна.
-
-- ✅ `@angular/material@21.2.14` (в линию с `@angular/cdk@21.2.14`; `@latest` = 22.x ломает дерево).
-- ✅ M3-тема сгенерирована из собственной палитры проекта
-  (`ng generate @angular/material:theme-color --primary-color=#2563eb --error-color=#dc2626`)
-  → `src/styles/_theme-colors.scss`, подключена через `mat.theme()` в `src/styles.scss`.
-  Типографика — Inter, чтобы Material не расходился с уже свёрстанными экранами.
-- ✅ Шрифты Inter + Material Symbols Outlined в `index.html`; `MAT_ICON_DEFAULT_OPTIONS`
-  с `fontSet: 'material-symbols-outlined'` в `app.config.ts`.
-- ✅ `@angular/animations` не нужен — Material 21 его в peer-зависимостях не держит.
-
-**Фазы миграции** (порядок выбран так, чтобы каждая фаза удаляла код целиком, а не правила его
-дважды; иконки переезжают на `mat-icon` попутно внутри каждой фазы):
-
-| Фаза | Что уходит                                                        | Чем заменяется                                                  | Кто              |
-| ---- | ----------------------------------------------------------------- | --------------------------------------------------------------- | ---------------- |
-| 1 ✅ | `ToastComponent`, `models/toast.ts`, CDK-обвязка `confirm-dialog` | `MatSnackBar`, `MatDialog`                                      | Claude           |
-| 2 ✅ | `ButtonComponent` (+ его `@Input()`-декораторы)                   | `matButton` / `matIconButton`                                   | Claude           |
-| 3 ✅ | `FieldErrorComponent`                                             | `mat-form-field` + `mat-error`                                  | Claude           |
-| 4 ✅ | `util/icons.ts`, зависимость `lucide-angular`                     | `mat-icon`                                                      | Claude           |
-| 5 ✅ | заглушка `PaginationComponent` (удалена в фазе 2)                 | `MatPaginator` прямо в `ServiceComponent` + серверная пагинация | **пользователь** |
-
-**Фазы 2–4 сделаны 2026-09-20.** Что важно знать про результат:
-
-- Ошибки валидации и ошибки сервера теперь одним механизмом. Сообщения из `errors` ответа API
-  кладутся в контролы через `setErrors({ server })` (`shared/util/form-errors.ts`:
-  `applyServerErrors`, `clearServerErrors`, `getFieldError`). Сигналы `serverErrors` и типы
-  `t*ServerErrors` удалены. Сообщение снимается само, когда пользователь правит поле.
-- `passwordMismatch` живёт на группе, а не на `confirmPassword`, поэтому у поля свой
-  `ErrorStateMatcher` (в `register.component.ts`).
-- `loading` у кнопок нет в Material: спиннер внутри кнопки + `[disabled]`.
-- Радио-карточки типа аккаунта заменены на `mat-button-toggle-group`, поповер с требованиями к
-  паролю — на `matTooltip`.
-- `mat-form-field` по умолчанию `outline` (провайдер в `app.config.ts`), высота/скругления
-  подогнаны токенами в `styles.scss`.
-- Проверено: сборка, скриншоты логина и регистрации в Firefox, временный тест на регистрации
-  (пустой сабмит, mismatch, серверная ошибка из async-колбэка в zoneless, сброс при правке).
-  Профиль и сайдбар за гвардом — глазами не смотрел.
-
-Известное изменение поведения: `MatSnackBar` показывает по одному уведомлению за раз (очередь),
-самописный `SnackbarService` их стекал. У снекбара нет заголовка — параметр `title` из API сервиса
-убран, тексты на 15 вызовах переписаны в самодостаточные.
-
-`SnackbarService` как имя и как API (`success`/`error`/`warning`/`info`) оставлен: внутри теперь
-обёртка над `MatSnackBar`, но вызывающий код не изменился по форме. Конфигурация уведомлений
-(позиция, длительность, panel-классы) лежит в одном месте.
-
-После фазы 1 бандл вырос до 510 kB и вышел за `maximumWarning: 500kB` в `angular.json`. Бюджет
-намеренно **не поднят**: это корректный сигнал. Правильный ответ — не заглушить предупреждение,
-а разрезать бандл лениво загружаемыми роутами (`loadComponent`), тема 6. Задача пользователя.
-
-### M4 — Слоты и бронирование ⬜
-
-- `GET /services/{id}/slots`, `POST /appointments` (lifecycle PENDING→…→COMPLETED),
-  форма ввода карты на экране оплаты (`POST /appointments/{id}/pay`, mocked, разовый ввод —
-  перенесено сюда из M2).
-- **Темы:** работа с датами (`Instant`/`LocalDate`/`LocalTime`), композиция RxJS, состояние-«машина» статусов.
-
-### M5 — Мои записи ⬜
-
-- Список `GET /appointments` + действия (accept/pay/cancel/complete) по ролям CLIENT/SPECIALIST.
-- **Темы:** списки + OnPush/CD, роли и типы, гварды по типу пользователя, полиморфные действия.
-
----
-
-## Лог прогресса
-
-_(наставник дописывает по ходу: дата — что разобрали / что построили)_
-
-- **2026-09-27** — CIT-1 (серверная пагинация каталога услуг) закрыт. `MatPaginator` в
-  `ServiceComponent`: `page`/`size` — сигналы выбора пользователя (не производные от ответа —
-  иначе при ошибке пагинатор и список расходятся), `response`/`services`/`totalElements` —
-  снимок и производные от него. Гонки кликов решены `Subject<{page,size}> → switchMap → subscribe`
-  вместо разрозненных `.subscribe()` на каждый вызов; подписка в конструкторе закрыта
-  `takeUntilDestroyed()`. Разобрана ловушка `finalize` внутри `switchMap` (срабатывает и на отмене
-  — мигает `isLoading`); решение — выключать `isLoading` в `next`/`error` внешней подписки, где
-  оказываются только «победившие» запросы. Индикатор — `mat-progress-bar` над сеткой, застайлен
-  под токены темы. Проверено вживую (не только `npm run build`): DevTools network throttling
-  (Slow 3G/4G) — отменённый запрос не долетает до сети, финальный список согласован с пагинатором;
-  стили бара сверены через `getComputedStyle` в момент рендера (zoneless CD откладывает DOM-апдейт
-  на микротаск после `signal.set()` — синхронная проверка DOM сразу после клика ничего не находит).
-  Попутно: `hideRequiredMarker` в `MAT_FORM_FIELD_DEFAULT_OPTIONS` вместо звёздочек по всем формам,
-  конвенция имён типов упразднена (без префиксов `i`/`e`/`t`, PascalCase — правило в CLAUDE.md),
-  `SnackbarService` рефакторен (bug: мутация общей `SNACKBAR_CONFIG.panelClass.push` вместо копии
-  через spread — копился набор CSS-классов между вызовами), стили снекбара и пагинатора приведены
-  к токенам проекта через официальные `mat.*-overrides()`/CSS custom properties. Следующее — CIT-2:
-  `httpResource`.
-
-- **2026-09-20** — В `CLAUDE.md` зафиксирована главная цель: архитектура современных приложений,
-  и отсюда приоритет скорости по всему, что к архитектуре не относится. Переписано разделение труда:
-  пользователь пишет всё, что несёт архитектурное решение, Claude — обвязку (скаффолды, разметку под
-  UI-библиотеку, стили, тему, механические миграции). Решение «не тащить Material» отменено,
-  проект переходит на Angular Material — см. M3.5. Попутно разобран ревью текущего кода:
-  `@Input()`-декораторы в shared-компонентах, `computed` вместо `asReadonly()` в `SessionService`,
-  снимок `requireUser()` вместо производного в `ProfileComponent`, инвертированный
-  `isPasswordVisible`, `set(!get())` вместо `update()`, «at least» в ветке `maxlength`, мёртвая
-  навигация в сайдбаре, отсутствующий `hasAvatar` в `iUser`.
-
-- **2026-07-18** — M1 и M2 закрыты. Профиль: две формы (личные данные + смена пароля) с
-  типизированными Reactive Forms, `app-field-error` на каждом поле, `pristine`/`markAsPristine()`,
-  write-through в `SessionService` после успешного `PATCH`. По пути: `SessionService.requireUser()`
-  (throws-аксессор вместо разрозненных `!`/`?.`), миграция `*-class.ts` → функции-модули,
-  kebab-case для файлов моделей в `auth`, self-closing теги в шаблонах, теория по `exhaustMap`/
-  `Subject`/hot-cold в противовес `switchMap`/`mergeMap`/`concatMap`. Начинаем M3.
+- «Messages» и «Help» в сайдбаре — на бэкенде нет для них API.
