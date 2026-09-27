@@ -38,6 +38,63 @@
   font-size: var(--font-size-lg);
 }
 
+.specialists__filters {
+  display: grid;
+  gap: var(--gap-md);
+  margin-bottom: var(--space-4);
+}
+
+.specialists__search-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.specialists__search {
+  flex: 1;
+}
+
+.specialists__filters-toggle {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.specialists__filters-toggle--active {
+  color: var(--color-primary-text);
+  background: var(--color-primary-glow);
+}
+
+.specialists__filters-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-md);
+  padding: var(--space-4);
+  border: var(--border-width-sm) solid var(--color-border-soft);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+
+.specialists__price,
+.specialists__status {
+  flex: 1 1 160px;
+}
+
+.filters-enter {
+  animation: filters-in 0.2s ease-out;
+}
+
+.filters-leave {
+  animation: filters-in 0.15s ease-in reverse;
+}
+
+@keyframes filters-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
 mat-progress-bar {
   --mat-progress-bar-active-indicator-color: var(--color-primary);
   --mat-progress-bar-track-color: var(--color-border-soft);

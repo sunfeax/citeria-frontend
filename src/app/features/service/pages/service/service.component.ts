@@ -1,15 +1,32 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatOption } from '@angular/material/core';
+import { MatFormField, MatLabel, MatPrefix } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelect } from '@angular/material/select';
 import { BehaviorSubject, catchError, EMPTY, switchMap, tap } from 'rxjs';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { ServiceService } from '../../services/service.service';
 
 @Component({
   selector: 'app-service',
-  imports: [MatButton, MatPaginatorModule, MatProgressBarModule],
+  imports: [
+    MatButton,
+    MatIconButton,
+    MatFormField,
+    MatLabel,
+    MatPrefix,
+    MatInput,
+    MatIcon,
+    MatSelect,
+    MatOption,
+    MatPaginatorModule,
+    MatProgressBarModule,
+  ],
   templateUrl: './service.component.html',
   styleUrl: './service.component.scss',
 })
@@ -29,6 +46,7 @@ export class ServiceComponent {
   });
 
   readonly isLoading = signal(false);
+  readonly filtersExpanded = signal(false);
 
   readonly response = toSignal(
     this.pageRequest$.pipe(
@@ -50,6 +68,10 @@ export class ServiceComponent {
   readonly totalElements = computed(() => this.response()?.totalElements ?? 0);
 
   /** ACTIONS */
+  toggleFilters(): void {
+    this.filtersExpanded.update((expanded) => !expanded);
+  }
+
   onPage(event: PageEvent) {
     this.size.set(event.pageSize);
     this.page.set(event.pageIndex);
