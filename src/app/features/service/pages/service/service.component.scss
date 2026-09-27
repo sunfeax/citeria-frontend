@@ -1,8 +1,7 @@
 .specialists {
   min-height: 100%;
   padding: 40px 20px;
-  background: radial-gradient(circle at 10% 0%, var(--color-primary-glow), transparent 448px),
-    var(--color-background);
+  background: radial-gradient(circle at 10% 0%, var(--color-primary-glow), transparent 448px), var(--color-background);
 }
 
 .specialists__container {
@@ -37,6 +36,17 @@
   margin: var(--space-4) 0 0;
   color: var(--color-text-muted);
   font-size: var(--font-size-lg);
+}
+
+mat-progress-bar {
+  --mat-progress-bar-active-indicator-color: var(--color-primary);
+  --mat-progress-bar-track-color: var(--color-border-soft);
+  --mat-progress-bar-active-indicator-height: 3px;
+  --mat-progress-bar-track-height: 3px;
+  --mat-progress-bar-track-shape: var(--radius-full);
+  margin-bottom: 10px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
 }
 
 .specialists__grid {

@@ -3,6 +3,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Subject, switchMap, tap } from 'rxjs';
 import { iApiError } from '../../../../shared/models/api-error';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
@@ -12,7 +13,7 @@ import { iPageableContent } from './../../../../shared/models/pageable';
 
 @Component({
   selector: 'app-service',
-  imports: [MatButton, MatPaginatorModule],
+  imports: [MatButton, MatPaginatorModule, MatProgressBarModule],
   templateUrl: './service.component.html',
   styleUrl: './service.component.scss',
 })
