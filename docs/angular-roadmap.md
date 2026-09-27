@@ -121,10 +121,14 @@
 - ✅ `features/service`: `iServiceList` + `iPageableContent<T>` (generic, переиспользуемый на будущих
   list-эндпоинтах), `ServiceService.getList()`, роут `/services`. Ответ бэкенда сверен вручную —
   форма модели совпала.
-- 🔄 Дальше: единый `page` signal под весь `iPageableContent<iServiceList>` (не растаскивать
-  `totalPages`/`totalElements`/`content` по отдельным сигналам — они меняются атомарно одним
-  ответом), рендер списка через `@for` + `track service.id`, живой поиск (`valueChanges` →
-  `debounceTime` → `distinctUntilChanged` → `switchMap`).
+- ✅ Рендер списка через `@for` + `track service.id`. Серверная пагинация закрыта (CIT-1, см. лог) —
+  `MatPaginator` в `ServiceComponent`, `page`/`size` как сигналы выбора пользователя, `response` как
+  снимок ответа сервера, `Subject` + `switchMap` + `takeUntilDestroyed()` для гонок кликов,
+  `isLoading` + `mat-progress-bar`.
+- 🔄 Дальше (CIT-2): перевод загрузки списка на `httpResource` — запрос как производное от
+  сигналов-параметров вместо ручного `Subject`/`switchMap`.
+- ⬜ Живой поиск (`search`/`minPrice`/`maxPrice`, `valueChanges` → `debounceTime` →
+  `distinctUntilChanged` → `switchMap`) — после `httpResource`.
 - ~~свой `shared/components/pagination` на сигнальных `input()/output()`~~ — **решение отменено
   2026-09-20**, см. «M3.5». Пагинация берётся из Angular Material (`MatPaginator`). Тема 5
   (`input()/output()/model()`) закрепляется не здесь, а на тех компонентах, которые в Material
@@ -158,7 +162,7 @@
 | 2 ✅ | `ButtonComponent` (+ его `@Input()`-декораторы)                   | `matButton` / `matIconButton`                                   | Claude           |
 | 3 ✅ | `FieldErrorComponent`                                             | `mat-form-field` + `mat-error`                                  | Claude           |
 | 4 ✅ | `util/icons.ts`, зависимость `lucide-angular`                     | `mat-icon`                                                      | Claude           |
-| 5 ⬜ | заглушка `PaginationComponent` (удалена в фазе 2)                 | `MatPaginator` прямо в `ServiceComponent` + серверная пагинация | **пользователь** |
+| 5 ✅ | заглушка `PaginationComponent` (удалена в фазе 2)                 | `MatPaginator` прямо в `ServiceComponent` + серверная пагинация | **пользователь** |
 
 **Фазы 2–4 сделаны 2026-09-20.** Что важно знать про результат:
 
@@ -206,6 +210,25 @@
 ## Лог прогресса
 
 _(наставник дописывает по ходу: дата — что разобрали / что построили)_
+
+- **2026-09-27** — CIT-1 (серверная пагинация каталога услуг) закрыт. `MatPaginator` в
+  `ServiceComponent`: `page`/`size` — сигналы выбора пользователя (не производные от ответа —
+  иначе при ошибке пагинатор и список расходятся), `response`/`services`/`totalElements` —
+  снимок и производные от него. Гонки кликов решены `Subject<{page,size}> → switchMap → subscribe`
+  вместо разрозненных `.subscribe()` на каждый вызов; подписка в конструкторе закрыта
+  `takeUntilDestroyed()`. Разобрана ловушка `finalize` внутри `switchMap` (срабатывает и на отмене
+  — мигает `isLoading`); решение — выключать `isLoading` в `next`/`error` внешней подписки, где
+  оказываются только «победившие» запросы. Индикатор — `mat-progress-bar` над сеткой, застайлен
+  под токены темы. Проверено вживую (не только `npm run build`): DevTools network throttling
+  (Slow 3G/4G) — отменённый запрос не долетает до сети, финальный список согласован с пагинатором;
+  стили бара сверены через `getComputedStyle` в момент рендера (zoneless CD откладывает DOM-апдейт
+  на микротаск после `signal.set()` — синхронная проверка DOM сразу после клика ничего не находит).
+  Попутно: `hideRequiredMarker` в `MAT_FORM_FIELD_DEFAULT_OPTIONS` вместо звёздочек по всем формам,
+  конвенция имён типов упразднена (без префиксов `i`/`e`/`t`, PascalCase — правило в CLAUDE.md),
+  `SnackbarService` рефакторен (bug: мутация общей `SNACKBAR_CONFIG.panelClass.push` вместо копии
+  через spread — копился набор CSS-классов между вызовами), стили снекбара и пагинатора приведены
+  к токенам проекта через официальные `mat.*-overrides()`/CSS custom properties. Следующее — CIT-2:
+  `httpResource`.
 
 - **2026-09-20** — В `CLAUDE.md` зафиксирована главная цель: архитектура современных приложений,
   и отсюда приоритет скорости по всему, что к архитектуре не относится. Переписано разделение труда:
