@@ -237,6 +237,18 @@ mat-form-field {
   --mat-form-field-outlined-focus-outline-color: var(--color-primary-text);
 }
 
+mat-paginator {
+  margin-top: 20px;
+  --mat-paginator-container-background-color: transparent;
+  --mat-paginator-container-text-color: var(--color-text-muted);
+  --mat-paginator-enabled-icon-color: var(--color-text-soft);
+  --mat-paginator-disabled-icon-color: var(--color-border);
+
+  .mat-mdc-paginator-container {
+    justify-content: space-between;
+  }
+}
+
 button.mat-mdc-outlined-button,
 button.mat-mdc-button {
   --mat-button-outlined-label-text-color: var(--color-primary-text);

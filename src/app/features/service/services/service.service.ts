@@ -11,7 +11,7 @@ export class ServiceService {
   private readonly http = inject(HttpClient);
 
   /** ACTIONS */
-  getList(page = 0, size = 20): Observable<iPageableContent<iServiceList>> {
+  getList(page: number, size: number): Observable<iPageableContent<iServiceList>> {
     return this.http.get<iPageableContent<iServiceList>>(`${environment.baseUrl}/services`, {
       params: { page, size },
       withCredentials: true,
