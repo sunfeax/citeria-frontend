@@ -10,7 +10,7 @@ export class SessionService {
   private readonly currentUser = signal<iUser | null>(null);
 
   readonly isAuthenticated = computed(() => !!this.accessToken());
-  readonly user = computed(() => this.currentUser());
+  readonly user = this.currentUser.asReadonly();
 
   /** ACTIONS */
   requireUser(): iUser {

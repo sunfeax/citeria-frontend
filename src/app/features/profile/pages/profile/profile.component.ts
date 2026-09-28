@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators as v } from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
@@ -42,7 +42,7 @@ export class ProfileComponent {
   readonly getFieldError = getFieldError;
 
   /** DATA */
-  user: iUser = this.sessionSE.requireUser();
+  readonly user = computed(() => this.sessionSE.requireUser());
 
   /** STATE */
   isProfileLoading = signal<boolean>(false);
@@ -52,19 +52,19 @@ export class ProfileComponent {
 
   /** FORM */
   profileForm = new FormGroup({
-    firstName: new FormControl(this.user.firstName, {
+    firstName: new FormControl(this.user().firstName, {
       nonNullable: true,
       validators: [v.required, v.minLength(2), v.maxLength(50), v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u)],
     }),
-    lastName: new FormControl(this.user.lastName, {
+    lastName: new FormControl(this.user().lastName, {
       nonNullable: true,
       validators: [v.required, v.minLength(2), v.maxLength(50), v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u)],
     }),
-    email: new FormControl(this.user.email, {
+    email: new FormControl(this.user().email, {
       nonNullable: true,
       validators: [v.required, v.email],
     }),
-    phone: new FormControl(this.user.phone, {
+    phone: new FormControl(this.user().phone, {
       nonNullable: true,
       validators: [v.required, v.minLength(7), v.maxLength(20), v.pattern(/^\+?\d+$/)],
     }),
@@ -91,7 +91,7 @@ export class ProfileComponent {
 
     this.isProfileLoading.set(true);
     this.profileSE
-      .update(this.user.id, getUserUpdatePayload(this.profileForm.getRawValue()))
+      .update(this.user().id, getUserUpdatePayload(this.profileForm.getRawValue()))
       .pipe(
         finalize(() => {
           this.isProfileLoading.set(false);
@@ -123,7 +123,7 @@ export class ProfileComponent {
 
     this.isPasswordLoading.set(true);
     this.profileSE
-      .changePassword(this.user.id, getChangePasswordPayload(this.passwordForm.getRawValue()))
+      .changePassword(this.user().id, getChangePasswordPayload(this.passwordForm.getRawValue()))
       .pipe(
         finalize(() => {
           this.isPasswordLoading.set(false);

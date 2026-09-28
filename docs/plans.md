@@ -1,8 +1,3 @@
-- session.service: user = computed(() => currentUser()) заменить на currentUser.asReadonly()
-- profile: user = requireUser() это снимок, сделать производным от sessionSE.user()
-- iUser: добавить hasAvatar (нужно для аватара, GET /users/{id}/avatar только с токеном)
-- auth-http.service: http сделать private readonly
-- auth.interceptor: если refresh упал на 401, нет редиректа на /login
 - dialog-service: confirm() с колбэком onConfirm заменить на возврат Observable<boolean>
 - service.component: убрать неиспользуемые computed (size, totalElements, isFirstPage, isLastPage), добавить loading/error состояние
 - один origin для фронта и API: dev через proxy.conf.json + proxyConfig в angular.json и baseUrl '/api', прод через reverse proxy (nginx); уберёт CORS preflight (OPTIONS), withCredentials станет не нужен

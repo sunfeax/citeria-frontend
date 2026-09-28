@@ -67,14 +67,14 @@ export class ServiceComponent {
   readonly sizeOptions = [5, 10, 20, 50];
 
   /** DATA */
-  private readonly query = computed(() => ({
+  private readonly request = computed(() => ({
     page: this.page(),
     size: this.size(),
     search: this.debouncedSearch(),
   }));
 
   readonly response = toSignal(
-    toObservable(this.query).pipe(
+    toObservable(this.request).pipe(
       switchMap(({ page, size, search }) => {
         this.isLoading.set(true);
         return this.serviceSE.getList(page, size, search).pipe(

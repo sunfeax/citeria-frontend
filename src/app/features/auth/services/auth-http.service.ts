@@ -12,7 +12,7 @@ import { iRefreshResponse } from '../models/refresh';
 })
 export class AuthHttpService {
   /** INJECTORS */
-  http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   /** ACTIONS */
   login(payload: iLoginRequest): Observable<iLoginResponse> {

@@ -10,5 +10,6 @@ export interface iUser {
   role: eUserRole;
   type: eUserType;
   isActive: boolean;
+  hasAvatar: boolean;
   createdAt: string;
 }
