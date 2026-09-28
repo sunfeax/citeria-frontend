@@ -44,18 +44,7 @@
   margin-bottom: var(--space-4);
 }
 
-.specialists__search-row {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-sm);
-}
-
-.specialists__search {
-  flex: 1;
-}
-
 .specialists__filters-toggle {
-  flex-shrink: 0;
   color: var(--color-text-muted);
   transition: color 0.2s, background-color 0.2s;
 }
@@ -69,15 +58,21 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap-md);
-  padding: var(--space-4);
-  border: var(--border-width-sm) solid var(--color-border-soft);
-  border-radius: 16px;
-  background: var(--color-surface);
 }
 
 .specialists__price,
 .specialists__status {
   flex: 1 1 160px;
+}
+
+.specialists__price input[type='number'] {
+  -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+  }
 }
 
 .filters-enter {

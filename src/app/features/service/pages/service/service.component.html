@@ -7,16 +7,14 @@
     </header>
 
     <div class="specialists__filters" role="search">
-      <div class="specialists__search-row">
-        <mat-form-field class="specialists__search" subscriptSizing="dynamic">
-          <mat-label>Search services</mat-label>
-          <mat-icon matPrefix>search</mat-icon>
-          <input [(ngModel)]="search" matInput type="search" autocomplete="off" />
-        </mat-form-field>
-
+      <mat-form-field class="specialists__search" subscriptSizing="dynamic">
+        <mat-label>Search services</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input [(ngModel)]="search" matInput type="search" autocomplete="off" />
         <button
           matIconButton
           type="button"
+          matSuffix
           class="specialists__filters-toggle"
           [class.specialists__filters-toggle--active]="filtersExpanded()"
           [attr.aria-expanded]="filtersExpanded()"
@@ -26,7 +24,7 @@
         >
           <mat-icon>tune</mat-icon>
         </button>
-      </div>
+      </mat-form-field>
 
       @if (filtersExpanded()) {
         <div
