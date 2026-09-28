@@ -11,7 +11,7 @@
         <mat-form-field class="specialists__search" subscriptSizing="dynamic">
           <mat-label>Search services</mat-label>
           <mat-icon matPrefix>search</mat-icon>
-          <input matInput type="search" autocomplete="off" />
+          <input [(ngModel)]="search" matInput type="search" autocomplete="off" />
         </mat-form-field>
 
         <button
@@ -29,7 +29,12 @@
       </div>
 
       @if (filtersExpanded()) {
-        <div id="catalog-filters" class="specialists__filters-panel" animate.enter="filters-enter" animate.leave="filters-leave">
+        <div
+          id="catalog-filters"
+          class="specialists__filters-panel"
+          animate.enter="filters-enter"
+          animate.leave="filters-leave"
+        >
           <mat-form-field class="specialists__price" subscriptSizing="dynamic">
             <mat-label>Min price</mat-label>
             <input matInput type="number" min="0" inputmode="decimal" />

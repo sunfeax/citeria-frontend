@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
 import { MatFormField, MatLabel, MatPrefix } from '@angular/material/form-field';
@@ -8,7 +9,17 @@ import { MatInput } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelect } from '@angular/material/select';
-import { BehaviorSubject, catchError, EMPTY, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  EMPTY,
+  map,
+  skip,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { ServiceService } from '../../services/service.service';
 
@@ -26,6 +37,7 @@ import { ServiceService } from '../../services/service.service';
     MatOption,
     MatPaginatorModule,
     MatProgressBarModule,
+    FormsModule,
   ],
   templateUrl: './service.component.html',
   styleUrl: './service.component.scss',
@@ -39,10 +51,22 @@ export class ServiceComponent {
   readonly page = signal(0);
   readonly size = signal(20);
   readonly sizeOptions = [5, 10, 20, 50];
+  readonly services = computed(() => this.response()?.content ?? []);
+  readonly totalElements = computed(() => this.response()?.totalElements ?? 0);
+
+  /** SEARCH */
+  readonly search = signal('');
+  readonly search$ = toObservable(this.search).pipe(
+    skip(1),
+    map(value => value.trim()),
+    debounceTime(300),
+    distinctUntilChanged(),
+  );
 
   private readonly pageRequest$ = new BehaviorSubject({
     page: this.page(),
     size: this.size(),
+    search: this.search(),
   });
 
   readonly isLoading = signal(false);
@@ -51,8 +75,8 @@ export class ServiceComponent {
   readonly response = toSignal(
     this.pageRequest$.pipe(
       tap(() => this.isLoading.set(true)),
-      switchMap(({ page, size }) =>
-        this.serviceSE.getList(page, size).pipe(
+      switchMap(({ page, size, search }) =>
+        this.serviceSE.getList(page, size, search).pipe(
           tap(() => this.isLoading.set(false)),
           catchError(() => {
             this.handleLoadError();
@@ -64,18 +88,30 @@ export class ServiceComponent {
     { initialValue: null },
   );
 
-  readonly services = computed(() => this.response()?.content ?? []);
-  readonly totalElements = computed(() => this.response()?.totalElements ?? 0);
-
   /** ACTIONS */
+  constructor() {
+    this.search$.pipe(takeUntilDestroyed()).subscribe(search => {
+      this.page.set(0);
+      this.pageRequest$.next({
+        page: 0,
+        size: this.size(),
+        search,
+      });
+    });
+  }
+
   toggleFilters(): void {
-    this.filtersExpanded.update((expanded) => !expanded);
+    this.filtersExpanded.update(expanded => !expanded);
   }
 
   onPage(event: PageEvent) {
     this.size.set(event.pageSize);
     this.page.set(event.pageIndex);
-    this.pageRequest$.next({ page: event.pageIndex, size: event.pageSize });
+    this.pageRequest$.next({
+      page: event.pageIndex,
+      size: event.pageSize,
+      search: this.search(),
+    });
   }
 
   private handleLoadError(): void {
