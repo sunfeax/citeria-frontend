@@ -50,12 +50,13 @@ export class SidebarComponent {
   }
 
   openConfirmDialogToLogout(): void {
-    this.dialogSE.confirm({
-      title: 'Logout',
-      message: 'Do want to sign out?',
-      confirmText: 'Logout',
-      variant: 'danger',
-      onConfirm: () => this.logout(),
-    });
+    this.dialogSE
+      .confirm({
+        title: 'Logout',
+        message: 'Do want to sign out?',
+        confirmText: 'Logout',
+        variant: 'danger',
+      })
+      .subscribe(() => this.logout());
   }
 }

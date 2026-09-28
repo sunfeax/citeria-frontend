@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -6,8 +7,7 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { MatButton } from '@angular/material/button';
-import { iDialogData } from '../../models/dialog-data';
+import { Dialog } from '../../models/dialog';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -17,10 +17,11 @@ import { iDialogData } from '../../models/dialog-data';
 })
 export class ConfirmDialogComponent {
   /** INJECTORS */
-  private readonly dialogRefSE = inject<MatDialogRef<ConfirmDialogComponent, boolean>>(MatDialogRef);
+  private readonly dialogRefSE =
+    inject<MatDialogRef<ConfirmDialogComponent, boolean>>(MatDialogRef);
 
   /** DATA */
-  readonly data = inject<iDialogData>(MAT_DIALOG_DATA);
+  readonly data = inject<Dialog>(MAT_DIALOG_DATA);
 
   get confirmClass(): string {
     switch (this.data.variant) {
