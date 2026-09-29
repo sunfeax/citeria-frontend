@@ -3,23 +3,21 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
-import { MatFormField, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatLabel,
+  MatPrefix,
+  MatSuffix,
+} from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelect } from '@angular/material/select';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  EMPTY,
-  finalize,
-  map,
-  skip,
-  switchMap,
-} from 'rxjs';
+import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
+import { catchError, EMPTY, finalize, switchMap } from 'rxjs';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
+import { debounced } from '../../../../shared/util/rxjs-helpers';
 import { ServiceService } from '../../services/service.service';
 
 @Component({
@@ -35,6 +33,8 @@ import { ServiceService } from '../../services/service.service';
     MatIcon,
     MatSelect,
     MatOption,
+    MatSlider,
+    MatSliderRangeThumb,
     MatPaginatorModule,
     MatProgressBarModule,
     FormsModule,
@@ -48,16 +48,18 @@ export class ServiceComponent {
   private readonly snackbarSE = inject(SnackbarService);
 
   /** SEARCH */
-  readonly search = signal('');
-  private readonly debouncedSearch = toSignal(
-    toObservable(this.search).pipe(
-      skip(1),
-      map(value => value.trim()),
-      debounceTime(300),
-      distinctUntilChanged(),
-    ),
-    { initialValue: '' },
+  readonly search = signal<string | null>(null);
+  private readonly debouncedSearch = debounced(
+    computed(() => this.search()?.trim() ?? null),
+    300,
   );
+
+  /** FILTERS */
+  readonly active = signal<boolean | null>(null);
+  readonly minPrice = signal<number | null>(null);
+  readonly maxPrice = signal<number | null>(null);
+  private readonly debouncedMinPrice = debounced(this.minPrice, 300);
+  private readonly debouncedMaxPrice = debounced(this.maxPrice, 300);
 
   /** PAGINATION */
   readonly page = linkedSignal({
@@ -71,14 +73,19 @@ export class ServiceComponent {
   private readonly request = computed(() => ({
     page: this.page(),
     size: this.size(),
-    search: this.debouncedSearch(),
+    filters: {
+      search: this.debouncedSearch(),
+      minPrice: this.debouncedMinPrice(),
+      maxPrice: this.debouncedMaxPrice(),
+      active: this.active(),
+    },
   }));
 
   readonly response = toSignal(
     toObservable(this.request).pipe(
-      switchMap(({ page, size, search }) => {
+      switchMap(({ page, size, filters }) => {
         this.isLoading.set(true);
-        return this.serviceSE.getList(page, size, search).pipe(
+        return this.serviceSE.getList(page, size, filters).pipe(
           catchError(() => {
             this.handleLoadError();
             return EMPTY;

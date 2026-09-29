@@ -57,22 +57,35 @@
 .specialists__filters-panel {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-md);
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
 }
 
-.specialists__price,
+.specialists__price-range {
+  display: flex;
+  flex: 0 1 300px;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.specialists__price-label {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.specialists__price-range mat-slider {
+  flex: 1;
+  min-width: 0;
+  margin-inline: 8px;
+}
+
 .specialists__status {
-  flex: 1 1 160px;
-}
-
-.specialists__price input[type='number'] {
-  -moz-appearance: textfield;
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    margin: 0;
-    -webkit-appearance: none;
-  }
+  --mat-form-field-container-height: 36px;
+  --mat-form-field-container-vertical-padding: 6px;
+  flex: 0 1 160px;
+  font-size: var(--font-size-sm);
 }
 
 .filters-enter {
@@ -90,13 +103,17 @@
   }
 }
 
+.specialists__progress {
+  height: 3px;
+  margin-bottom: 10px;
+}
+
 mat-progress-bar {
   --mat-progress-bar-active-indicator-color: var(--color-primary);
   --mat-progress-bar-track-color: var(--color-border-soft);
   --mat-progress-bar-active-indicator-height: 3px;
   --mat-progress-bar-track-height: 3px;
   --mat-progress-bar-track-shape: var(--radius-full);
-  margin-bottom: 10px;
   border-radius: var(--radius-full);
   overflow: hidden;
 }

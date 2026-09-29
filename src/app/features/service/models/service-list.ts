@@ -10,3 +10,10 @@ export interface iServiceList {
   isActive: boolean;
   createdAt: string;
 }
+
+export interface ServiceFilters {
+  search: string | null;
+  minPrice: number | null;
+  maxPrice: number | null;
+  active: boolean | null;
+}

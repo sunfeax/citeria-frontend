@@ -33,19 +33,31 @@
           animate.enter="filters-enter"
           animate.leave="filters-leave"
         >
-          <mat-form-field class="specialists__price" subscriptSizing="dynamic">
-            <mat-label>Min price</mat-label>
-            <input matInput type="number" min="0" inputmode="decimal" />
-          </mat-form-field>
-
-          <mat-form-field class="specialists__price" subscriptSizing="dynamic">
-            <mat-label>Max price</mat-label>
-            <input matInput type="number" min="0" inputmode="decimal" />
-          </mat-form-field>
+          <div
+            class="specialists__price-range"
+            role="group"
+            aria-labelledby="price-range-label"
+          >
+            <span id="price-range-label" class="specialists__price-label">
+              Price range
+            </span>
+            <mat-slider min="0" max="500" step="10" discrete>
+              <input
+                matSliderStartThumb
+                [(ngModel)]="minPrice"
+                aria-label="Minimum price"
+              />
+              <input
+                matSliderEndThumb
+                [(ngModel)]="maxPrice"
+                aria-label="Maximum price"
+              />
+            </mat-slider>
+          </div>
 
           <mat-form-field class="specialists__status" subscriptSizing="dynamic">
             <mat-label>Status</mat-label>
-            <mat-select>
+            <mat-select [(ngModel)]="active">
               <mat-option [value]="null">Any</mat-option>
               <mat-option [value]="true">Active only</mat-option>
               <mat-option [value]="false">Inactive only</mat-option>
@@ -55,16 +67,22 @@
       }
     </div>
 
-    @if (isLoading()) {
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    }
+    <div class="specialists__progress">
+      @if (isLoading()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+    </div>
 
     <div class="specialists__grid">
       @for (specialist of services(); track specialist.id) {
         <article class="specialist-card">
           <div class="specialist-card__media" aria-hidden="true">
             <span class="specialist-card__tag">{{ specialist.name }}</span>
-            <img class="specialist-card__avatar" src="/assets/images/default-avatar.png" alt="" />
+            <img
+              class="specialist-card__avatar"
+              src="/assets/images/default-avatar.png"
+              alt=""
+            />
           </div>
 
           <div class="specialist-card__content">
