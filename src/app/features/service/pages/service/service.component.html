@@ -41,7 +41,13 @@
             <span id="price-range-label" class="specialists__price-label">
               Price range
             </span>
-            <mat-slider min="0" max="500" step="10" discrete>
+            <mat-slider
+              [min]="priceSlider.min"
+              [max]="priceSlider.max"
+              [step]="priceSlider.step"
+              discrete
+              [displayWith]="formatPrice"
+            >
               <input
                 matSliderStartThumb
                 [(ngModel)]="minPrice"

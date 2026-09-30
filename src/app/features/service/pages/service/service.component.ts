@@ -11,13 +11,14 @@ import {
 } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSelect } from '@angular/material/select';
 import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
 import { catchError, EMPTY, finalize, switchMap } from 'rxjs';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { debounced } from '../../../../shared/util/rxjs-helpers';
+import { ServiceFilters } from '../../models/service-list';
 import { ServiceService } from '../../services/service.service';
 
 @Component({
@@ -35,8 +36,8 @@ import { ServiceService } from '../../services/service.service';
     MatOption,
     MatSlider,
     MatSliderRangeThumb,
-    MatPaginatorModule,
-    MatProgressBarModule,
+    MatPaginator,
+    MatProgressBar,
     FormsModule,
   ],
   templateUrl: './service.component.html',
@@ -47,25 +48,39 @@ export class ServiceComponent {
   private readonly serviceSE = inject(ServiceService);
   private readonly snackbarSE = inject(SnackbarService);
 
+  /** CONTROL STATE */
+  readonly error = signal(false);
+  readonly isLoading = signal(true);
+  readonly filtersExpanded = signal(false);
+
   /** SEARCH */
   readonly search = signal<string | null>(null);
   private readonly debouncedSearch = debounced(
-    computed(() => this.search()?.trim() ?? null),
+    computed(() => this.search()?.trim() || null),
     300,
   );
 
   /** FILTERS */
+  readonly priceSlider = { min: 0, max: 500, step: 10 } as const;
+  readonly minPrice = signal(this.priceSlider.min);
+  readonly maxPrice = signal(this.priceSlider.max);
   readonly active = signal<boolean | null>(null);
-  readonly minPrice = signal<number | null>(null);
-  readonly maxPrice = signal<number | null>(null);
   private readonly debouncedMinPrice = debounced(this.minPrice, 300);
   private readonly debouncedMaxPrice = debounced(this.maxPrice, 300);
 
-  /** PAGINATION */
-  readonly page = linkedSignal({
-    source: this.debouncedSearch,
-    computation: () => 0,
+  private readonly filters = computed<ServiceFilters>(() => {
+    const min = this.debouncedMinPrice();
+    const max = this.debouncedMaxPrice();
+    return {
+      search: this.debouncedSearch(),
+      minPrice: min === this.priceSlider.min ? null : min,
+      maxPrice: max === this.priceSlider.max ? null : max,
+      active: this.active(),
+    };
   });
+
+  /** PAGINATION */
+  readonly page = linkedSignal({ source: this.filters, computation: () => 0 });
   readonly size = signal(20);
   readonly sizeOptions = [5, 10, 20, 50];
 
@@ -73,12 +88,7 @@ export class ServiceComponent {
   private readonly request = computed(() => ({
     page: this.page(),
     size: this.size(),
-    filters: {
-      search: this.debouncedSearch(),
-      minPrice: this.debouncedMinPrice(),
-      maxPrice: this.debouncedMaxPrice(),
-      active: this.active(),
-    },
+    filters: this.filters(),
   }));
 
   readonly response = toSignal(
@@ -99,10 +109,6 @@ export class ServiceComponent {
   readonly services = computed(() => this.response()?.content ?? []);
   readonly totalElements = computed(() => this.response()?.totalElements ?? 0);
 
-  /** CONTROL STATE */
-  readonly isLoading = signal(false);
-  readonly filtersExpanded = signal(false);
-
   /** ACTIONS */
   toggleFilters(): void {
     this.filtersExpanded.update(expanded => !expanded);
@@ -112,6 +118,10 @@ export class ServiceComponent {
     this.size.set(event.pageSize);
     this.page.set(event.pageIndex);
   }
+
+  readonly formatPrice = (value: number): string => {
+    return value === this.priceSlider.max ? `${value}+` : `${value}`;
+  };
 
   private handleLoadError(): void {
     this.snackbarSE.error('Unable to load services right now.');
