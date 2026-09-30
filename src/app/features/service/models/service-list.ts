@@ -12,7 +12,7 @@ export interface iServiceList {
 }
 
 export interface ServiceFilters {
-  search: string | null;
+  search: string;
   minPrice: number | null;
   maxPrice: number | null;
   active: boolean | null;

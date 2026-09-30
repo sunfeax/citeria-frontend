@@ -1,5 +1,5 @@
 import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
@@ -15,11 +15,12 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSelect } from '@angular/material/select';
 import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
-import { catchError, EMPTY, finalize, switchMap } from 'rxjs';
-import { SnackbarService } from '../../../../shared/services/snackbar.service';
-import { debounced } from '../../../../shared/util/rxjs-helpers';
-import { ServiceFilters } from '../../models/service-list';
+import { iPageableContent } from '../../../../shared/models/pageable';
+import { debouncedSignal } from '../../../../shared/util/rxjs-helpers';
+import { iServiceList, ServiceFilters } from '../../models/service-list';
 import { ServiceService } from '../../services/service.service';
+
+type ServicePage = iPageableContent<iServiceList>;
 
 @Component({
   selector: 'app-service',
@@ -44,29 +45,20 @@ import { ServiceService } from '../../services/service.service';
   styleUrl: './service.component.scss',
 })
 export class ServiceComponent {
-  /** INJECTORS */
   private readonly serviceSE = inject(ServiceService);
-  private readonly snackbarSE = inject(SnackbarService);
 
-  /** CONTROL STATE */
-  readonly error = signal(false);
-  readonly isLoading = signal(true);
-  readonly filtersExpanded = signal(false);
+  readonly search = signal('');
+  readonly priceSlider = { min: 0, max: 500, step: 10 } as const;
+  readonly minPrice = signal<number>(this.priceSlider.min);
+  readonly maxPrice = signal<number>(this.priceSlider.max);
+  readonly active = signal<boolean | null>(null);
 
-  /** SEARCH */
-  readonly search = signal<string | null>(null);
-  private readonly debouncedSearch = debounced(
-    computed(() => this.search()?.trim() || null),
+  private readonly debouncedSearch = debouncedSignal(
+    computed(() => this.search().trim()),
     300,
   );
-
-  /** FILTERS */
-  readonly priceSlider = { min: 0, max: 500, step: 10 } as const;
-  readonly minPrice = signal(this.priceSlider.min);
-  readonly maxPrice = signal(this.priceSlider.max);
-  readonly active = signal<boolean | null>(null);
-  private readonly debouncedMinPrice = debounced(this.minPrice, 300);
-  private readonly debouncedMaxPrice = debounced(this.maxPrice, 300);
+  private readonly debouncedMinPrice = debouncedSignal(this.minPrice, 300);
+  private readonly debouncedMaxPrice = debouncedSignal(this.maxPrice, 300);
 
   private readonly filters = computed<ServiceFilters>(() => {
     const min = this.debouncedMinPrice();
@@ -79,53 +71,56 @@ export class ServiceComponent {
     };
   });
 
-  /** PAGINATION */
+  readonly hasFilters = computed(() => {
+    const { search, minPrice, maxPrice, active } = this.filters();
+    return search !== '' || minPrice !== null || maxPrice !== null || active !== null;
+  });
+
   readonly page = linkedSignal({ source: this.filters, computation: () => 0 });
   readonly size = signal(20);
   readonly sizeOptions = [5, 10, 20, 50];
 
-  /** DATA */
-  private readonly request = computed(() => ({
-    page: this.page(),
-    size: this.size(),
-    filters: this.filters(),
-  }));
+  private readonly servicesRes = rxResource({
+    params: () => ({ page: this.page(), size: this.size(), filters: this.filters() }),
+    stream: ({ params }) =>
+      this.serviceSE.getList(params.page, params.size, params.filters),
+  });
 
-  readonly response = toSignal(
-    toObservable(this.request).pipe(
-      switchMap(({ page, size, filters }) => {
-        this.isLoading.set(true);
-        return this.serviceSE.getList(page, size, filters).pipe(
-          catchError(() => {
-            this.handleLoadError();
-            return EMPTY;
-          }),
-          finalize(() => this.isLoading.set(false)),
-        );
-      }),
-    ),
-    { initialValue: null },
-  );
-  readonly services = computed(() => this.response()?.content ?? []);
-  readonly totalElements = computed(() => this.response()?.totalElements ?? 0);
+  private readonly lastPage = linkedSignal<
+    ServicePage | undefined,
+    ServicePage | undefined
+  >({
+    source: () => (this.servicesRes.hasValue() ? this.servicesRes.value() : undefined),
+    computation: (value, previous) => value ?? previous?.value,
+  });
 
-  /** ACTIONS */
+  readonly isLoading = computed(() => this.servicesRes.isLoading());
+  readonly loadFailed = computed(() => this.servicesRes.status() === 'error');
+  readonly hasLoaded = computed(() => this.lastPage() !== undefined);
+  readonly services = computed(() => this.lastPage()?.content ?? []);
+  readonly totalElements = computed(() => this.lastPage()?.totalElements ?? 0);
+  readonly filtersExpanded = signal(false);
+
+  readonly formatPrice = (value: number): string =>
+    value === this.priceSlider.max ? `${value}+` : `${value}`;
+
   toggleFilters(): void {
     this.filtersExpanded.update(expanded => !expanded);
   }
 
-  onPage(event: PageEvent) {
-    this.size.set(event.pageSize);
+  onPage(event: PageEvent): void {
     this.page.set(event.pageIndex);
+    this.size.set(event.pageSize);
   }
 
-  readonly formatPrice = (value: number): string => {
-    return value === this.priceSlider.max ? `${value}+` : `${value}`;
-  };
+  retry(): void {
+    this.servicesRes.reload();
+  }
 
-  private handleLoadError(): void {
-    this.snackbarSE.error('Unable to load services right now.');
-    this.page.set(this.response()?.page ?? this.page());
-    this.size.set(this.response()?.size ?? this.size());
+  clearFilters(): void {
+    this.search.set('');
+    this.minPrice.set(this.priceSlider.min);
+    this.maxPrice.set(this.priceSlider.max);
+    this.active.set(null);
   }
 }

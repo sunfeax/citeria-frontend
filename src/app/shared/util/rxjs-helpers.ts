@@ -1,9 +1,11 @@
 import { Signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { debounceTime } from 'rxjs';
+import { debounce, of, timer } from 'rxjs';
 
-export function debounced<T>(source: Signal<T>, ms: number): Signal<T> {
-  return toSignal(toObservable(source).pipe(debounceTime(ms)), {
-    initialValue: source(),
-  });
+export function debouncedSignal<T>(source: Signal<T>, ms: number): Signal<T> {
+  const initial = source();
+  return toSignal(
+    toObservable(source).pipe(debounce(value => (value === initial ? of(0) : timer(ms)))),
+    { initialValue: initial },
+  );
 }

@@ -1,7 +1,9 @@
 .specialists {
   min-height: 100%;
   padding: 40px 20px;
-  background: radial-gradient(circle at 10% 0%, var(--color-primary-glow), transparent 448px), var(--color-background);
+  background:
+    radial-gradient(circle at 10% 0%, var(--color-primary-glow), transparent 448px),
+    var(--color-background);
 }
 
 .specialists__container {
@@ -46,7 +48,9 @@
 
 .specialists__filters-toggle {
   color: var(--color-text-muted);
-  transition: color 0.2s, background-color 0.2s;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
 }
 
 .specialists__filters-toggle--active {
@@ -116,12 +120,26 @@ mat-progress-bar {
   --mat-progress-bar-track-shape: var(--radius-full);
   border-radius: var(--radius-full);
   overflow: hidden;
+  animation: progress-appear 0.15s ease-out 0.2s both;
+}
+
+@keyframes progress-appear {
+  from {
+    opacity: 0;
+  }
 }
 
 .specialists__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: 16px;
+  transition: opacity 0.2s;
+}
+
+// Dim only when loading takes a while; the delay applies on the way in, restoring starts right away.
+.specialists__grid--stale {
+  opacity: 0.55;
+  transition-delay: 0.2s;
 }
 
 .specialist-card {
@@ -227,15 +245,21 @@ mat-progress-bar {
   font-size: var(--font-size-sm);
 }
 
-.specialists__empty {
+.specialists__state {
+  display: grid;
   grid-column: 1 / -1;
-  margin: 0;
+  justify-items: center;
+  gap: var(--gap-md);
   padding: 48px;
   border: var(--border-width-sm) dashed var(--color-border);
   border-radius: var(--radius-3xl);
   background: var(--color-surface);
   color: var(--color-text-muted);
   text-align: center;
+
+  p {
+    margin: 0;
+  }
 }
 
 @media (max-width: 480px) {
