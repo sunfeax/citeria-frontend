@@ -50,15 +50,15 @@ import {
 })
 export class ProfileComponent {
   /** INJECTORS */
-  private readonly sessionSE = inject(SessionService);
-  private readonly profileSE = inject(ProfileService);
-  private readonly snackbarSE = inject(SnackbarService);
+  private readonly sessionService = inject(SessionService);
+  private readonly profileService = inject(ProfileService);
+  private readonly snackbarService = inject(SnackbarService);
 
   /** TEMPLATE HELPERS */
   readonly getFieldError = getFieldError;
 
   /** DATA */
-  readonly user = computed(() => this.sessionSE.requireUser());
+  readonly user = computed(() => this.sessionService.requireUser());
 
   /** STATE */
   isProfileLoading = signal<boolean>(false);
@@ -120,7 +120,7 @@ export class ProfileComponent {
     }
 
     this.isProfileLoading.set(true);
-    this.profileSE
+    this.profileService
       .update(this.user().id, getUserUpdatePayload(this.profileForm.getRawValue()))
       .pipe(
         finalize(() => {
@@ -129,8 +129,8 @@ export class ProfileComponent {
       )
       .subscribe({
         next: user => {
-          this.sessionSE.setUser(user);
-          this.snackbarSE.success('Your information has been updated.');
+          this.sessionService.setUser(user);
+          this.snackbarService.success('Your information has been updated.');
           this.profileForm.markAsPristine();
         },
         error: (err: HttpErrorResponse) => {
@@ -138,7 +138,7 @@ export class ProfileComponent {
           if (apiError.errors) {
             applyServerErrors(this.profileForm, apiError.errors);
           } else {
-            this.snackbarSE.error(apiError.detail ?? 'Update failed.');
+            this.snackbarService.error(apiError.detail ?? 'Update failed.');
           }
         },
       });
@@ -153,7 +153,7 @@ export class ProfileComponent {
     }
 
     this.isPasswordLoading.set(true);
-    this.profileSE
+    this.profileService
       .changePassword(
         this.user().id,
         getChangePasswordPayload(this.passwordForm.getRawValue()),
@@ -165,7 +165,7 @@ export class ProfileComponent {
       )
       .subscribe({
         next: () => {
-          this.snackbarSE.success('Your password has been updated.');
+          this.snackbarService.success('Your password has been updated.');
           this.passwordForm.reset();
         },
         error: (err: HttpErrorResponse) => {
@@ -173,7 +173,7 @@ export class ProfileComponent {
           if (apiError.errors) {
             applyServerErrors(this.passwordForm, apiError.errors);
           } else {
-            this.snackbarSE.error(apiError.detail ?? 'Password update failed.');
+            this.snackbarService.error(apiError.detail ?? 'Password update failed.');
           }
         },
       });

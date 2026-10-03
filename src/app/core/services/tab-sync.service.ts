@@ -21,7 +21,7 @@ export class TabSyncService {
     this.destroyRef.onDestroy(() => this.channel.close());
   }
 
-  send(msg: any) {
+  send(msg: string): void {
     this.channel.postMessage(msg);
   }
 }

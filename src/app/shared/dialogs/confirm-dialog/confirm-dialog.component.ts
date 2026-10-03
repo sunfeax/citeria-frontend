@@ -17,7 +17,7 @@ import { Dialog } from '../../models/dialog';
 })
 export class ConfirmDialogComponent {
   /** INJECTORS */
-  private readonly dialogRefSE =
+  private readonly dialogRefService =
     inject<MatDialogRef<ConfirmDialogComponent, boolean>>(MatDialogRef);
 
   /** DATA */
@@ -36,9 +36,9 @@ export class ConfirmDialogComponent {
 
   /** ACTIONS */
   onConfirm(): void {
-    this.dialogRefSE.close(true);
+    this.dialogRefService.close(true);
   }
   onCancel(): void {
-    this.dialogRefSE.close(false);
+    this.dialogRefService.close(false);
   }
 }

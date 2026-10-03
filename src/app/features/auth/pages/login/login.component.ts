@@ -34,9 +34,9 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   /** INJECTORS */
-  private authSE = inject(AuthService);
+  private authService = inject(AuthService);
   private router = inject(Router);
-  private snackbarSE = inject(SnackbarService);
+  private snackbarService = inject(SnackbarService);
 
   /** ROUTES */
   readonly routes = routes;
@@ -63,7 +63,7 @@ export class LoginComponent {
   });
 
   /** ACTIONS */
-  onSubmit() {
+  onSubmit(): void {
     this.isPasswordVisible.set(false);
     this.isSubmitted.set(true);
     this.serverError.set(null);
@@ -77,7 +77,7 @@ export class LoginComponent {
 
     const payload: iLoginRequest = this.loginForm.getRawValue();
 
-    this.authSE
+    this.authService
       .login(payload)
       .pipe(
         finalize(() => {
@@ -91,10 +91,10 @@ export class LoginComponent {
         },
         error: (err: HttpErrorResponse) => {
           if (err.status === 401) {
-            this.snackbarSE.error('Invalid email or password.');
+            this.snackbarService.error('Invalid email or password.');
             return;
           } else {
-            this.snackbarSE.error('Unable to sign in right now. Please try later.');
+            this.snackbarService.error('Unable to sign in right now. Please try later.');
           }
         },
       });

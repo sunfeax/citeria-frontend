@@ -5,14 +5,14 @@ import { SessionService } from '../../features/auth/services/session.service';
 import { AuthService } from '../../features/auth/services/auth.service';
 
 export const accessGuard: CanActivateFn = () => {
-  const sessionSE = inject(SessionService);
-  const authSE = inject(AuthService);
+  const sessionService = inject(SessionService);
+  const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (sessionSE.isAuthenticated()) {
+  if (sessionService.isAuthenticated()) {
     return true;
   }
-  return authSE.refresh().pipe(
+  return authService.refresh().pipe(
     map(() => true),
     catchError(() => of(router.createUrlTree(['/login']))),
   );

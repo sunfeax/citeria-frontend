@@ -23,8 +23,8 @@ export const appConfig: ApplicationConfig = {
       useValue: { appearance: 'outline', hideRequiredMarker: true },
     },
     provideAppInitializer(() => {
-      const authSE = inject(AuthService);
-      return authSE.restoreSession().pipe(catchError(() => of(null)));
+      const authService = inject(AuthService);
+      return authService.restoreSession().pipe(catchError(() => of(null)));
     }),
   ],
 };

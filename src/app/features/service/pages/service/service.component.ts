@@ -45,7 +45,7 @@ type ServicePage = iPageableContent<iServiceList>;
   styleUrl: './service.component.scss',
 })
 export class ServiceComponent {
-  private readonly serviceSE = inject(ServiceService);
+  private readonly serviceService = inject(ServiceService);
 
   readonly search = signal('');
   readonly priceSlider = { min: 0, max: 500, step: 10 } as const;
@@ -83,7 +83,7 @@ export class ServiceComponent {
   private readonly servicesRes = rxResource({
     params: () => ({ page: this.page(), size: this.size(), filters: this.filters() }),
     stream: ({ params }) =>
-      this.serviceSE.getList(params.page, params.size, params.filters),
+      this.serviceService.getList(params.page, params.size, params.filters),
   });
 
   private readonly lastPage = linkedSignal<

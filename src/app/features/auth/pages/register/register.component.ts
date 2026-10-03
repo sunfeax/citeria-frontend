@@ -52,8 +52,8 @@ import { getRegisterPayload } from './../../../../shared/util/payload-handler';
 })
 export class RegisterComponent {
   /** INJECTORS */
-  private authSE = inject(AuthService);
-  private snackbarSE = inject(SnackbarService);
+  private authService = inject(AuthService);
+  private snackbarService = inject(SnackbarService);
   private router = inject(Router);
 
   /** ENUMS */
@@ -117,7 +117,7 @@ export class RegisterComponent {
   );
 
   /** ACTIONS */
-  onSubmit() {
+  onSubmit(): void {
     this.isPasswordVisible.set(false);
     this.isConfirmPasswordVisible.set(false);
     clearServerErrors(this.registerForm);
@@ -128,7 +128,7 @@ export class RegisterComponent {
     }
 
     this.isLoading.set(true);
-    this.authSE
+    this.authService
       .register(getRegisterPayload(this.registerForm.getRawValue()))
       .pipe(
         finalize(() => {
@@ -144,7 +144,7 @@ export class RegisterComponent {
           if (apiError.errors) {
             applyServerErrors(this.registerForm, apiError.errors);
           } else {
-            this.snackbarSE.error(apiError.detail ?? 'Registration failed.');
+            this.snackbarService.error(apiError.detail ?? 'Registration failed.');
           }
         },
       });

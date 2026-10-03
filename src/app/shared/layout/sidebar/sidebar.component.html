@@ -43,7 +43,7 @@
       <span class="user-name">{{ displayName() }}</span>
     </div>
     <div class="sidebar-actions">
-      @if (themeSE.theme() === 'dark') {
+      @if (themeService.theme() === 'dark') {
         <button matIconButton type="button" aria-label="Switch to light theme" (click)="toggleTheme()">
           <mat-icon>light_mode</mat-icon>
         </button>

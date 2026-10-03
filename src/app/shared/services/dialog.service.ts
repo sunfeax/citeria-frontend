@@ -7,11 +7,11 @@ import { Dialog } from '../models/dialog';
 @Injectable({ providedIn: 'root' })
 export class DialogService {
   /** INJECTORS */
-  private readonly dialogSE = inject(MatDialog);
+  private readonly dialogService = inject(MatDialog);
 
   /** ACTIONS */
   confirm(data: Dialog): Observable<boolean> {
-    return this.dialogSE
+    return this.dialogService
       .open<ConfirmDialogComponent, Dialog, boolean>(ConfirmDialogComponent, {
         data,
         width: 'min(28rem, calc(100vw - 2rem))',

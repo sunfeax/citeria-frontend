@@ -19,19 +19,19 @@ import { SnackbarService } from './../../services/snackbar.service';
 })
 export class SidebarComponent {
   /** INJECTORS */
-  private readonly authSE = inject(AuthService);
-  private readonly sessionSE = inject(SessionService);
+  private readonly authService = inject(AuthService);
+  private readonly sessionService = inject(SessionService);
   private readonly router = inject(Router);
-  private readonly dialogSE = inject(DialogService);
+  private readonly dialogService = inject(DialogService);
   private readonly snackbarService = inject(SnackbarService);
   private readonly tabSyncService = inject(TabSyncService);
-  readonly themeSE = inject(ThemeService);
+  readonly themeService = inject(ThemeService);
 
   /** DATA */
   sidebarData = SIDEBAR_CONFIG;
   isExpandedSidebar = signal<boolean>(true);
   protected readonly displayName = computed(() => {
-    const user = this.sessionSE.user();
+    const user = this.sessionService.user();
     if (!user) return 'Guest';
     return user.firstName?.trim() || user.email;
   });
@@ -41,11 +41,11 @@ export class SidebarComponent {
   }
 
   toggleTheme(): void {
-    this.themeSE.toggle();
+    this.themeService.toggle();
   }
 
   logout(): void {
-    this.authSE.logout().subscribe({
+    this.authService.logout().subscribe({
       next: () => {
         this.router.navigateByUrl(routes.login);
         this.tabSyncService.send('logout');
@@ -55,7 +55,7 @@ export class SidebarComponent {
   }
 
   openConfirmDialogToLogout(): void {
-    this.dialogSE
+    this.dialogService
       .confirm({
         title: 'Logout',
         message: 'Do want to sign out?',
