@@ -2,7 +2,9 @@
   <header class="profile-page__header">
     <p class="profile-page__eyebrow">Account</p>
     <h1 id="profile-title" class="profile-page__title">Profile settings</h1>
-    <p class="profile-page__subtitle">Manage your personal details and keep your account secure.</p>
+    <p class="profile-page__subtitle">
+      Manage your personal details and keep your account secure.
+    </p>
   </header>
 
   <div class="profile-page__grid">
@@ -13,22 +15,40 @@
         </span>
 
         <div>
-          <h2 id="general-information-title" class="profile-card__title">General information</h2>
-          <p class="profile-card__description">Update the details shown on your profile.</p>
+          <h2 id="general-information-title" class="profile-card__title">
+            General information
+          </h2>
+          <p class="profile-card__description">
+            Update the details shown on your profile.
+          </p>
         </div>
       </header>
 
-      <form [formGroup]="profileForm" (ngSubmit)="submitProfileForm()" class="profile-form">
+      <form
+        [formGroup]="profileForm"
+        (ngSubmit)="submitProfileForm()"
+        class="profile-form"
+      >
         <div class="profile-form__grid">
           <mat-form-field>
             <mat-label>First name</mat-label>
-            <input matInput type="text" formControlName="firstName" autocomplete="given-name" />
+            <input
+              matInput
+              type="text"
+              formControlName="firstName"
+              autocomplete="given-name"
+            />
             <mat-error>{{ getFieldError(profileForm.controls.firstName) }}</mat-error>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Last name</mat-label>
-            <input matInput type="text" formControlName="lastName" autocomplete="family-name" />
+            <input
+              matInput
+              type="text"
+              formControlName="lastName"
+              autocomplete="family-name"
+            />
             <mat-error>{{ getFieldError(profileForm.controls.lastName) }}</mat-error>
           </mat-form-field>
 
@@ -69,11 +89,17 @@
 
         <div>
           <h2 id="password-title" class="profile-card__title">Password</h2>
-          <p class="profile-card__description">Choose a strong password you do not reuse.</p>
+          <p class="profile-card__description">
+            Choose a strong password you do not reuse.
+          </p>
         </div>
       </header>
 
-      <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordForm()" class="profile-form">
+      <form
+        [formGroup]="passwordForm"
+        (ngSubmit)="submitPasswordForm()"
+        class="profile-form"
+      >
         <mat-form-field>
           <mat-label>Current password</mat-label>
           <input
@@ -86,13 +112,21 @@
             matIconButton
             matSuffix
             type="button"
-            [attr.aria-label]="isCurrentPasswordVisible() ? 'Hide current password' : 'Show current password'"
+            [attr.aria-label]="
+              isCurrentPasswordVisible()
+                ? 'Hide current password'
+                : 'Show current password'
+            "
             [attr.aria-pressed]="isCurrentPasswordVisible()"
             (click)="isCurrentPasswordVisible.update(visible => !visible)"
           >
-            <mat-icon>{{ isCurrentPasswordVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            <mat-icon>
+              {{ isCurrentPasswordVisible() ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
           </button>
-          <mat-error>{{ getFieldError(passwordForm.controls.currentPassword) }}</mat-error>
+          <mat-error>
+            {{ getFieldError(passwordForm.controls.currentPassword) }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field>
@@ -107,11 +141,15 @@
             matIconButton
             matSuffix
             type="button"
-            [attr.aria-label]="isNewPasswordVisible() ? 'Hide new password' : 'Show new password'"
+            [attr.aria-label]="
+              isNewPasswordVisible() ? 'Hide new password' : 'Show new password'
+            "
             [attr.aria-pressed]="isNewPasswordVisible()"
             (click)="isNewPasswordVisible.update(visible => !visible)"
           >
-            <mat-icon>{{ isNewPasswordVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            <mat-icon>
+              {{ isNewPasswordVisible() ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
           </button>
           <mat-error>{{ getFieldError(passwordForm.controls.newPassword) }}</mat-error>
         </mat-form-field>

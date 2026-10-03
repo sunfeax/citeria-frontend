@@ -1,19 +1,35 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators as v } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators as v,
+} from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import {
+  MatError,
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs';
 import { iApiError } from '../../../../shared/models/api-error';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
-import { applyServerErrors, clearServerErrors, getFieldError } from '../../../../shared/util/form-errors';
+import {
+  applyServerErrors,
+  clearServerErrors,
+  getFieldError,
+} from '../../../../shared/util/form-errors';
 import { SessionService } from '../../../auth/services/session.service';
 import { ProfileService } from '../../services/profile.service';
-import { getChangePasswordPayload, getUserUpdatePayload } from './../../../../shared/util/payload-handler';
-import { iUser } from './../../../auth/models/user';
+import {
+  getChangePasswordPayload,
+  getUserUpdatePayload,
+} from './../../../../shared/util/payload-handler';
 
 @Component({
   selector: 'app-profile',
@@ -54,11 +70,21 @@ export class ProfileComponent {
   profileForm = new FormGroup({
     firstName: new FormControl(this.user().firstName, {
       nonNullable: true,
-      validators: [v.required, v.minLength(2), v.maxLength(50), v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u)],
+      validators: [
+        v.required,
+        v.minLength(2),
+        v.maxLength(50),
+        v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
+      ],
     }),
     lastName: new FormControl(this.user().lastName, {
       nonNullable: true,
-      validators: [v.required, v.minLength(2), v.maxLength(50), v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u)],
+      validators: [
+        v.required,
+        v.minLength(2),
+        v.maxLength(50),
+        v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
+      ],
     }),
     email: new FormControl(this.user().email, {
       nonNullable: true,
@@ -76,7 +102,11 @@ export class ProfileComponent {
     }),
     newPassword: new FormControl('', {
       nonNullable: true,
-      validators: [v.required, v.minLength(8), v.pattern(/^(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z0-9@#$%^&+=!]+$/)],
+      validators: [
+        v.required,
+        v.minLength(8),
+        v.pattern(/^(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z0-9@#$%^&+=!]+$/),
+      ],
     }),
   });
 
@@ -113,6 +143,7 @@ export class ProfileComponent {
         },
       });
   }
+
   submitPasswordForm(): void {
     clearServerErrors(this.passwordForm);
 
@@ -123,7 +154,10 @@ export class ProfileComponent {
 
     this.isPasswordLoading.set(true);
     this.profileSE
-      .changePassword(this.user().id, getChangePasswordPayload(this.passwordForm.getRawValue()))
+      .changePassword(
+        this.user().id,
+        getChangePasswordPayload(this.passwordForm.getRawValue()),
+      )
       .pipe(
         finalize(() => {
           this.isPasswordLoading.set(false);
