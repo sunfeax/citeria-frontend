@@ -1,11 +1,20 @@
-import { AuthHttpService } from './auth-http.service';
 import { inject, Injectable } from '@angular/core';
-import { SessionService } from './session.service';
+import {
+  catchError,
+  finalize,
+  Observable,
+  of,
+  shareReplay,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { iLoginRequest, iLoginResponse } from '../models/login';
 import { iRefreshResponse } from '../models/refresh';
 import { iRegisterRequest, tRegisterResponse } from '../models/register';
-import { catchError, finalize, Observable, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { iUser } from '../models/user';
+import { AuthHttpService } from './auth-http.service';
+import { SessionService } from './session.service';
 
 @Injectable({
   providedIn: 'root',
