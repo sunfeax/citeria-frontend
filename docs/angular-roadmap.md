@@ -19,6 +19,10 @@ interop (`toSignal`/`toObservable`), Reactive Forms. `resource`/`httpResource`/`
 - ✅ Логин, регистрация, logout, восстановление сессии при старте приложения.
 - ✅ Интерцептор: Bearer-заголовок, авто-refresh на 401, дедупликация конкурентных refresh.
 - ✅ Гвард доступа.
+- ✅ Синхронизация logout между вкладками: `TabSyncService` — чистый транспорт поверх
+  `BroadcastChannel` (`Observable` с teardown), `AuthService` отправляет и слушает. Навигация на логин —
+  одна реакция на переход «пользователь был → стал `null`» (`toObservable` + `pairwise`), покрывает
+  logout, чужую вкладку и упавший refresh.
 - 🔄 `forgot-password` — заглушка. На бэкенде нет эндпоинта восстановления пароля; ждёт его.
 
 ## M2 — Профиль 🔄
