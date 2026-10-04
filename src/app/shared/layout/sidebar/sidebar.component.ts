@@ -41,12 +41,6 @@ export class SidebarComponent {
   }
 
   logout(): void {
-    this.authService.logout().subscribe({
-      error: () => this.snackbarService.error('An error occurred during logout'),
-    });
-  }
-
-  openConfirmDialogToLogout(): void {
     this.dialogService
       .confirm({
         title: 'Logout',
@@ -54,6 +48,10 @@ export class SidebarComponent {
         confirmText: 'Logout',
         variant: 'danger',
       })
-      .subscribe(() => this.logout());
+      .subscribe(() =>
+        this.authService.logout().subscribe({
+          error: () => this.snackbarService.error('An error occurred during logout'),
+        }),
+      );
   }
 }
