@@ -17,7 +17,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs';
-import { iApiError } from '../../../../shared/models/api-error';
+import { ApiError } from '../../../../shared/models/api-error';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import {
   applyServerErrors,
@@ -134,7 +134,7 @@ export class ProfileComponent {
           this.profileForm.markAsPristine();
         },
         error: (err: HttpErrorResponse) => {
-          const apiError = err.error as iApiError;
+          const apiError = err.error as ApiError;
           if (apiError.errors) {
             applyServerErrors(this.profileForm, apiError.errors);
           } else {
@@ -169,7 +169,7 @@ export class ProfileComponent {
           this.passwordForm.reset();
         },
         error: (err: HttpErrorResponse) => {
-          const apiError = err.error as iApiError;
+          const apiError = err.error as ApiError;
           if (apiError.errors) {
             applyServerErrors(this.passwordForm, apiError.errors);
           } else {

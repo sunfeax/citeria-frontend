@@ -9,10 +9,10 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { iLoginRequest, iLoginResponse } from '../models/login';
-import { iRefreshResponse } from '../models/refresh';
-import { iRegisterRequest, tRegisterResponse } from '../models/register';
-import { iUser } from '../models/user';
+import { LoginRequest, LoginResponse } from '../models/login';
+import { RefreshResponse } from '../models/refresh';
+import { RegisterRequest, RegisterResponse } from '../models/register';
+import { User } from '../models/user';
 import { AuthHttpService } from './auth-http.service';
 import { SessionService } from './session.service';
 
@@ -25,10 +25,10 @@ export class AuthService {
   private readonly sessionService = inject(SessionService);
 
   /** STATE */
-  private refresh$: Observable<iRefreshResponse> | null = null;
+  private refresh$: Observable<RefreshResponse> | null = null;
 
   /** ACTIONS */
-  login(payload: iLoginRequest): Observable<iLoginResponse> {
+  login(payload: LoginRequest): Observable<LoginResponse> {
     return this.authHttpService.login(payload).pipe(
       tap(response => {
         this.sessionService.setAccessToken(response.accessToken);
@@ -36,10 +36,10 @@ export class AuthService {
       }),
     );
   }
-  register(payload: iRegisterRequest): Observable<tRegisterResponse> {
+  register(payload: RegisterRequest): Observable<RegisterResponse> {
     return this.authHttpService.register(payload);
   }
-  refresh(): Observable<iRefreshResponse> {
+  refresh(): Observable<RefreshResponse> {
     if (!this.refresh$) {
       this.refresh$ = this.authHttpService.refresh().pipe(
         tap(response => this.sessionService.setAccessToken(response.accessToken)),
@@ -61,7 +61,7 @@ export class AuthService {
       }),
     );
   }
-  getMe(): Observable<iUser> {
+  getMe(): Observable<User> {
     return this.authHttpService.getMe().pipe(
       tap(response => {
         this.sessionService.setUser(response);
@@ -72,7 +72,7 @@ export class AuthService {
       }),
     );
   }
-  restoreSession(): Observable<iUser | null> {
+  restoreSession(): Observable<User | null> {
     return this.refresh().pipe(
       switchMap(() => this.getMe()),
       catchError(() => {

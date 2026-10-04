@@ -15,12 +15,12 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSelect } from '@angular/material/select';
 import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
-import { iPageableContent } from '../../../../shared/models/pageable';
+import { PageableContent } from '../../../../shared/models/pageable';
 import { debouncedSignal } from '../../../../shared/util/rxjs-helpers';
-import { iServiceList, ServiceFilters } from '../../models/service-list';
+import { ServiceList, ServiceFilters } from '../../models/service-list';
 import { ServiceService } from '../../services/service.service';
 
-type ServicePage = iPageableContent<iServiceList>;
+type ServicePage = PageableContent<ServiceList>;
 
 @Component({
   selector: 'app-service',

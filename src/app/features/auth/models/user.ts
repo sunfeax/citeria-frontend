@@ -1,14 +1,14 @@
-import { eUserRole } from './user-role';
-import { eUserType } from './user-type';
+import { UserRole } from './user-role';
+import { UserType } from './user-type';
 
-export interface iUser {
+export interface User {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  role: eUserRole;
-  type: eUserType;
+  role: UserRole;
+  type: UserType;
   isActive: boolean;
   hasAvatar: boolean;
   createdAt: string;

@@ -1,8 +1,8 @@
-import { iRegisterRequest } from '../../features/auth/models/register';
-import { iChangePasswordRequest } from '../../features/profile/models/user-change-password';
-import { iUserUpdateRequest } from '../../features/profile/models/user-update-request';
+import { RegisterRequest } from '../../features/auth/models/register';
+import { ChangePasswordRequest } from '../../features/profile/models/user-change-password';
+import { UserUpdateRequest } from '../../features/profile/models/user-update-request';
 
-export function getRegisterPayload(raw: iRegisterRequest): iRegisterRequest {
+export function getRegisterPayload(raw: RegisterRequest): RegisterRequest {
   return {
     firstName: raw.firstName.trim(),
     lastName: raw.lastName.trim(),
@@ -12,7 +12,7 @@ export function getRegisterPayload(raw: iRegisterRequest): iRegisterRequest {
     type: raw.type,
   };
 }
-export function getUserUpdatePayload(raw: iUserUpdateRequest): iUserUpdateRequest {
+export function getUserUpdatePayload(raw: UserUpdateRequest): UserUpdateRequest {
   return {
     firstName: raw.firstName?.trim(),
     lastName: raw.lastName?.trim(),
@@ -20,7 +20,7 @@ export function getUserUpdatePayload(raw: iUserUpdateRequest): iUserUpdateReques
     phone: raw.phone?.trim(),
   };
 }
-export function getChangePasswordPayload(raw: iChangePasswordRequest): iChangePasswordRequest {
+export function getChangePasswordPayload(raw: ChangePasswordRequest): ChangePasswordRequest {
   return {
     currentPassword: raw.currentPassword.trim(),
     newPassword: raw.newPassword.trim(),

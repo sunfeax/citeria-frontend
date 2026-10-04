@@ -1,4 +1,4 @@
-export interface iServiceList {
+export interface ServiceList {
   id: string;
   specialistId: string;
   specialistName: string;

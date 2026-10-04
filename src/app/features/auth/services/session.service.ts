@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { iUser } from '../models/user';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -7,13 +7,13 @@ import { iUser } from '../models/user';
 export class SessionService {
   /** STATE */
   private readonly accessToken = signal<string | null>(null);
-  private readonly currentUser = signal<iUser | null>(null);
+  private readonly currentUser = signal<User | null>(null);
 
   readonly isAuthenticated = computed(() => !!this.accessToken());
   readonly user = this.currentUser.asReadonly();
 
   /** ACTIONS */
-  requireUser(): iUser {
+  requireUser(): User {
     const user = this.currentUser();
     if (!user) {
       throw new Error('Session service doesn´t have an authenticated session');
@@ -30,7 +30,7 @@ export class SessionService {
     this.accessToken.set(null);
     this.currentUser.set(null);
   }
-  setUser(user: iUser): void {
+  setUser(user: User): void {
     this.currentUser.set(user);
   }
 }

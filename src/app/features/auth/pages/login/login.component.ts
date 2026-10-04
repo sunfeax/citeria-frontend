@@ -11,7 +11,7 @@ import { finalize } from 'rxjs';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { getFieldError } from '../../../../shared/util/form-errors';
 import { routes } from '../../../../shared/util/routes';
-import { iLoginRequest } from '../../models/login';
+import { LoginRequest } from '../../models/login';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -75,7 +75,7 @@ export class LoginComponent {
 
     this.isLoading.set(true);
 
-    const payload: iLoginRequest = this.loginForm.getRawValue();
+    const payload: LoginRequest = this.loginForm.getRawValue();
 
     this.authService
       .login(payload)

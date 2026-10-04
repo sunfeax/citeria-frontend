@@ -1,12 +1,12 @@
-import { iUser } from './user';
+import { User } from './user';
 
-export interface iLoginRequest {
+export interface LoginRequest {
   email: string;
   password: string;
 }
 
-export interface iLoginResponse {
+export interface LoginResponse {
   accessToken: string;
   tokenType: string;
-  user: iUser;
+  user: User;
 }

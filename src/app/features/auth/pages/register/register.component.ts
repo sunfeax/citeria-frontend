@@ -21,11 +21,11 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { iApiError } from '../../../../shared/models/api-error';
+import { ApiError } from '../../../../shared/models/api-error';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { applyServerErrors, clearServerErrors, getFieldError } from '../../../../shared/util/form-errors';
 import { routes } from '../../../../shared/util/routes';
-import { eUserType } from '../../models/user-type';
+import { UserType } from '../../models/user-type';
 import { AuthService } from '../../services/auth.service';
 import { getRegisterPayload } from './../../../../shared/util/payload-handler';
 
@@ -57,7 +57,7 @@ export class RegisterComponent {
   private router = inject(Router);
 
   /** ENUMS */
-  readonly UserType = eUserType;
+  readonly UserType = UserType;
 
   /** ROUTES */
   readonly routes = routes;
@@ -106,7 +106,7 @@ export class RegisterComponent {
         nonNullable: true,
         validators: [v.required],
       }),
-      type: new FormControl(eUserType.CLIENT, {
+      type: new FormControl(UserType.CLIENT, {
         nonNullable: true,
         validators: [v.required],
       }),
@@ -140,7 +140,7 @@ export class RegisterComponent {
           this.router.navigateByUrl(routes.login);
         },
         error: (err: HttpErrorResponse) => {
-          const apiError = err.error as iApiError;
+          const apiError = err.error as ApiError;
           if (apiError.errors) {
             applyServerErrors(this.registerForm, apiError.errors);
           } else {

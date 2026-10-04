@@ -1,13 +1,13 @@
-import { eUserType } from './user-type';
-import { iUser } from './user';
+import { UserType } from './user-type';
+import { User } from './user';
 
-export interface iRegisterRequest {
+export interface RegisterRequest {
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   password: string;
-  type: eUserType;
+  type: UserType;
 }
 
-export type tRegisterResponse = iUser;
+export type RegisterResponse = User;

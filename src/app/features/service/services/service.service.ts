@@ -2,8 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { iPageableContent } from '../../../shared/models/pageable';
-import { iServiceList, ServiceFilters } from '../models/service-list';
+import { PageableContent } from '../../../shared/models/pageable';
+import { ServiceList, ServiceFilters } from '../models/service-list';
 
 @Injectable({ providedIn: 'root' })
 export class ServiceService {
@@ -15,7 +15,7 @@ export class ServiceService {
     page: number,
     size: number,
     filters: ServiceFilters,
-  ): Observable<iPageableContent<iServiceList>> {
+  ): Observable<PageableContent<ServiceList>> {
     let params = new HttpParams().set('page', page).set('size', size);
 
     for (const [key, value] of Object.entries(filters)) {
@@ -24,7 +24,7 @@ export class ServiceService {
       }
     }
 
-    return this.http.get<iPageableContent<iServiceList>>(
+    return this.http.get<PageableContent<ServiceList>>(
       `${environment.baseUrl}/services`,
       {
         params,
