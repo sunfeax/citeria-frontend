@@ -40,7 +40,7 @@
           <mat-error>{{ getFieldError(loginForm.controls.password) }}</mat-error>
         </mat-form-field>
         <div class="auth-actions auth-actions--end">
-          <a [routerLink]="routes.forgotPassword" class="auth-link auth-link--small">Forgot password?</a>
+          <a [routerLink]="routePaths.forgotPassword" class="auth-link auth-link--small">Forgot password?</a>
         </div>
       </div>
 
@@ -53,7 +53,7 @@
 
       <p class="auth-switch">
         Don't have an account?
-        <a [routerLink]="routes.register" class="auth-link">Sign up</a>
+        <a [routerLink]="routePaths.register" class="auth-link">Sign up</a>
       </p>
 
       <div class="auth-divider">

@@ -10,7 +10,7 @@ import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import { getFieldError } from '../../../../shared/util/form-errors';
-import { routes } from '../../../../shared/util/routes';
+import { routePaths } from '../../../../shared/util/route-paths';
 import { LoginRequest } from '../../models/login';
 import { AuthService } from '../../services/auth.service';
 
@@ -39,7 +39,7 @@ export class LoginComponent {
   private snackbarService = inject(SnackbarService);
 
   /** ROUTES */
-  readonly routes = routes;
+  readonly routePaths = routePaths;
 
   /** HELPERS */
   readonly getFieldError = getFieldError;
@@ -87,7 +87,7 @@ export class LoginComponent {
       .subscribe({
         next: () => {
           this.serverError.set(null);
-          this.router.navigateByUrl(routes.profile);
+          this.router.navigateByUrl(routePaths.profile);
         },
         error: (err: HttpErrorResponse) => {
           if (err.status === 401) {

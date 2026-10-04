@@ -2,11 +2,11 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
+import { routePaths } from '../../util/route-paths';
 import { TabSyncService } from '../../../core/services/tab-sync.service';
 import { SessionService } from '../../../features/auth/services/session.service';
 import { DialogService } from '../../services/dialog.service';
 import { ThemeService } from '../../services/theme.service';
-import { routes } from '../../util/routes';
 import { SIDEBAR_CONFIG } from '../../util/sidebar.config';
 import { AuthService } from './../../../features/auth/services/auth.service';
 import { SnackbarService } from './../../services/snackbar.service';
@@ -47,8 +47,8 @@ export class SidebarComponent {
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        this.router.navigateByUrl(routes.login);
-        this.tabSyncService.send('logout');
+        this.router.navigateByUrl(routePaths.login);
+        this.tabSyncService.send({ type: 'logout' });
       },
       error: () => this.snackbarService.error('An error occurred during logout.'),
     });

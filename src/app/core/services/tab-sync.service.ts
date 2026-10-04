@@ -1,27 +1,25 @@
 import { DestroyRef, inject, Service } from '@angular/core';
-import { Router } from '@angular/router';
-import { SessionService } from '../../features/auth/services/session.service';
-import { routes } from '../../shared/util/routes';
+import { Observable } from 'rxjs';
+import { BroadcastMessage } from '../models/broadcast-message';
 
 @Service()
 export class TabSyncService {
   private readonly channel = new BroadcastChannel('app');
 
-  private readonly sessionService = inject(SessionService);
-  private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
+  incoming = new Observable<BroadcastMessage>(subscriber => {
+    const handler = (event: MessageEvent<BroadcastMessage>) =>
+      subscriber.next(event.data);
+
+    this.channel.addEventListener('message', handler);
+
+    return () => this.channel.removeEventListener('message', handler);
+  });
 
   constructor() {
-    this.channel.onmessage = (event: MessageEvent) => {
-      if (event.data === 'logout') {
-        this.sessionService.clearSession();
-        this.router.navigateByUrl(routes.login);
-      }
-    };
-    this.destroyRef.onDestroy(() => this.channel.close());
+    inject(DestroyRef).onDestroy(() => this.channel.close());
   }
 
-  send(msg: string): void {
+  send(msg: BroadcastMessage): void {
     this.channel.postMessage(msg);
   }
 }

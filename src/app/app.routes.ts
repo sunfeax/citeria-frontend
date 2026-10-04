@@ -17,25 +17,37 @@ export const routes: Routes = [
     children: [
       {
         path: 'profile',
-        loadComponent: () => import('./features/profile/pages/profile/profile.component').then(m => m.ProfileComponent),
+        loadComponent: () =>
+          import('./features/profile/pages/profile/profile.component').then(
+            m => m.ProfileComponent,
+          ),
       },
       {
         path: 'services',
-        loadComponent: () => import('./features/service/pages/service/service.component').then(m => m.ServiceComponent),
+        loadComponent: () =>
+          import('./features/service/pages/service/service.component').then(
+            m => m.ServiceComponent,
+          ),
       },
     ],
   },
   {
     path: 'forgot-password',
     loadComponent: () =>
-      import('./features/auth/pages/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent),
+      import('./features/auth/pages/forgot-password/forgot-password.component').then(
+        m => m.ForgotPasswordComponent,
+      ),
   },
   {
     path: 'login',
-    loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent),
+    loadComponent: () =>
+      import('./features/auth/pages/login/login.component').then(m => m.LoginComponent),
   },
   {
     path: 'register',
-    loadComponent: () => import('./features/auth/pages/register/register.component').then(m => m.RegisterComponent),
+    loadComponent: () =>
+      import('./features/auth/pages/register/register.component').then(
+        m => m.RegisterComponent,
+      ),
   },
 ];

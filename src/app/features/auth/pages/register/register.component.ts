@@ -14,7 +14,12 @@ import {
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import {
+  MatError,
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -23,10 +28,14 @@ import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { ApiError } from '../../../../shared/models/api-error';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
-import { applyServerErrors, clearServerErrors, getFieldError } from '../../../../shared/util/form-errors';
-import { routes } from '../../../../shared/util/routes';
+import {
+  applyServerErrors,
+  clearServerErrors,
+  getFieldError,
+} from '../../../../shared/util/form-errors';
 import { UserType } from '../../models/user-type';
 import { AuthService } from '../../services/auth.service';
+import { routePaths } from '../../../../shared/util/route-paths';
 import { getRegisterPayload } from './../../../../shared/util/payload-handler';
 
 @Component({
@@ -56,11 +65,8 @@ export class RegisterComponent {
   private snackbarService = inject(SnackbarService);
   private router = inject(Router);
 
-  /** ENUMS */
   readonly UserType = UserType;
-
-  /** ROUTES */
-  readonly routes = routes;
+  readonly routePaths = routePaths;
 
   /** TEMPLATE HELPERS */
   readonly getFieldError = getFieldError;
@@ -84,11 +90,21 @@ export class RegisterComponent {
     {
       firstName: new FormControl('', {
         nonNullable: true,
-        validators: [v.required, v.minLength(2), v.maxLength(50), v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u)],
+        validators: [
+          v.required,
+          v.minLength(2),
+          v.maxLength(50),
+          v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
+        ],
       }),
       lastName: new FormControl('', {
         nonNullable: true,
-        validators: [v.required, v.minLength(2), v.maxLength(50), v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u)],
+        validators: [
+          v.required,
+          v.minLength(2),
+          v.maxLength(50),
+          v.pattern(/^[\p{L}]+(?:[\s'-][\p{L}]+)*$/u),
+        ],
       }),
       email: new FormControl('', {
         nonNullable: true,
@@ -100,7 +116,11 @@ export class RegisterComponent {
       }),
       password: new FormControl('', {
         nonNullable: true,
-        validators: [v.required, v.minLength(8), v.pattern(/^(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z0-9@#$%^&+=!]+$/)],
+        validators: [
+          v.required,
+          v.minLength(8),
+          v.pattern(/^(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z0-9@#$%^&+=!]+$/),
+        ],
       }),
       confirmPassword: new FormControl('', {
         nonNullable: true,
@@ -137,7 +157,7 @@ export class RegisterComponent {
       )
       .subscribe({
         next: () => {
-          this.router.navigateByUrl(routes.login);
+          this.router.navigateByUrl(routePaths.login);
         },
         error: (err: HttpErrorResponse) => {
           const apiError = err.error as ApiError;
@@ -161,9 +181,14 @@ export class RegisterComponent {
 }
 
 class ConfirmPasswordErrorMatcher implements ErrorStateMatcher {
-  isErrorState(control: AbstractControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: AbstractControl | null,
+    form: FormGroupDirective | NgForm | null,
+  ): boolean {
     if (!control) return false;
     const isInteracted = control.touched || !!form?.submitted;
-    return isInteracted && (control.invalid || !!control.parent?.hasError('passwordMismatch'));
+    return (
+      isInteracted && (control.invalid || !!control.parent?.hasError('passwordMismatch'))
+    );
   }
 }
