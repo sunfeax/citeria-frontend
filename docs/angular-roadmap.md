@@ -27,7 +27,8 @@ interop (`toSignal`/`toObservable`), Reactive Forms, resource-API (`resource`/`h
   восстановление сессии — забота старта приложения (`restoreSession()` в initializer), не гварда.
   Сейчас refresh в гварде открывает роут с `user = null`. Решить судьбу `isAuthenticated`.
 - 🔄 **Разделение интерцепторов** — `tokenInterceptor` (только крепит Bearer) и `refreshInterceptor`
-  (401 → refresh → повтор). Порядок в цепочке как архитектурное решение.
+  (401 → refresh → повтор). Порядок в цепочке как архитектурное решение. Особые запросы
+  помечает тот, кто их делает (`HttpContextToken` в `AuthHttpService`), а не список URL в `core`.
 - 🔄 `forgot-password` — заглушка. На бэкенде нет эндпоинта восстановления пароля; ждёт его.
 
 ## M2 — Профиль 🔄
@@ -61,7 +62,7 @@ interop (`toSignal`/`toObservable`), Reactive Forms, resource-API (`resource`/`h
 - ⬜ **Нормализация ошибок** — любой `HttpErrorResponse` → размеченный `AppError`
   (`api` / `network` / `unknown`), без `err.error as ApiError` в компонентах.
 - ⬜ **Глобальный error-интерцептор** — неожиданные ошибки (5xx, сеть, 403) → снекбар; ожидаемые
-  остаются компоненту. Opt-out через `HttpContextToken`, без двойного фидбэка.
+  остаются компоненту. Opt-out через `HttpContextToken` (введён в M1), без двойного фидбэка.
 - ⬜ **Примитив мутации** — `{ isPending, error, run() }` на сигналах + `exhaustMap`; убрать ручной
   `isXLoading` + `finalize` из профиля и логина.
 - ⬜ `ErrorHandler` — только логирование необработанного, не UX.

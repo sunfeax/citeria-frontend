@@ -101,6 +101,7 @@ export class AuthService {
       }),
     );
   }
+
   restoreSession(): Observable<User | null> {
     return this.refresh().pipe(
       switchMap(() => this.getMe()),
