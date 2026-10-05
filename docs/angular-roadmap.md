@@ -7,8 +7,8 @@
 применение на настоящем HTTP, ошибках и гонках.
 
 Инструменты — только проверенные: сигналы (`signal`/`computed`/`linkedSignal`/`effect`), RxJS,
-interop (`toSignal`/`toObservable`), Reactive Forms. `resource`/`httpResource`/`rxResource`
-не используем.
+interop (`toSignal`/`toObservable`), Reactive Forms, resource-API (`resource`/`httpResource`/
+`rxResource`).
 
 Легенда: ✅ готово · 🔄 в процессе · ⬜ дальше
 
@@ -43,7 +43,7 @@ interop (`toSignal`/`toObservable`), Reactive Forms. `resource`/`httpResource`/`
   страницу; пустые параметры не отправляются; во время загрузки остаётся прошлый список; ошибка —
   блок с Retry (`reload()`); пустой результат по фильтрам — «Clear filters».
   `GET /services?search&minPrice&maxPrice&active`.
-- ⬜ **Сортировка** — по имени, цене, дате. `sort=name,asc` и т.п.
+- 🔄 **Сортировка** — по имени, цене, дате. `sort=name,asc` и т.п.
 - ⬜ **Состояние каталога переживает перезагрузку** — фильтры, сортировка и страница
   восстанавливаются после F5 и открываются по присланной ссылке.
 - ⬜ **Страница специалиста** — переход из карточки услуги: профиль, активные услуги, часы

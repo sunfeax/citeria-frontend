@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { exhaustMap } from 'rxjs';
 import { SessionService } from '../../../features/auth/services/session.service';
 import { DialogService } from '../../services/dialog.service';
 import { ThemeService } from '../../services/theme.service';
@@ -44,14 +45,13 @@ export class SidebarComponent {
     this.dialogService
       .confirm({
         title: 'Logout',
-        message: 'Do want to sign out?',
+        message: 'Do you want to sign out?',
         confirmText: 'Logout',
         variant: 'danger',
       })
-      .subscribe(() =>
-        this.authService.logout().subscribe({
-          error: () => this.snackbarService.error('An error occurred during logout'),
-        }),
-      );
+      .pipe(exhaustMap(() => this.authService.logout()))
+      .subscribe({
+        error: () => this.snackbarService.error('An error occurred during logout'),
+      });
   }
 }
