@@ -8,7 +8,6 @@ import { DialogService } from '../../services/dialog.service';
 import { ThemeService } from '../../services/theme.service';
 import { SIDEBAR_CONFIG } from '../../util/sidebar.config';
 import { AuthService } from './../../../features/auth/services/auth.service';
-import { SnackbarService } from './../../services/snackbar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,7 +20,6 @@ export class SidebarComponent {
   private readonly authService = inject(AuthService);
   private readonly sessionService = inject(SessionService);
   private readonly dialogService = inject(DialogService);
-  private readonly snackbarService = inject(SnackbarService);
   readonly themeService = inject(ThemeService);
 
   /** DATA */
@@ -50,8 +48,6 @@ export class SidebarComponent {
         variant: 'danger',
       })
       .pipe(exhaustMap(() => this.authService.logout()))
-      .subscribe({
-        error: () => this.snackbarService.error('An error occurred during logout'),
-      });
+      .subscribe();
   }
 }

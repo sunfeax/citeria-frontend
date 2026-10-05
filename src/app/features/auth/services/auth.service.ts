@@ -83,7 +83,7 @@ export class AuthService {
 
   logout(): Observable<void> {
     return this.authHttpService.logout().pipe(
-      tap(() => {
+      finalize(() => {
         this.sessionService.clearSession();
         this.tabSyncService.send({ type: 'logout' });
       }),

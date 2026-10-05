@@ -7,7 +7,7 @@ import { AuthService } from './../../features/auth/services/auth.service';
 export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
-  if (!req.context.get(SKIP_REFRESH)) {
+  if (req.context.get(SKIP_REFRESH)) {
     return next(req);
   }
 
