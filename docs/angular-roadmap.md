@@ -23,6 +23,11 @@ interop (`toSignal`/`toObservable`), Reactive Forms, resource-API (`resource`/`h
   `BroadcastChannel` (`Observable` с teardown), `AuthService` отправляет и слушает. Навигация на логин —
   одна реакция на переход «пользователь был → стал `null`» (`toObservable` + `pairwise`), покрывает
   logout, чужую вкладку и упавший refresh.
+- 🔄 **Гвард проверяет пользователя, а не токен** — гвард только решает доступ по `user`,
+  восстановление сессии — забота старта приложения (`restoreSession()` в initializer), не гварда.
+  Сейчас refresh в гварде открывает роут с `user = null`. Решить судьбу `isAuthenticated`.
+- 🔄 **Разделение интерцепторов** — `tokenInterceptor` (только крепит Bearer) и `refreshInterceptor`
+  (401 → refresh → повтор). Порядок в цепочке как архитектурное решение.
 - 🔄 `forgot-password` — заглушка. На бэкенде нет эндпоинта восстановления пароля; ждёт его.
 
 ## M2 — Профиль 🔄
@@ -48,6 +53,18 @@ interop (`toSignal`/`toObservable`), Reactive Forms, resource-API (`resource`/`h
   восстанавливаются после F5 и открываются по присланной ссылке.
 - ⬜ **Страница специалиста** — переход из карточки услуги: профиль, активные услуги, часы
   работы. `GET /specialist-detail/{id}`.
+
+## M3.5 — Слой ошибок и состояния запросов ⬜
+
+Три задачи с разными владельцами, не один «глобальный HTTP-стейт».
+
+- ⬜ **Нормализация ошибок** — любой `HttpErrorResponse` → размеченный `AppError`
+  (`api` / `network` / `unknown`), без `err.error as ApiError` в компонентах.
+- ⬜ **Глобальный error-интерцептор** — неожиданные ошибки (5xx, сеть, 403) → снекбар; ожидаемые
+  остаются компоненту. Opt-out через `HttpContextToken`, без двойного фидбэка.
+- ⬜ **Примитив мутации** — `{ isPending, error, run() }` на сигналах + `exhaustMap`; убрать ручной
+  `isXLoading` + `finalize` из профиля и логина.
+- ⬜ `ErrorHandler` — только логирование необработанного, не UX.
 
 ## M4 — Бронирование ⬜
 
