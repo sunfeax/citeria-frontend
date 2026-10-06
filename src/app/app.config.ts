@@ -29,8 +29,9 @@ export const appConfig: ApplicationConfig = {
       useValue: { appearance: 'outline', hideRequiredMarker: true },
     },
     provideAppInitializer(() => {
-      const authService = inject(AuthService);
-      return authService.restoreSession().pipe(catchError(() => of(null)));
+      return inject(AuthService)
+        .restoreSession()
+        .pipe(catchError(() => of(null)));
     }),
   ],
 };

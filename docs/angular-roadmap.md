@@ -23,10 +23,10 @@ interop (`toSignal`/`toObservable`), Reactive Forms, resource-API (`resource`/`h
   `BroadcastChannel` (`Observable` с teardown), `AuthService` отправляет и слушает. Навигация на логин —
   одна реакция на переход «пользователь был → стал `null`» (`toObservable` + `pairwise`), покрывает
   logout, чужую вкладку и упавший refresh.
-- 🔄 **Гвард проверяет пользователя, а не токен** — гвард только решает доступ по `user`,
+- ✅ **Гвард проверяет пользователя, а не токен** — гвард только решает доступ по `user`,
   восстановление сессии — забота старта приложения (`restoreSession()` в initializer), не гварда.
   Сейчас refresh в гварде открывает роут с `user = null`. Решить судьбу `isAuthenticated`.
-- 🔄 **Разделение интерцепторов** — `tokenInterceptor` (только крепит Bearer) и `refreshInterceptor`
+- ✅ **Разделение интерцепторов** — `tokenInterceptor` (только крепит Bearer) и `refreshInterceptor`
   (401 → refresh → повтор). Порядок в цепочке как архитектурное решение. Особые запросы
   помечает тот, кто их делает (`HttpContextToken` в `AuthHttpService`), а не список URL в `core`.
 - 🔄 `forgot-password` — заглушка. На бэкенде нет эндпоинта восстановления пароля; ждёт его.
@@ -37,7 +37,7 @@ interop (`toSignal`/`toObservable`), Reactive Forms, resource-API (`resource`/`h
 - ✅ Смена пароля — `PATCH /users/{id}/password`.
 - ⬜ **Аватар** — загрузка, замена, удаление; показ в профиле и в сайдбаре.
   `POST/GET/DELETE /users/{id}/avatar` (multipart).
-- ⬜ **Удаление аккаунта** — подтверждение в диалоге, soft delete, выход из системы.
+- 🔄 **Удаление аккаунта** — подтверждение в диалоге, soft delete, выход из системы.
   `DELETE /users/{id}`.
 
 ## M3 — Каталог услуг 🔄
@@ -66,6 +66,8 @@ interop (`toSignal`/`toObservable`), Reactive Forms, resource-API (`resource`/`h
 - ⬜ **Примитив мутации** — `{ isPending, error, run() }` на сигналах + `exhaustMap`; убрать ручной
   `isXLoading` + `finalize` из профиля и логина.
 - ⬜ `ErrorHandler` — только логирование необработанного, не UX.
+- ⬜ `AuthService.logout()` — ошибка сервера сейчас уходит подписчику необработанной (сессия
+  чистится через `finalize`). Решить вместе с логированием: поглощать в сервисе или нет.
 
 ## M4 — Бронирование ⬜
 
