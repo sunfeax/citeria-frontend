@@ -56,4 +56,10 @@ export class AuthHttpService {
       withCredentials: true,
     });
   }
+
+  softDeleteAccount(uuid: string): Observable<User> {
+    return this.http.delete<User>(`${environment.baseUrl}/users/${uuid}`, {
+      withCredentials: true,
+    });
+  }
 }

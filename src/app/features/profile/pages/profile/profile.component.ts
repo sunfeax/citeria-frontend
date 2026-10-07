@@ -16,7 +16,7 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { finalize } from 'rxjs';
+import { finalize, switchMap } from 'rxjs';
 import { ApiError } from '../../../../shared/models/api-error';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
 import {
@@ -26,10 +26,12 @@ import {
 } from '../../../../shared/util/form-errors';
 import { SessionService } from '../../../auth/services/session.service';
 import { ProfileService } from '../../services/profile.service';
+import { DialogService } from './../../../../shared/services/dialog.service';
 import {
   getChangePasswordPayload,
   getUserUpdatePayload,
 } from './../../../../shared/util/payload-handler';
+import { AuthService } from './../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -53,6 +55,8 @@ export class ProfileComponent {
   private readonly sessionService = inject(SessionService);
   private readonly profileService = inject(ProfileService);
   private readonly snackbarService = inject(SnackbarService);
+  private readonly dialogService = inject(DialogService);
+  private readonly authService = inject(AuthService);
 
   /** TEMPLATE HELPERS */
   readonly getFieldError = getFieldError;
@@ -176,6 +180,25 @@ export class ProfileComponent {
             this.snackbarService.error(apiError.detail ?? 'Password update failed.');
           }
         },
+      });
+  }
+
+  deleteAccount(): void {
+    this.dialogService
+      .confirm({
+        title: 'Delete account',
+        message:
+          'Are you sure you want to delete your account? You will be signed out on all devices.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        variant: 'danger',
+      })
+      .pipe(
+        switchMap(() => this.authService.softDeleteAccount()),
+        switchMap(() => this.authService.logout()),
+      )
+      .subscribe({
+        error: () => this.snackbarService.error('Unable to delete your account. Please try again.'),
       });
   }
 }

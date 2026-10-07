@@ -110,4 +110,9 @@ export class AuthService {
       }),
     );
   }
+
+  softDeleteAccount(): Observable<User> {
+    const userId = this.sessionService.requireUser().id;
+    return this.authHttpService.softDeleteAccount(userId);
+  }
 }

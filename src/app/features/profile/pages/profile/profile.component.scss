@@ -41,10 +41,12 @@
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(288px, 0.85fr);
   gap: var(--space-6);
-  align-items: start;
+  align-items: stretch;
 }
 
 .profile-card {
+  display: flex;
+  flex-direction: column;
   border: var(--border-width-sm) solid var(--color-border);
   border-radius: var(--radius-2xl);
   padding: var(--space-5);
@@ -71,6 +73,11 @@
   color: var(--color-primary-text);
 }
 
+.profile-card__icon--danger {
+  background: color-mix(in srgb, var(--color-danger) 14%, transparent);
+  color: var(--color-danger);
+}
+
 .profile-card__icon mat-icon {
   width: 20px;
   height: 20px;
@@ -92,10 +99,30 @@
   line-height: var(--line-height-normal);
 }
 
+.profile-card__header--compact {
+  margin-bottom: 0;
+}
+
+.profile-card--danger {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  border-color: color-mix(in srgb, var(--color-danger) 40%, var(--color-border));
+}
+
+.profile-card__danger-action {
+  flex: 0 0 auto;
+  --mat-button-outlined-label-text-color: var(--color-danger);
+  --mat-button-outlined-outline-color: var(--color-danger);
+}
+
 .profile-form {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-5);
 }
 
 .profile-form__grid {
@@ -111,12 +138,14 @@ mat-form-field {
 .profile-form__actions {
   display: flex;
   justify-content: flex-end;
+  margin-top: auto;
   padding-top: var(--space-5);
   border-top: var(--border-width-sm) solid var(--color-border-soft);
 }
 
 .profile-form__submit {
-  width: 168px;
+  min-width: 168px;
+  white-space: nowrap;
 }
 
 @media (max-width: 1024px) {
@@ -126,6 +155,11 @@ mat-form-field {
 
   .profile-card--security {
     max-width: 576px;
+  }
+
+  .profile-card--danger {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
@@ -147,7 +181,8 @@ mat-form-field {
   }
 
   .profile-form__actions,
-  .profile-form__submit {
+  .profile-form__submit,
+  .profile-card__danger-action {
     width: 100%;
   }
 }
