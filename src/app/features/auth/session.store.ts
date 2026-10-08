@@ -1,10 +1,10 @@
 import { Injectable, signal } from '@angular/core';
-import { User } from '../models/user';
+import { User } from './models/user';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SessionService {
+export class SessionStore {
   /** STATE */
   private readonly accessToken = signal<string | null>(null);
   private readonly currentUser = signal<User | null>(null);

@@ -1,11 +1,11 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { SessionService } from '../../features/auth/services/session.service';
+import { SessionStore } from '../../features/auth/session.store';
 import { IS_PUBLIC_ENDPOINT } from '../config/http-context';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
-  const sessionService = inject(SessionService);
-  const token = sessionService.getAccessToken();
+  const sessionStore = inject(SessionStore);
+  const token = sessionStore.getAccessToken();
   const newReq =
     token && !req.context.get(IS_PUBLIC_ENDPOINT)
       ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })

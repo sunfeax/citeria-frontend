@@ -24,7 +24,7 @@ import {
   clearServerErrors,
   getFieldError,
 } from '../../../../shared/util/form-errors';
-import { SessionService } from '../../../auth/services/session.service';
+import { SessionStore } from '../../../auth/session.store';
 import { ProfileService } from '../../services/profile.service';
 import { DialogService } from './../../../../shared/services/dialog.service';
 import {
@@ -52,7 +52,7 @@ import { AuthService } from './../../../auth/services/auth.service';
 })
 export class ProfileComponent {
   /** INJECTORS */
-  private readonly sessionService = inject(SessionService);
+  private readonly sessionStore = inject(SessionStore);
   private readonly profileService = inject(ProfileService);
   private readonly snackbarService = inject(SnackbarService);
   private readonly dialogService = inject(DialogService);
@@ -62,7 +62,7 @@ export class ProfileComponent {
   readonly getFieldError = getFieldError;
 
   /** DATA */
-  readonly user = computed(() => this.sessionService.requireUser());
+  readonly user = computed(() => this.sessionStore.requireUser());
 
   /** STATE */
   isProfileLoading = signal<boolean>(false);
@@ -133,7 +133,7 @@ export class ProfileComponent {
       )
       .subscribe({
         next: user => {
-          this.sessionService.setUser(user);
+          this.sessionStore.setUser(user);
           this.snackbarService.success('Your information has been updated.');
           this.profileForm.markAsPristine();
         },
@@ -198,7 +198,8 @@ export class ProfileComponent {
         switchMap(() => this.authService.logout()),
       )
       .subscribe({
-        error: () => this.snackbarService.error('Unable to delete your account. Please try again.'),
+        error: () =>
+          this.snackbarService.error('Unable to delete your account. Please try again.'),
       });
   }
 }

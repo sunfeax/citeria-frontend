@@ -1,13 +1,12 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import {
   catchError,
   filter,
   finalize,
   Observable,
-  of,
-  pairwise,
   shareReplay,
   switchMap,
   tap,
@@ -19,14 +18,14 @@ import { LoginRequest, LoginResponse } from '../models/login';
 import { RefreshResponse } from '../models/refresh';
 import { RegisterRequest, RegisterResponse } from '../models/register';
 import { User } from '../models/user';
+import { SessionStore } from '../session.store';
 import { AuthHttpService } from './auth-http.service';
-import { SessionService } from './session.service';
 
 @Service()
 export class AuthService {
   /** INJECTORS */
   private readonly authHttpService = inject(AuthHttpService);
-  private readonly sessionService = inject(SessionService);
+  private readonly sessionStore = inject(SessionStore);
   private readonly tabSyncService = inject(TabSyncService);
   private readonly router = inject(Router);
 
@@ -34,21 +33,13 @@ export class AuthService {
   private refresh$: Observable<RefreshResponse> | null = null;
 
   constructor() {
-    toObservable(this.sessionService.user)
-      .pipe(
-        pairwise(),
-        filter(([prev, curr]) => curr === null && prev !== null),
-        takeUntilDestroyed(),
-      )
-      .subscribe(() => this.router.navigateByUrl(routePaths.login));
-
     this.tabSyncService.incoming
       .pipe(
         filter(value => value.type === 'logout'),
         takeUntilDestroyed(),
       )
       .subscribe(() => {
-        this.sessionService.clearSession();
+        this.endSession();
       });
   }
 
@@ -56,8 +47,8 @@ export class AuthService {
   login(payload: LoginRequest): Observable<LoginResponse> {
     return this.authHttpService.login(payload).pipe(
       tap(response => {
-        this.sessionService.setAccessToken(response.accessToken);
-        this.sessionService.setUser(response.user);
+        this.sessionStore.setAccessToken(response.accessToken);
+        this.sessionStore.setUser(response.user);
       }),
     );
   }
@@ -69,9 +60,11 @@ export class AuthService {
   refresh(): Observable<RefreshResponse> {
     if (!this.refresh$) {
       this.refresh$ = this.authHttpService.refresh().pipe(
-        tap(response => this.sessionService.setAccessToken(response.accessToken)),
-        catchError(err => {
-          this.sessionService.clearSession();
+        tap(response => this.sessionStore.setAccessToken(response.accessToken)),
+        catchError((err: HttpErrorResponse) => {
+          if (err.status === 401) {
+            this.endSession();
+          }
           return throwError(() => err);
         }),
         finalize(() => (this.refresh$ = null)),
@@ -84,7 +77,7 @@ export class AuthService {
   logout(): Observable<void> {
     return this.authHttpService.logout().pipe(
       finalize(() => {
-        this.sessionService.clearSession();
+        this.endSession();
         this.tabSyncService.send({ type: 'logout' });
       }),
     );
@@ -93,26 +86,24 @@ export class AuthService {
   getMe(): Observable<User> {
     return this.authHttpService.getMe().pipe(
       tap(response => {
-        this.sessionService.setUser(response);
-      }),
-      catchError(err => {
-        this.sessionService.clearSession();
-        return throwError(() => err);
+        this.sessionStore.setUser(response);
       }),
     );
   }
 
-  restoreSession(): Observable<User | null> {
-    return this.refresh().pipe(
-      switchMap(() => this.getMe()),
-      catchError(() => {
-        return of(null);
-      }),
-    );
+  restoreSession(): Observable<User> {
+    return this.refresh().pipe(switchMap(() => this.getMe()));
   }
 
   softDeleteAccount(): Observable<User> {
-    const userId = this.sessionService.requireUser().id;
-    return this.authHttpService.softDeleteAccount(userId);
+    return this.authHttpService.softDeleteAccount(this.sessionStore.requireUser().id);
+  }
+
+  private endSession(): void {
+    const hadUser = this.sessionStore.user() !== null;
+    this.sessionStore.clearSession();
+    if (hadUser) {
+      void this.router.navigateByUrl(routePaths.login);
+    }
   }
 }

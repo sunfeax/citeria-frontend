@@ -1,13 +1,13 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { SessionService } from '../../features/auth/services/session.service';
+import { SessionStore } from '../../features/auth/session.store';
 import { routePaths } from '../../shared/util/route-paths';
 
 export const accessGuard: CanActivateFn = () => {
-  const sessionService = inject(SessionService);
+  const sessionStore = inject(SessionStore);
   const router = inject(Router);
 
-  if (sessionService.user()) {
+  if (sessionStore.user()) {
     return true;
   }
 

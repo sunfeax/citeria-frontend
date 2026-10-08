@@ -3,7 +3,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { exhaustMap } from 'rxjs';
-import { SessionService } from '../../../features/auth/services/session.service';
+import { SessionStore } from '../../../features/auth/session.store';
 import { DialogService } from '../../services/dialog.service';
 import { ThemeService } from '../../services/theme.service';
 import { SIDEBAR_CONFIG } from '../../util/sidebar.config';
@@ -18,7 +18,7 @@ import { AuthService } from './../../../features/auth/services/auth.service';
 export class SidebarComponent {
   /** INJECTORS */
   private readonly authService = inject(AuthService);
-  private readonly sessionService = inject(SessionService);
+  private readonly sessionStore = inject(SessionStore);
   private readonly dialogService = inject(DialogService);
   readonly themeService = inject(ThemeService);
 
@@ -26,7 +26,7 @@ export class SidebarComponent {
   sidebarData = SIDEBAR_CONFIG;
   isExpandedSidebar = signal<boolean>(true);
   protected readonly displayName = computed(() => {
-    const user = this.sessionService.user();
+    const user = this.sessionStore.user();
     if (!user) return 'Guest';
     return user.firstName?.trim() || user.email;
   });
