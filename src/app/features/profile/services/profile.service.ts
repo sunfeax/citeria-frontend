@@ -1,14 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { UserUpdateRequest } from '../models/user-update-request';
 import { User } from '../../auth/models/user';
 import { ChangePasswordRequest } from '../models/user-change-password';
+import { UserUpdateRequest } from '../models/user-update-request';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class ProfileService {
   /** INJECTORS */
   private readonly http = inject(HttpClient);

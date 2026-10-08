@@ -1,9 +1,7 @@
-import { Injectable, signal } from '@angular/core';
+import { Service, signal } from '@angular/core';
 import { User } from './models/user';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class SessionStore {
   /** STATE */
   private readonly accessToken = signal<string | null>(null);

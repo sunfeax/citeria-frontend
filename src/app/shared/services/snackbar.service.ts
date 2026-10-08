@@ -1,12 +1,10 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SNACKBAR_CONFIG } from '../../core/config/snackbar.config';
 
 type Snackbar = 'success' | 'error' | 'info' | 'warning';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class SnackbarService {
   /** INJECTORS */
   private readonly snackBarService = inject(MatSnackBar);

@@ -1,9 +1,9 @@
 import { DOCUMENT } from '@angular/common';
-import { effect, inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Service, signal } from '@angular/core';
 
 export type Theme = 'dark' | 'light';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ThemeService {
   document = inject(DOCUMENT);
   theme = signal<Theme>(this.getInitialTheme());

@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { PageableContent } from '../../../shared/models/pageable';
-import { ServiceList, ServiceFilters } from '../models/service-list';
+import { ServiceFilters, ServiceList } from '../models/service-list';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ServiceService {
   /** INJECTORS */
   private readonly http = inject(HttpClient);
