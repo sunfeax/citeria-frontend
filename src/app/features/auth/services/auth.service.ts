@@ -4,8 +4,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import {
   catchError,
-  filter,
   finalize,
+  map,
   Observable,
   shareReplay,
   switchMap,
@@ -35,11 +35,17 @@ export class AuthService {
   constructor() {
     this.tabSyncService.incoming
       .pipe(
-        filter(value => value.type === 'logout'),
+        switchMap(event => {
+          return this.restoreSession().pipe(map(user => ({ user, event })));
+        }),
         takeUntilDestroyed(),
       )
-      .subscribe(() => {
-        this.endSession();
+      .subscribe(data => {
+        if (data.event === 'login') {
+          this.router.navigateByUrl(routePaths.profile);
+        } else {
+          this.router.navigateByUrl(routePaths.login);
+        }
       });
   }
 
@@ -49,6 +55,7 @@ export class AuthService {
       tap(response => {
         this.sessionStore.setAccessToken(response.accessToken);
         this.sessionStore.setUser(response.user);
+        this.tabSyncService.send('login');
       }),
     );
   }
@@ -78,7 +85,7 @@ export class AuthService {
     return this.authHttpService.logout().pipe(
       finalize(() => {
         this.endSession();
-        this.tabSyncService.send({ type: 'logout' });
+        this.tabSyncService.send('logout');
       }),
     );
   }

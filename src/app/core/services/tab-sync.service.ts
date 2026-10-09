@@ -1,14 +1,14 @@
 import { DestroyRef, inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BroadcastMessage } from '../models/broadcast-message';
+
+export type EventType = 'login' | 'logout';
 
 @Service()
 export class TabSyncService {
   private readonly channel = new BroadcastChannel('app');
 
-  incoming = new Observable<BroadcastMessage>(subscriber => {
-    const handler = (event: MessageEvent<BroadcastMessage>) =>
-      subscriber.next(event.data);
+  incoming = new Observable<EventType>(subscriber => {
+    const handler = (event: MessageEvent<EventType>) => subscriber.next(event.data);
 
     this.channel.addEventListener('message', handler);
 
@@ -19,7 +19,7 @@ export class TabSyncService {
     inject(DestroyRef).onDestroy(() => this.channel.close());
   }
 
-  send(msg: BroadcastMessage): void {
-    this.channel.postMessage(msg);
+  send(e: EventType): void {
+    this.channel.postMessage(e);
   }
 }
